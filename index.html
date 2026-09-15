@@ -394,7 +394,7 @@
       cursor: pointer;
     }
     .tour-arrow:hover, .tour-arrow:focus-visible { color: #000; background: var(--cyan); outline: 0; }
-    .tour-tabs { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+    .tour-tabs { display: grid; grid-template-columns: repeat(9, 1fr); gap: 7px; }
     .tour-tab {
       min-width: 0;
       padding: 7px 8px;
@@ -677,7 +677,7 @@
       .tour-controls { grid-template-columns: 42px 1fr 42px; }
       .tour-arrow { width: 42px; }
       .tour-tabs { grid-template-columns: repeat(2, 1fr); }
-      .tour-tab:nth-child(7) { grid-column: 1 / -1; }
+      .tour-tab:nth-child(9) { grid-column: 1 / -1; }
       .system-line { grid-template-columns: 38px 1fr; gap: 15px; }
       .first-party-strip { grid-template-columns: 1fr; }
       .first-party-strip article,
@@ -832,33 +832,39 @@
 
       <div class="tour-shell" aria-label="navi screenshot carousel">
         <div class="tour-screen" aria-live="polite">
-          <figure class="tour-slide active" data-title="the wired, ready" data-copy="A finished desktop in nightshadeNeon: focused, legible and built for the keyboard." data-meta="01 / 07">
+          <figure class="tour-slide active" data-title="the wired, ready" data-copy="A finished desktop in nightshadeNeon: focused, legible and built for the keyboard." data-meta="01 / 09">
             <img src="assets/hero.png" alt="The navi desktop with Waybar, terminal windows and the nightshadeNeon theme">
           </figure>
-          <figure class="tour-slide" data-title="tiled by default" data-copy="Sway arranges the work. i3 remains one session away when X11 is the right tool." data-meta="02 / 07">
+          <figure class="tour-slide" data-title="tiled by default" data-copy="Sway arranges the work. i3 remains one session away when X11 is the right tool." data-meta="02 / 09">
             <img src="assets/tiled.png" alt="navi tiled desktop with Vim, ranger and terminal windows">
           </figure>
-          <figure class="tour-slide" data-title="agents belong here" data-copy="navi-Q and open agent tools meet the operating system in the terminal, where the work already happens." data-meta="03 / 07">
+          <figure class="tour-slide" data-title="agents belong here" data-copy="navi-Q and open agent tools meet the operating system in the terminal, where the work already happens." data-meta="03 / 09">
             <img src="assets/agent.png" alt="navi-Q agent mode alongside a terminal visualization">
           </figure>
-          <figure class="tour-slide" data-title="radio from the smallweb" data-copy="navi radio brings live stations and local music into a screen tuned to the rest of the desktop." data-meta="04 / 07">
+          <figure class="tour-slide" data-title="radio from the smallweb" data-copy="navi radio brings live stations and local music into a screen tuned to the rest of the desktop." data-meta="04 / 09">
             <img src="assets/navi-radio.png" alt="navi radio playing a station in its nightshadeNeon interface">
           </figure>
-          <figure class="tour-slide" data-title="apps, living locally" data-copy="naviApps is an offline-first catalog of 68 installable webapps, including a dedicated from xvoidsx collection." data-meta="05 / 07">
+          <figure class="tour-slide" data-title="apps, living locally" data-copy="naviApps is an offline-first catalog of 70 installable webapps, including a dedicated from xvoidsx collection." data-meta="05 / 09">
             <img src="assets/naviapps.png" alt="The local naviApps web interface with search, categories and app cards">
           </figure>
-          <figure class="tour-slide" data-title="duskline, in the wild" data-copy="A real daily desktop: Waybar overhead, music in motion and a violet horizon behind it." data-meta="06 / 07">
+          <figure class="tour-slide" data-title="your people, your protocols" data-copy="neighborli on the fediverse and glyyph on nostr, side by side — social that belongs to you, not a platform." data-meta="06 / 09">
+            <img src="assets/neighborli-glyyph.png" alt="neighborli and the glyyph nostr client open side by side on the navi desktop">
+          </figure>
+          <figure class="tour-slide" data-title="duskline, in the wild" data-copy="A real daily desktop: Waybar overhead, music in motion and a violet horizon behind it." data-meta="07 / 09">
             <img src="assets/duskline-desktop.png" alt="A real navi desktop with duskline gifpaper, Waybar and music tools">
           </figure>
-          <figure class="tour-slide" data-title="the wired has a pulse" data-copy="cmus and cava arrive pre-tuned in cyan, green, magenta and red — music is part of the environment." data-meta="07 / 07">
+          <figure class="tour-slide" data-title="the wired has a pulse" data-copy="cmus and cava arrive pre-tuned in cyan, green, magenta and red — music is part of the environment." data-meta="08 / 09">
             <img src="assets/music-desktop.png" alt="A real navi desktop with cmus, cava and an animated Lain wallpaper">
+          </figure>
+          <figure class="tour-slide" data-title="old iron, new tricks" data-copy="navi 1.2 on a 2015 Acer Cloudbook. if it flies here, it flies anywhere — that's perma-computing." data-meta="09 / 09">
+            <img src="assets/fastfetch.png" alt="fastfetch showing navi 1.2 mika running on a 2015 Acer Aspire Cloudbook">
           </figure>
           <div class="tour-overlay">
             <div>
               <h3 id="tour-title">the wired, ready</h3>
               <p id="tour-copy">A finished desktop in nightshadeNeon: focused, legible and built for the keyboard.</p>
             </div>
-            <span class="tour-count" id="tour-count">01 / 07</span>
+            <span class="tour-count" id="tour-count">01 / 09</span>
           </div>
         </div>
         <div class="tour-controls">
@@ -869,8 +875,10 @@
             <button class="tour-tab" type="button" role="tab" aria-selected="false">agents</button>
             <button class="tour-tab" type="button" role="tab" aria-selected="false">radio</button>
             <button class="tour-tab" type="button" role="tab" aria-selected="false">apps</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">social</button>
             <button class="tour-tab" type="button" role="tab" aria-selected="false">duskline</button>
             <button class="tour-tab" type="button" role="tab" aria-selected="false">music</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">system</button>
           </div>
           <button class="tour-arrow" type="button" id="tour-next" aria-label="Next screenshot">→</button>
         </div>
