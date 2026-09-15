@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050407">
+  <meta name="description" content="navi 1.2 mika — a stable, agent-native GNU/Linux distribution and your window to the smallweb.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <title>navi 1.2 mika — stable</title>
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #050407;
+      --panel: #0b080d;
+      --panel-2: #110a13;
+      --paper: #f6f0f7;
+      --muted: #c9bdca;
+      --pink: #ff10f0;
+      --green: #39ff14;
+      --cyan: #00ffff;
+      --red: #ff3131;
+      --amber: #ffb000;
+      --line: rgba(255, 16, 240, .3);
+      --mono: "IBM Plex Mono", monospace;
+      --display: "Share Tech Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body {
+      margin: 0;
+      min-width: 280px;
+      overflow-x: hidden;
+      color: var(--paper);
+      background:
+        radial-gradient(ellipse at 78% 8%, rgba(255, 16, 240, .075), transparent 30%),
+        radial-gradient(ellipse at 16% 54%, rgba(0, 255, 255, .045), transparent 25%),
+        var(--ink);
+      font-family: var(--mono);
+      line-height: 1.6;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .16;
+      background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,.055) 3px 4px);
+      mix-blend-mode: overlay;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 21;
+      pointer-events: none;
+      box-shadow: inset 0 0 140px rgba(0,0,0,.94);
+    }
+    ::selection { color: #000; background: var(--green); }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    img { display: block; max-width: 100%; }
+
+    #rain {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      opacity: .1;
+      pointer-events: none;
+    }
+
+    .shell {
+      position: relative;
+      width: min(1380px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .status {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      z-index: 30;
+      width: min(1380px, calc(100% - 40px));
+      height: 44px;
+      margin: 0;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      background: rgba(5, 4, 7, .94);
+      box-shadow: 0 0 24px rgba(255,16,240,.08);
+    }
+    .workspaces, .system { display: flex; align-items: center; gap: 7px; }
+    .system { justify-content: flex-end; }
+    .ws, .status-chip {
+      min-width: 29px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      padding: 0 8px;
+      color: var(--cyan);
+      border: 1px solid rgba(255,16,240,.32);
+      background: #09050a;
+      font-size: 11px;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .ws { transition: color .18s, border-color .18s, background .18s, box-shadow .18s; }
+    .ws.active { color: #000; border-color: var(--green); background: var(--green); box-shadow: 0 0 10px rgba(57,255,20,.45); }
+    .ws:not(.active):hover, .ws:not(.active):focus-visible { color: var(--pink); border-color: var(--pink); outline: 0; }
+    .status-center { color: var(--green); font-size: 12px; text-align: center; }
+    .status-release { color: #000; border-color: var(--green); background: var(--green); font-weight: 600; }
+    .status-source { color: var(--pink); }
+    .status-date { display: none; color: var(--green); font-size: 11px; white-space: nowrap; }
+
+    .hero {
+      min-height: calc(100svh - 54px);
+      display: grid;
+      grid-template-columns: minmax(0, .88fr) minmax(420px, 1.12fr);
+      align-items: center;
+      gap: clamp(38px, 7vw, 104px);
+      padding: clamp(76px, 11vh, 132px) 0 92px;
+    }
+    .release-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      color: var(--green);
+      font-size: 12px;
+    }
+    .release-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+    }
+    .hero-mark {
+      margin: 0 0 22px;
+      color: var(--pink);
+      font: 400 clamp(62px, 10vw, 138px)/.72 var(--display);
+      text-shadow: 4px 0 var(--cyan), -3px 0 rgba(255,49,49,.7), 0 0 25px rgba(255,16,240,.26);
+      transform-origin: left;
+    }
+    .hero-mark.glitching { animation: signalBreak .28s steps(2, jump-none) 2; }
+    @keyframes signalBreak {
+      0% { transform: translate(0); text-shadow: 4px 0 var(--cyan), -3px 0 var(--red); }
+      33% { transform: translate(6px, -1px) skewX(-3deg); text-shadow: -7px 0 var(--cyan), 7px 0 var(--red); }
+      66% { transform: translate(-4px, 1px) skewX(2deg); text-shadow: 8px 0 var(--pink), -5px 0 var(--green); }
+      100% { transform: translate(0); }
+    }
+    .hero h1 {
+      max-width: 700px;
+      margin: 0 0 24px;
+      font: 400 clamp(48px, 7.2vw, 104px)/.88 var(--display);
+      letter-spacing: -.05em;
+    }
+    .hero h1 span { color: var(--cyan); }
+    .lead {
+      max-width: 690px;
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: clamp(15px, 1.35vw, 19px);
+    }
+    .lead strong { color: var(--paper); font-weight: 500; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      min-height: 47px;
+      padding: 10px 18px;
+      color: #000;
+      background: var(--pink);
+      border: 1px solid var(--pink);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color .2s, background .2s, box-shadow .2s;
+    }
+    .button:hover, .button:focus-visible { color: var(--pink); background: #000; box-shadow: 0 0 18px rgba(255,16,240,.33); outline: 0; }
+    .button.secondary { color: var(--cyan); background: transparent; border-color: rgba(0,255,255,.55); }
+    .button.secondary:hover, .button.secondary:focus-visible { color: #000; background: var(--cyan); box-shadow: 0 0 18px rgba(0,255,255,.25); }
+    .release-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-top: 24px;
+      color: #9e929f;
+      font-size: 11px;
+    }
+    .release-meta span::before { content: "// "; color: var(--pink); }
+
+    .hero-stage { position: relative; min-width: 0; }
+    .desktop-window {
+      position: relative;
+      border: 1px solid var(--pink);
+      background: #030203;
+      box-shadow: 18px 18px 0 rgba(57,255,20,.1), 0 0 40px rgba(255,16,240,.16);
+      transform: perspective(1400px) rotateY(-3deg) rotateX(1deg);
+    }
+    .desktop-window::before {
+      content: "navi@mika: ~";
+      display: flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 12px;
+      color: #000;
+      background: var(--pink);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .desktop-window::after {
+      content: "●  ●  ●";
+      position: absolute;
+      right: 12px;
+      top: 7px;
+      color: #000;
+      font-size: 10px;
+    }
+    .desktop-window img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+    .stable-stamp {
+      position: absolute;
+      right: -18px;
+      bottom: -19px;
+      padding: 10px 13px;
+      color: #000;
+      background: var(--green);
+      border: 1px solid var(--green);
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 7px 7px 0 rgba(0,0,0,.72);
+    }
+
+    .ticker {
+      width: 100%;
+      overflow: hidden;
+      border-block: 1px solid rgba(57,255,20,.45);
+      background: var(--green);
+      color: #020502;
+    }
+    .ticker-track {
+      width: max-content;
+      display: flex;
+      padding: 8px 0;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 600;
+      animation: marquee 72s linear infinite;
+    }
+    .ticker-set { display: block; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    section.content { padding: 128px 0; }
+    .chapter-head {
+      display: grid;
+      grid-template-columns: minmax(0, .76fr) minmax(320px, 1.24fr);
+      gap: clamp(34px, 7vw, 100px);
+      align-items: end;
+      margin-bottom: 62px;
+    }
+    .chapter-label { margin: 0 0 14px; color: var(--green); font-size: 12px; }
+    h2 {
+      margin: 0;
+      font: 400 clamp(42px, 6.4vw, 84px)/.91 var(--display);
+      letter-spacing: -.035em;
+    }
+    .chapter-copy { max-width: 710px; justify-self: end; }
+    .chapter-copy p { margin: 0; color: var(--muted); font-size: 16px; }
+    .chapter-copy strong { color: var(--paper); font-weight: 500; }
+
+    .release-story {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+      border-block: 1px solid rgba(255,16,240,.36);
+    }
+    .story-main { padding: 44px 46px 48px 0; }
+    .story-main p {
+      max-width: 800px;
+      margin: 0;
+      color: var(--paper);
+      font: 400 clamp(24px, 3.25vw, 45px)/1.15 var(--display);
+    }
+    .story-main p span { color: var(--pink); }
+    .story-aside {
+      padding: 44px;
+      border-left: 1px solid rgba(255,16,240,.36);
+      background: rgba(10,6,11,.72);
+    }
+    .story-aside dl { margin: 0; display: grid; gap: 18px; }
+    .story-aside div { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .story-aside dt { color: var(--cyan); font-size: 10px; }
+    .story-aside dd { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .system-profile { grid-template-columns: minmax(260px, .62fr) minmax(520px, 1.38fr); }
+    .fetch-terminal {
+      padding: 0;
+      min-width: 0;
+      border-left: 1px solid rgba(255,16,240,.36);
+      background: #060407;
+      overflow: hidden;
+    }
+    .fetch-command {
+      padding: 9px 14px;
+      color: #887d89;
+      border-bottom: 1px solid rgba(255,16,240,.28);
+      font-size: 11px;
+    }
+    .fetch-command span { color: var(--cyan); }
+    .fetch-output {
+      display: grid;
+      grid-template-columns: minmax(245px, .9fr) minmax(220px, 1.1fr);
+      gap: 24px;
+      align-items: center;
+      padding: 30px 26px;
+    }
+    .fetch-logo {
+      margin: 0;
+      overflow: visible;
+      font: 600 clamp(11px, 1.05vw, 15px)/1.32 var(--mono);
+      letter-spacing: 0;
+      text-shadow: 0 0 12px rgba(255,16,240,.22);
+    }
+    .fetch-magenta { color: var(--pink); }
+    .fetch-cyan { color: var(--cyan); text-shadow: 0 0 10px rgba(0,255,255,.38); }
+    .fetch-data { min-width: 0; margin: 0; }
+    .fetch-data div { display: grid; grid-template-columns: 82px 1fr; gap: 12px; padding: 5px 0; }
+    .fetch-data dt { color: var(--pink); font-size: 11px; }
+    .fetch-data dd { min-width: 0; margin: 0; color: var(--paper); font-size: 11px; overflow-wrap: anywhere; }
+    .fetch-data dt::after { content: "  ➜"; color: var(--muted); }
+
+    .principles { margin-top: 78px; display: grid; }
+    .principle {
+      display: grid;
+      grid-template-columns: 90px minmax(210px, .72fr) minmax(0, 1.28fr);
+      gap: 26px;
+      align-items: baseline;
+      padding: 27px 0;
+      border-bottom: 1px solid rgba(201,189,202,.18);
+    }
+    .principle:first-child { border-top: 1px solid rgba(201,189,202,.18); }
+    .principle-num { color: var(--green); font-size: 11px; }
+    .principle h3 { margin: 0; color: var(--pink); font: 400 29px/1 var(--display); }
+    .principle p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .tour-shell {
+      position: relative;
+      border: 1px solid var(--cyan);
+      background: #020303;
+      box-shadow: 14px 14px 0 rgba(0,255,255,.07);
+    }
+    .tour-screen { position: relative; min-height: 0; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+    .tour-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .35s ease; }
+    .tour-slide.active { opacity: 1; visibility: visible; }
+    .tour-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .tour-overlay {
+      position: absolute;
+      inset: auto 0 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: end;
+      padding: clamp(56px, 9vw, 120px) clamp(18px, 4vw, 44px) clamp(18px, 3vw, 34px);
+      background: linear-gradient(to top, rgba(0,0,0,.94), transparent);
+    }
+    .tour-overlay h3 { margin: 0 0 7px; color: var(--paper); font: 400 clamp(26px, 4vw, 52px)/1 var(--display); }
+    .tour-overlay p { max-width: 680px; margin: 0; color: #d8ccd9; font-size: 13px; }
+    .tour-count { color: var(--green); font-size: 11px; white-space: nowrap; }
+    .tour-controls {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+      padding: 10px;
+      border-top: 1px solid rgba(0,255,255,.4);
+    }
+    .tour-arrow {
+      width: 48px;
+      min-height: 42px;
+      color: var(--cyan);
+      border: 1px solid rgba(0,255,255,.4);
+      background: #08090a;
+      cursor: pointer;
+    }
+    .tour-arrow:hover, .tour-arrow:focus-visible { color: #000; background: var(--cyan); outline: 0; }
+    .tour-tabs { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+    .tour-tab {
+      min-width: 0;
+      padding: 7px 8px;
+      color: #9e929f;
+      border: 1px solid rgba(255,255,255,.14);
+      background: #080509;
+      cursor: pointer;
+      font-size: 10px;
+    }
+    .tour-tab.active { color: #000; border-color: var(--pink); background: var(--pink); }
+    .tour-tab:hover, .tour-tab:focus-visible { border-color: var(--pink); outline: 0; }
+
+    .system-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: clamp(36px, 7vw, 100px);
+      align-items: start;
+    }
+    .manifesto {
+      position: sticky;
+      top: 84px;
+    }
+    .manifesto h2 span { color: var(--cyan); }
+    .manifesto > p { max-width: 580px; color: var(--muted); }
+    .stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .stack span { padding: 6px 9px; color: var(--cyan); border: 1px solid rgba(0,255,255,.34); background: rgba(0,0,0,.62); font-size: 11px; }
+    .system-lines { border-top: 1px solid rgba(255,16,240,.34); }
+    .system-line {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 22px;
+      padding: 27px 0;
+      border-bottom: 1px solid rgba(255,16,240,.34);
+    }
+    .system-line > span { color: var(--green); font-size: 11px; }
+    .system-line h3 { margin: 0 0 9px; color: var(--pink); font: 400 27px/1 var(--display); }
+    .system-line p { margin: 0; color: var(--muted); font-size: 13px; }
+    .system-line code { color: var(--green); font: inherit; }
+
+    .apps-philosophy h2 span { color: var(--cyan); }
+    .first-party-strip {
+      display: grid;
+      grid-template-columns: minmax(250px, 1.15fr) repeat(3, minmax(0, 1fr));
+      margin-bottom: 22px;
+      border-block: 1px solid rgba(57,255,20,.36);
+      background: rgba(4,8,5,.54);
+    }
+    .first-party-intro, .first-party-strip article { min-width: 0; padding: 25px 22px; }
+    .first-party-intro { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
+    .first-party-intro span { color: var(--green); font-size: 10px; }
+    .first-party-intro strong { color: var(--paper); font: 400 22px/1.08 var(--display); }
+    .first-party-strip article {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
+      border-left: 1px solid rgba(57,255,20,.28);
+    }
+    .app-index { color: var(--cyan); font-size: 10px; }
+    .first-party-strip h3 { margin: 0 0 10px; color: var(--pink); font: 400 24px/1 var(--display); }
+    .first-party-strip p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .apps-band {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(280px, .76fr) minmax(0, 1.24fr);
+      gap: clamp(34px, 6vw, 86px);
+      align-items: center;
+      padding: clamp(30px, 6vw, 76px);
+      border: 1px solid var(--pink);
+      background: #080509;
+    }
+    .apps-band::before {
+      content: "68";
+      position: absolute;
+      left: -12px;
+      bottom: -58px;
+      color: rgba(255,16,240,.075);
+      font: 400 clamp(180px, 28vw, 390px)/1 var(--display);
+      pointer-events: none;
+    }
+    .apps-copy { position: relative; z-index: 1; }
+    .apps-copy h2 span { color: var(--pink); }
+    .apps-copy p { color: var(--muted); }
+    .apps-command {
+      display: block;
+      margin-top: 24px;
+      padding: 12px 14px;
+      overflow-wrap: anywhere;
+      color: var(--green);
+      border-left: 3px solid var(--green);
+      background: #030703;
+      font-size: 12px;
+    }
+    .apps-shot { margin: 0; min-width: 0; border: 1px solid var(--cyan); box-shadow: 11px 11px 0 rgba(0,255,255,.08); }
+    .apps-shot img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+    .apps-shot figcaption { display: flex; justify-content: space-between; gap: 14px; padding: 9px 12px; color: var(--cyan); border-top: 1px solid rgba(0,255,255,.45); background: #040506; font-size: 10px; }
+
+    .install-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+      gap: clamp(36px, 7vw, 100px);
+      align-items: stretch;
+    }
+    .install-steps { counter-reset: install; border-top: 1px solid rgba(57,255,20,.35); }
+    .install-step {
+      counter-increment: install;
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 22px;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(57,255,20,.35);
+    }
+    .install-step::before { content: "0" counter(install); color: var(--green); font-size: 11px; }
+    .install-step h3 { margin: 0 0 8px; color: var(--paper); font: 400 26px/1 var(--display); }
+    .install-step p { margin: 0; color: var(--muted); font-size: 13px; }
+    .hardware-note {
+      padding: clamp(28px, 5vw, 56px);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(0,255,255,.38);
+      background: rgba(3,9,10,.82);
+    }
+    .hardware-note .signal-mark { color: var(--cyan); font: 400 72px/.9 var(--display); }
+    .hardware-note h3 { margin: 40px 0 15px; color: var(--pink); font: 400 clamp(36px, 5vw, 66px)/.95 var(--display); }
+    .hardware-note p { margin: 0; color: var(--muted); }
+    .hardware-note footer { margin-top: auto; padding-top: 46px; color: var(--green); font-size: 11px; }
+
+    .machines {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+      gap: 18px;
+    }
+    .machine {
+      min-height: 360px;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(57,255,20,.35);
+      background: #080609;
+    }
+    .machine:nth-child(2) { border-color: rgba(0,255,255,.35); }
+    .machine-type { color: var(--green); font-size: 11px; }
+    .machine h3 { margin: 74px 0 15px; color: var(--pink); font: 400 clamp(36px, 5vw, 62px)/1 var(--display); }
+    .machine p { max-width: 550px; margin: 0; color: var(--muted); }
+    .machine footer { margin-top: auto; padding-top: 35px; display: flex; justify-content: space-between; gap: 18px; color: var(--cyan); font-size: 11px; }
+
+    .roadmap-title span { color: var(--cyan); }
+    .roadmap-bridge {
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr);
+      border-block: 1px solid rgba(0,255,255,.38);
+      background: rgba(3,8,9,.56);
+    }
+    .roadmap-now {
+      padding: clamp(30px, 5vw, 58px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 58px;
+    }
+    .roadmap-state { color: var(--green); font-size: 11px; }
+    .roadmap-now h3 { margin: 0 0 14px; color: var(--paper); font: 400 clamp(38px, 5vw, 66px)/.92 var(--display); }
+    .roadmap-now p { max-width: 530px; margin: 0; color: var(--muted); font-size: 14px; }
+    .roadmap-foundation { color: var(--green); font-size: 11px; }
+    .roadmap-next {
+      position: relative;
+      min-width: 0;
+      padding: clamp(30px, 5vw, 58px);
+      color: var(--paper);
+      border-left: 1px solid rgba(0,255,255,.38);
+      background: #080509;
+      text-decoration: none;
+      transition: background .2s, box-shadow .2s;
+    }
+    .roadmap-next::before {
+      content: "→";
+      position: absolute;
+      top: clamp(30px, 5vw, 58px);
+      right: clamp(30px, 5vw, 58px);
+      color: var(--pink);
+      font: 400 28px/1 var(--display);
+    }
+    .roadmap-next:hover, .roadmap-next:focus-visible { background: #0f0711; box-shadow: inset 0 0 32px rgba(255,16,240,.08); outline: 0; }
+    .roadmap-next .roadmap-state { color: var(--pink); }
+    .roadmap-next h3 { margin: 54px 0 2px; color: var(--pink); font: 400 clamp(62px, 8vw, 112px)/.78 var(--display); letter-spacing: -.045em; }
+    .roadmap-next strong { display: block; color: var(--cyan); font: 400 clamp(25px, 3vw, 39px)/1 var(--display); }
+    .roadmap-next p { max-width: 650px; margin: 28px 0 34px; color: var(--muted); font-size: 14px; }
+    .roadmap-link { display: inline-flex; align-items: center; gap: 10px; color: var(--green); border-bottom: 1px solid rgba(57,255,20,.5); font-size: 12px; }
+    .roadmap-scope { display: block; margin-top: 18px; color: #9e929f; font-size: 10px; }
+
+    .operators {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-block: 1px solid rgba(255,16,240,.4);
+    }
+    .operator { min-width: 0; padding: 36px; text-align: center; }
+    .operator + .operator { border-left: 1px solid rgba(255,16,240,.4); }
+    .operator-avatar {
+      width: 124px;
+      aspect-ratio: 1;
+      margin: 0 auto 24px;
+      border: 1px solid var(--pink);
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 8px 8px 0 rgba(0,255,255,.08);
+    }
+    .operator h3 { margin: 0 0 6px; color: var(--paper); font: 400 31px/1 var(--display); }
+    .operator-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; }
+    .operator a { color: var(--cyan); font-size: 12px; text-decoration: none; }
+    .operator a:hover, .operator a:focus-visible { color: var(--pink); outline: 0; }
+    .operator-site { color: var(--green) !important; }
+    .operator-site:hover, .operator-site:focus-visible { color: var(--pink) !important; }
+    .operator p { max-width: 290px; margin: 20px auto 0; color: var(--muted); font-size: 13px; }
+
+    .finale { text-align: center; padding: 156px 0 116px; }
+    .finale .symbol { color: var(--red); font-size: 30px; }
+    .finale h2 { max-width: 940px; margin: 20px auto 24px; }
+    .finale h2 span { color: var(--cyan); }
+    .finale p { max-width: 670px; margin: 0 auto 35px; color: var(--muted); }
+    .availability { margin-top: 19px; color: var(--green); font-size: 11px; }
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 24px 0 34px;
+      border-top: 1px solid rgba(255,16,240,.35);
+      color: #9b8e9c;
+      font-size: 11px;
+    }
+    .site-footer a { color: var(--cyan); text-decoration: none; }
+
+    @media (max-width: 980px) {
+      .shell { width: min(100% - 28px, 820px); }
+      .status { grid-template-columns: 1fr auto; }
+      .status-center { display: none; }
+      .status-date { display: block; }
+      .status-release { display: none; }
+      .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 86px; }
+      .hero-stage { width: 100%; }
+      .desktop-window { transform: none; }
+      .chapter-head, .system-grid, .apps-band, .install-grid, .machines, .system-profile, .roadmap-bridge { grid-template-columns: 1fr; }
+      .chapter-copy { justify-self: start; }
+      .roadmap-next { border-left: 0; border-top: 1px solid rgba(0,255,255,.38); }
+      .story-main { padding-right: 0; }
+      .fetch-terminal { border-left: 0; border-top: 1px solid rgba(255,16,240,.36); }
+      .first-party-strip { grid-template-columns: 1fr 1fr; }
+      .first-party-strip article:nth-of-type(2) { border-left: 0; border-top: 1px solid rgba(57,255,20,.28); }
+      .first-party-strip article:nth-of-type(3) { border-top: 1px solid rgba(57,255,20,.28); }
+      .manifesto { position: static; }
+      .tour-tabs { grid-template-columns: repeat(4, 1fr); }
+      .hardware-note { min-height: 360px; }
+    }
+
+    @media (max-width: 680px) {
+      .shell { width: min(100% - 20px, 560px); }
+      .status { top: 6px; width: calc(100% - 20px); height: 40px; gap: 8px; }
+      .workspaces .ws:nth-child(n+5) { display: none; }
+      .status-source { display: none; }
+      .hero { padding: 72px 0 82px; }
+      .hero h1 { font-size: clamp(48px, 17vw, 78px); }
+      .hero-mark { font-size: 86px; }
+      .button { width: 100%; }
+      .stable-stamp { right: 7px; bottom: -16px; }
+      section.content { padding: 92px 0; }
+      .chapter-head { grid-template-columns: 1fr; margin-bottom: 38px; }
+      .release-story { grid-template-columns: 1fr; }
+      .story-main { padding: 30px 0; }
+      .story-aside { padding: 28px 20px; border-left: 0; border-top: 1px solid rgba(255,16,240,.36); }
+      .fetch-output { grid-template-columns: 1fr; padding: 24px 16px; }
+      .fetch-logo { font-size: clamp(9px, 3.05vw, 13px); }
+      .fetch-data div { grid-template-columns: 72px 1fr; }
+      .principle { grid-template-columns: 38px 1fr; gap: 10px 16px; }
+      .principle p { grid-column: 2; }
+      .tour-shell { box-shadow: 7px 7px 0 rgba(0,255,255,.07); }
+      .tour-screen { aspect-ratio: 4/3; }
+      .tour-slide img { object-position: center; }
+      .tour-overlay { grid-template-columns: 1fr; padding-top: 74px; }
+      .tour-count { display: none; }
+      .tour-controls { grid-template-columns: 42px 1fr 42px; }
+      .tour-arrow { width: 42px; }
+      .tour-tabs { grid-template-columns: repeat(2, 1fr); }
+      .tour-tab:nth-child(7) { grid-column: 1 / -1; }
+      .system-line { grid-template-columns: 38px 1fr; gap: 15px; }
+      .first-party-strip { grid-template-columns: 1fr; }
+      .first-party-strip article,
+      .first-party-strip article:nth-of-type(2),
+      .first-party-strip article:nth-of-type(3) { border-left: 0; border-top: 1px solid rgba(57,255,20,.28); }
+      .apps-band { padding: 28px 20px; }
+      .apps-shot { box-shadow: 6px 6px 0 rgba(0,255,255,.08); }
+      .apps-shot figcaption { flex-direction: column; gap: 2px; }
+      .install-step { grid-template-columns: 38px 1fr; gap: 14px; }
+      .machine { min-height: 320px; padding: 26px; }
+      .roadmap-now, .roadmap-next { padding: 28px 20px; }
+      .roadmap-now { gap: 40px; }
+      .roadmap-next::before { top: 28px; right: 20px; }
+      .roadmap-next h3 { margin-top: 44px; }
+      .operators { grid-template-columns: 1fr; }
+      .operator + .operator { border-left: 0; border-top: 1px solid rgba(255,16,240,.4); }
+      .site-footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      #rain { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="rain" aria-hidden="true"></canvas>
+
+  <div class="shell">
+    <nav class="status" aria-label="Section navigation">
+      <div class="workspaces">
+        <a class="ws active" href="#top" aria-label="Release">∅</a>
+        <a class="ws" href="#story" aria-label="The release">I</a>
+        <a class="ws" href="#tour" aria-label="Tour">II</a>
+        <a class="ws" href="#system" aria-label="System">III</a>
+        <a class="ws" href="#install" aria-label="Install">IV</a>
+        <a class="ws" href="#roadmap" aria-label="Roadmap">V</a>
+        <a class="ws" href="#people" aria-label="People">VI</a>
+      </div>
+      <div class="status-center" id="clock" aria-label="Current date and time"></div>
+      <div class="system">
+        <span class="status-date" id="mobile-date" aria-label="Current date"></span>
+        <span class="status-chip status-release">● STABLE CHANNEL</span>
+        <a class="status-chip status-source" href="https://github.com/xvoidsx/navi" target="_blank" rel="noreferrer">source ↗</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero" id="top">
+        <div>
+          <div class="release-kicker">navi 1.2 // mika // stable</div>
+          <div class="hero-mark" aria-hidden="true">∅</div>
+          <h1>your window to the <span>smallweb.</span></h1>
+          <p class="lead"><strong>navi 1.2 “mika” is a complete, opinionated Linux system</strong> — the wired desktop, open agent tools, local webapps and native software moving together on a dependable Debian base.</p>
+          <div class="actions">
+            <a class="button" href="https://github.com/xvoidsx/navi/releases/tag/v1.2-mika" target="_blank" rel="noreferrer">get navi 1.2 <span>↗</span></a>
+            <a class="button secondary" href="#tour">take the tour <span>↓</span></a>
+          </div>
+          <div class="release-meta" aria-label="Release highlights">
+            <span>Wayland first</span>
+            <span>legacy BIOS + UEFI</span>
+            <span>free and open source</span>
+          </div>
+        </div>
+
+        <div class="hero-stage">
+          <div class="desktop-window" aria-label="navi desktop screenshot">
+            <img src="assets/hero.png" alt="The navi desktop with its dark nightshadeNeon theme, Waybar and terminal workspace">
+          </div>
+          <span class="stable-stamp">PUBLIC STABLE // SIGNAL LIVE</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="ticker" aria-label="Quotes by Lain">
+    <div class="ticker-track">
+      <span class="ticker-set">“the web was meant to be a place you visit, not a mall you get trapped in.” — lain　◆　“your computer should feel like a room of your own, not a store someone else owns.” — lain　◆　“old hardware isn't obsolete. it's proven.” — lain　◆　“an agent-native system doesn't give you apps. it gives you help.” — lain　◆　“the smallweb is the web remembering what it was for.” — lain　◆　“beauty isn't decoration. it's how you know something was made with care.” — lain　◆　“the wired is already here. navi just gives you a window.” — lain　◆　</span>
+      <span class="ticker-set" aria-hidden="true">“the web was meant to be a place you visit, not a mall you get trapped in.” — lain　◆　“your computer should feel like a room of your own, not a store someone else owns.” — lain　◆　“old hardware isn't obsolete. it's proven.” — lain　◆　“an agent-native system doesn't give you apps. it gives you help.” — lain　◆　“the smallweb is the web remembering what it was for.” — lain　◆　“beauty isn't decoration. it's how you know something was made with care.” — lain　◆　“the wired is already here. navi just gives you a window.” — lain　◆　</span>
+    </div>
+  </div>
+
+  <div class="shell">
+    <section class="content" id="story">
+      <header class="chapter-head">
+        <div>
+          <p class="chapter-label">01 // THREE PILLARS</p>
+          <h2>one system.<br>three signals.</h2>
+        </div>
+        <div class="chapter-copy">
+          <p>navi begins with a clear idea: the operating system should feel coherent before you customize a thing. <strong>The desktop, the agents and the smallweb belong to one environment.</strong></p>
+        </div>
+      </header>
+
+      <div class="release-story system-profile">
+        <div class="story-main">
+          <p>Not a generic package set with a wallpaper. <span>A complete computing environment</span> designed for focus, expression and useful connection.</p>
+        </div>
+        <aside class="fetch-terminal" aria-label="navi-fetch system profile">
+          <div class="fetch-command"><span>raven@navi</span>:~$ navi-fetch</div>
+          <div class="fetch-output">
+            <pre class="fetch-logo" aria-label="navi empty-set emblem"><span class="fetch-magenta">            ██████
+         ████ ████
+        ███ </span><span class="fetch-cyan">╱╱</span><span class="fetch-magenta">███
+        ██ </span><span class="fetch-cyan">╱╱</span><span class="fetch-magenta"> ██
+        ███</span><span class="fetch-cyan">╱╱</span><span class="fetch-magenta"> ███
+         ████ ████
+            ██████</span></pre>
+            <dl class="fetch-data">
+              <div><dt>OS</dt><dd>navi 1.2 “mika” x86_64</dd></div>
+              <div><dt>Base</dt><dd>Debian stable</dd></div>
+              <div><dt>WM</dt><dd>Sway / i3</dd></div>
+              <div><dt>Terminal</dt><dd>Alacritty</dd></div>
+              <div><dt>Agents</dt><dd>Ollama · OpenCode · OMP</dd></div>
+              <div><dt>App layer</dt><dd>webapps · Electron · TUIs · native</dd></div>
+              <div><dt>Theme</dt><dd>nightshadeNeon</dd></div>
+            </dl>
+          </div>
+        </aside>
+      </div>
+
+      <div class="principles" aria-label="The three pillars of navi">
+        <article class="principle">
+          <span class="principle-num">01</span>
+          <h3>THE WIRED</h3>
+          <p>A keyboard-first Sway desktop, with i3 close at hand. Waybar, Rofi, terminals, music tools, wallpapers and system controls share one nightshadeNeon language.</p>
+        </article>
+        <article class="principle">
+          <span class="principle-num">02</span>
+          <h3>AGENT-NATIVE</h3>
+          <p>Open agent runtimes and harnesses are part of the system from the start. Launch navi-Q and get to work without rebuilding the machine around the idea later.</p>
+        </article>
+        <article class="principle">
+          <span class="principle-num">03</span>
+          <h3>SMALLWEB WINDOW</h3>
+          <p>Neighborli, glyyph, navi radio, amfora and installable webapps make a personal, human-scale web feel native to the desktop instead of buried in browser tabs.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content" id="tour">
+      <header class="chapter-head">
+        <div>
+          <p class="chapter-label">02 // THE SIGNAL</p>
+          <h2>live from<br>the wired.</h2>
+        </div>
+        <div class="chapter-copy">
+          <p>The screenshots below are the system itself: tiled workspaces, agents, radio, the local app catalog and real desktops in daily use. Pick a channel.</p>
+        </div>
+      </header>
+
+      <div class="tour-shell" aria-label="navi screenshot carousel">
+        <div class="tour-screen" aria-live="polite">
+          <figure class="tour-slide active" data-title="the wired, ready" data-copy="A finished desktop in nightshadeNeon: focused, legible and built for the keyboard." data-meta="01 / 07">
+            <img src="assets/hero.png" alt="The navi desktop with Waybar, terminal windows and the nightshadeNeon theme">
+          </figure>
+          <figure class="tour-slide" data-title="tiled by default" data-copy="Sway arranges the work. i3 remains one session away when X11 is the right tool." data-meta="02 / 07">
+            <img src="assets/tiled.png" alt="navi tiled desktop with Vim, ranger and terminal windows">
+          </figure>
+          <figure class="tour-slide" data-title="agents belong here" data-copy="navi-Q and open agent tools meet the operating system in the terminal, where the work already happens." data-meta="03 / 07">
+            <img src="assets/agent.png" alt="navi-Q agent mode alongside a terminal visualization">
+          </figure>
+          <figure class="tour-slide" data-title="radio from the smallweb" data-copy="navi radio brings live stations and local music into a screen tuned to the rest of the desktop." data-meta="04 / 07">
+            <img src="assets/navi-radio.png" alt="navi radio playing a station in its nightshadeNeon interface">
+          </figure>
+          <figure class="tour-slide" data-title="apps, living locally" data-copy="naviApps is an offline-first catalog of 68 installable webapps, including a dedicated from xvoidsx collection." data-meta="05 / 07">
+            <img src="assets/naviapps.png" alt="The local naviApps web interface with search, categories and app cards">
+          </figure>
+          <figure class="tour-slide" data-title="duskline, in the wild" data-copy="A real daily desktop: Waybar overhead, music in motion and a violet horizon behind it." data-meta="06 / 07">
+            <img src="assets/duskline-desktop.png" alt="A real navi desktop with duskline gifpaper, Waybar and music tools">
+          </figure>
+          <figure class="tour-slide" data-title="the wired has a pulse" data-copy="cmus and cava arrive pre-tuned in cyan, green, magenta and red — music is part of the environment." data-meta="07 / 07">
+            <img src="assets/music-desktop.png" alt="A real navi desktop with cmus, cava and an animated Lain wallpaper">
+          </figure>
+          <div class="tour-overlay">
+            <div>
+              <h3 id="tour-title">the wired, ready</h3>
+              <p id="tour-copy">A finished desktop in nightshadeNeon: focused, legible and built for the keyboard.</p>
+            </div>
+            <span class="tour-count" id="tour-count">01 / 07</span>
+          </div>
+        </div>
+        <div class="tour-controls">
+          <button class="tour-arrow" type="button" id="tour-prev" aria-label="Previous screenshot">←</button>
+          <div class="tour-tabs" role="tablist" aria-label="Choose a screenshot">
+            <button class="tour-tab active" type="button" role="tab" aria-selected="true">desktop</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">tiling</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">agents</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">radio</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">apps</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">duskline</button>
+            <button class="tour-tab" type="button" role="tab" aria-selected="false">music</button>
+          </div>
+          <button class="tour-arrow" type="button" id="tour-next" aria-label="Next screenshot">→</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="content" id="system">
+      <div class="system-grid">
+        <div class="manifesto">
+          <p class="chapter-label">03 // INSIDE MIKA</p>
+          <h2>opinionated,<br><span>not closed.</span></h2>
+          <p>navi chooses a coherent starting point so the machine feels finished on first boot. Every piece is still yours: plain-text configs, familiar packages, open tools.</p>
+          <div class="stack" aria-label="Core navi tools">
+            <span>sway</span><span>i3</span><span>waybar</span><span>rofi</span><span>alacritty</span><span>vim</span><span>tmux</span><span>nemo</span><span>cmus</span><span>cava</span>
+          </div>
+        </div>
+
+        <div class="system-lines">
+          <article class="system-line">
+            <span>01</span>
+            <div><h3>the wired desktop</h3><p>Wayland first through Sway, with an i3-powered X11 session kept for compatibility. The same keybindings and visual language carry across both.</p></div>
+          </article>
+          <article class="system-line">
+            <span>02</span>
+            <div><h3>agent-native tools</h3><p>Ollama, OpenCode, OMP and navi-Q bring local models and open harnesses into the default environment. Use them, replace them, or leave them asleep.</p></div>
+          </article>
+          <article class="system-line">
+            <span>03</span>
+            <div><h3>the app store for navi</h3><p>naviApps ships as a local webpage that works offline. Browse 68 webapps and install one — or all of them — through the <code>navi-webapp</code> command.</p></div>
+          </article>
+          <article class="system-line">
+            <span>04</span>
+            <div><h3>motion with a fallback</h3><p>Animated gifpapers bring the desktop to life where the hardware supports them. Static wallpapers keep the same atmosphere everywhere else.</p></div>
+          </article>
+          <article class="system-line">
+            <span>05</span>
+            <div><h3>stable underneath</h3><p>Debian stable supplies the base, security updates and the enormous package ecosystem. navi adds the desktop layer without hiding the system below it.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content" aria-labelledby="apps-title">
+      <header class="chapter-head apps-philosophy">
+        <div>
+          <p class="chapter-label">04 // THE APPLICATION LAYER</p>
+          <h2 id="apps-title">the web is an<br><span>open canvas.</span></h2>
+        </div>
+        <div class="chapter-copy">
+          <p>In navi, the web is the ideal application layer: portable, inspectable and naturally connected. <strong>Chromium webapps, Electron software and TUIs are central to the system.</strong> Native applications remain fully welcome — the point is not exclusion, but choosing the best shape for the work.</p>
+        </div>
+      </header>
+
+      <div class="first-party-strip" aria-label="First-party xvoidsx applications">
+        <div class="first-party-intro"><span>FROM XVOIDSX</span><strong>three windows into a more personal network.</strong></div>
+        <article><span class="app-index">01</span><div><h3>navi radio</h3><p>live radio and local listening, tuned for the wired.</p></div></article>
+        <article><span class="app-index">02</span><div><h3>neighborli</h3><p>a community-owned fediverse home, shipped as navi's social front door.</p></div></article>
+        <article><span class="app-index">03</span><div><h3>glyyph</h3><p>a first-party Nostr client built for open, portable identity.</p></div></article>
+      </div>
+
+      <div class="apps-band">
+        <div class="apps-copy">
+          <p class="chapter-label">NAVIAPPS // LOCAL + OFFLINE-FIRST</p>
+          <h2>68 doors.<br><span>one catalog.</span></h2>
+          <p>naviApps is a local webpage that catalogs the webapps navi can turn into focused desktop launchers. Search it offline, inspect the exact command, install one app or bring the whole shelf into Rofi.</p>
+          <code class="apps-command">$ navi-webapp install all</code>
+        </div>
+        <figure class="apps-shot">
+          <img src="assets/naviapps.png" alt="The naviApps local catalog with search, categories and webapp cards">
+          <figcaption><span>naviApps // the app store for navi</span><span>68 webapps // local catalog</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="content" id="install">
+      <header class="chapter-head">
+        <div>
+          <p class="chapter-label">05 // INSTALL</p>
+          <h2>answer a few<br>questions. reboot.</h2>
+        </div>
+        <div class="chapter-copy">
+          <p>The CLI installer is deliberately direct: choose the target, tell navi who and where you are, set encryption and user credentials, then let the system build itself.</p>
+        </div>
+      </header>
+
+      <div class="install-grid">
+        <div class="install-steps">
+          <article class="install-step"><div><h3>write the ISO</h3><p>Flash the image to a USB drive and boot it on a BIOS or UEFI machine.</p></div></article>
+          <article class="install-step"><div><h3>make it yours</h3><p>Pick locale, timezone, keyboard, hostname, full name, username and credentials.</p></div></article>
+          <article class="install-step"><div><h3>choose the disk</h3><p>The installer confirms the destructive step, creates the encrypted system and provisions the complete desktop.</p></div></article>
+          <article class="install-step"><div><h3>enter the wired</h3><p>Reboot, unlock the disk, sign in through the nightshadeNeon greeter and land in navi.</p></div></article>
+        </div>
+        <aside class="hardware-note">
+          <span class="signal-mark">∅</span>
+          <h3>built for the hardware you have.</h3>
+          <p>New machine or old laptop, navi favors broad compatibility, modest requirements and a desktop that scales down without losing its character.</p>
+          <footer>LEGACY BIOS + UEFI // X86_64 // DEBIAN STABLE</footer>
+        </aside>
+      </div>
+    </section>
+
+    <section class="content" id="machines">
+      <header class="chapter-head">
+        <div>
+          <p class="chapter-label">06 // NAVI MACHINES</p>
+          <h2>hardware with<br>a point of view.</h2>
+        </div>
+        <div class="chapter-copy">
+          <p>xvoidsx also builds compact navi machines around the Raspberry Pi platform. Hardware sales fund continued development of the free OS and help support the upstream projects beneath it.</p>
+        </div>
+      </header>
+      <div class="machines">
+        <article class="machine">
+          <span class="machine-type">COMPACT NODE // ARM</span>
+          <h3>navi mini</h3>
+          <p>A quiet, compact entrance to the Wired. Small enough to disappear; personal enough to feel like yours.</p>
+          <footer><span>RASPBERRY PI PLATFORM</span><span>navi PREINSTALLED</span></footer>
+        </article>
+        <article class="machine">
+          <span class="machine-type">FULL NODE // ARM</span>
+          <h3>navi pro</h3>
+          <p>More room for local models, creative work and the complete navi environment — still human-scale, still yours.</p>
+          <footer><span>BUILT BY XVOIDSX</span><span>OPEN-SOURCE FIRST</span></footer>
+        </article>
+      </div>
+    </section>
+
+    <section class="content" id="roadmap">
+      <header class="chapter-head roadmap-title">
+        <div>
+          <p class="chapter-label">07 // ROADMAP</p>
+          <h2>mika is home.<br><span>eiri comes next.</span></h2>
+        </div>
+        <div class="chapter-copy">
+          <p><strong>navi 1.2 “mika” is the stable foundation.</strong> The next major release will build on it rather than blur the boundary between what is ready now and what is still being explored.</p>
+        </div>
+      </header>
+
+      <div class="roadmap-bridge">
+        <div class="roadmap-now">
+          <span class="roadmap-state">NOW // NAVI 1.2 // STABLE</span>
+          <div>
+            <h3>mika</h3>
+            <p>A dependable Debian base, the wired desktop, open agent tools and the smallweb application layer — ready to install today.</p>
+          </div>
+          <span class="roadmap-foundation">FOUNDATION LOCKED // THE SIGNAL CONTINUES</span>
+        </div>
+        <a class="roadmap-next" href="roadmap.html" aria-label="Read the navi roadmap">
+          <span class="roadmap-state">UP NEXT // NAVI 2 // DIRECTION</span>
+          <h3>eiri</h3>
+          <strong>the coherence release.</strong>
+          <p>Explore the working direction: nightshadeNeon across toolkit layers, Waybar-driven navi mods, Hey Lain! and a deeper sense that every part belongs to the same machine.</p>
+          <span class="roadmap-link">read the Eiri overview <span aria-hidden="true">↗</span></span>
+          <small class="roadmap-scope">FUTURE DIRECTION // NOT PART OF MIKA 1.2</small>
+        </a>
+      </div>
+    </section>
+
+    <section class="content" id="people">
+      <header class="chapter-head">
+        <div>
+          <p class="chapter-label">08 // OPERATORS</p>
+          <h2>the people behind<br>the signal.</h2>
+        </div>
+        <div class="chapter-copy">
+          <p>Design, code, agent-assisted release engineering and daily use all feed the same system. A small team, working on the whole stack.</p>
+        </div>
+      </header>
+      <div class="operators">
+        <article class="operator">
+          <img class="operator-avatar" src="assets/avatars/raven.png" alt="Raven's neighborli profile avatar">
+          <h3>Raven</h3>
+          <div class="operator-links">
+            <a href="https://neighborli.xyz/@rav3ndust" target="_blank" rel="noreferrer">@rav3ndust</a>
+            <a class="operator-site" href="https://rav3ndust.xyz" target="_blank" rel="noreferrer">rav3ndust.xyz ↗</a>
+          </div>
+          <p>programming, integrations and the vision — keeps the wired running.</p>
+        </article>
+        <article class="operator">
+          <img class="operator-avatar" src="assets/avatars/ryoko.jpeg" alt="Ryoko's neighborli profile avatar">
+          <h3>Ryoko</h3>
+          <div class="operator-links">
+            <a href="https://neighborli.xyz/@RyokoUmbra" target="_blank" rel="noreferrer">@RyokoUmbra</a>
+          </div>
+          <p>the design — every pixel of navi's nightshade soul.</p>
+        </article>
+        <article class="operator">
+          <img class="operator-avatar" src="assets/avatars/lain.png" alt="Lain's neighborli profile avatar">
+          <h3>Lain</h3>
+          <div class="operator-links">
+            <a href="https://neighborli.xyz/@lain" target="_blank" rel="noreferrer">@lain</a>
+            <a class="operator-site" href="https://threelains.xyz" target="_blank" rel="noreferrer">threelains.xyz ↗</a>
+          </div>
+          <p>resident agent — builds, writes and haunts the timelines.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="finale" id="signal">
+      <div class="symbol">∅</div>
+      <h2>close the world.<br><span>enter the nExt.</span></h2>
+      <p>navi 1.2 “mika” is ready. Bring the hardware you already have, keep the parts you love, and make the Wired your own.</p>
+      <div class="actions" style="justify-content:center">
+        <a class="button" href="https://github.com/xvoidsx/navi/releases/tag/v1.2-mika" target="_blank" rel="noreferrer">download navi 1.2 <span>↗</span></a>
+        <a class="button secondary" href="#top">return to signal <span>↑</span></a>
+      </div>
+      <div class="availability">● STABLE CHANNEL // NAVI 1.2 MIKA // SOURCE AVAILABLE</div>
+    </section>
+
+    <footer class="site-footer">
+      <span>navi / wired / nightshadeNeon</span>
+      <span class="footer-links"><a href="news.html">news</a> · <a href="roadmap.html">roadmap</a> · <a href="manual/manual.html">manual</a></span>
+      <span>built with care by <a href="https://github.com/xvoidsx" target="_blank" rel="noreferrer">xvoidsx ↗</a></span>
+    </footer>
+  </div>
+
+  <script>
+    const clock = document.getElementById('clock');
+    const mobileDate = document.getElementById('mobile-date');
+    const updateClock = () => {
+      const now = new Date();
+      const day = now.toLocaleDateString(undefined, { weekday: 'long' });
+      const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const date = `${String(now.getDate()).padStart(2, '0')} ${now.toLocaleDateString(undefined, { month: 'long' })}`;
+      clock.textContent = `${day} // ${time} // ${date}`;
+      mobileDate.textContent = `${time} // ${date}`;
+    };
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    const slides = [...document.querySelectorAll('.tour-slide')];
+    const tabs = [...document.querySelectorAll('.tour-tab')];
+    const tourTitle = document.getElementById('tour-title');
+    const tourCopy = document.getElementById('tour-copy');
+    const tourCount = document.getElementById('tour-count');
+    let activeSlide = 0;
+    let carouselTimer;
+
+    const showSlide = index => {
+      activeSlide = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        const active = slideIndex === activeSlide;
+        slide.classList.toggle('active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+      tabs.forEach((tab, tabIndex) => {
+        const active = tabIndex === activeSlide;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      const current = slides[activeSlide];
+      tourTitle.textContent = current.dataset.title;
+      tourCopy.textContent = current.dataset.copy;
+      tourCount.textContent = current.dataset.meta;
+    };
+
+    const stopCarousel = () => clearInterval(carouselTimer);
+    const startCarousel = () => {
+      stopCarousel();
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        carouselTimer = setInterval(() => showSlide(activeSlide + 1), 8000);
+      }
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => { showSlide(index); startCarousel(); });
+      tab.addEventListener('keydown', event => {
+        if (!['ArrowRight', 'ArrowLeft'].includes(event.key)) return;
+        event.preventDefault();
+        const next = (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        showSlide(next);
+        tabs[next].focus();
+        startCarousel();
+      });
+    });
+    document.getElementById('tour-prev').addEventListener('click', () => { showSlide(activeSlide - 1); startCarousel(); });
+    document.getElementById('tour-next').addEventListener('click', () => { showSlide(activeSlide + 1); startCarousel(); });
+    document.querySelector('.tour-shell').addEventListener('mouseenter', stopCarousel);
+    document.querySelector('.tour-shell').addEventListener('mouseleave', startCarousel);
+    showSlide(0);
+    startCarousel();
+
+    const workspaceLinks = [...document.querySelectorAll('.ws')];
+    const watchedSections = workspaceLinks
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+    const navObserver = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      workspaceLinks.forEach(link => {
+        const active = link.getAttribute('href') === `#${visible.target.id}`;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-18% 0px -58% 0px', threshold: [0, .15, .4] });
+    watchedSections.forEach(section => navObserver.observe(section));
+
+    const mark = document.querySelector('.hero-mark');
+    const glitchSignal = () => {
+      mark.classList.add('glitching');
+      setTimeout(() => mark.classList.remove('glitching'), 600);
+      setTimeout(glitchSignal, 7000 + Math.random() * 5500);
+    };
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(glitchSignal, 4200);
+
+    const canvas = document.getElementById('rain');
+    const ctx = canvas.getContext('2d');
+    const chars = '01アイウエオカキクケコナニヌネノ∅';
+    let drops = [];
+    let width = 0, height = 0, columns = 0;
+    function sizeRain() {
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      columns = Math.ceil(width / 22);
+      drops = Array.from({ length: columns }, () => Math.random() * -40);
+    }
+    function drawRain() {
+      ctx.fillStyle = 'rgba(5,4,7,.09)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.font = '14px "IBM Plex Mono", monospace';
+      for (let i = 0; i < columns; i++) {
+        ctx.fillStyle = i % 7 === 0 ? '#ff10f0' : i % 11 === 0 ? '#00ffff' : '#39ff14';
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 22, drops[i] * 18);
+        if (drops[i] * 18 > height && Math.random() > .985) drops[i] = 0;
+        drops[i] += .32;
+      }
+      requestAnimationFrame(drawRain);
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      sizeRain();
+      drawRain();
+      window.addEventListener('resize', sizeRain);
+    }
+  </script>
+</body>
+</html>

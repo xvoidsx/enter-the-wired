@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The navi roadmap — where mika stands and where eiri is headed.">
+<title>roadmap — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 600px; margin: 0 0 56px; }
+  .stop { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 24px; background: var(--panel); }
+  .stop.now { border-color: var(--green); }
+  .stop.next { border-color: var(--cyan); }
+  .stop .state { font-size: 11px; letter-spacing: .24em; margin: 0 0 10px; }
+  .stop.now .state { color: var(--green); }
+  .stop.next .state { color: var(--cyan); }
+  .stop.future .state { color: var(--pink); }
+  .stop h2 { margin: 0 0 6px; font-size: 32px; letter-spacing: -.01em; }
+  .stop h2 small { color: var(--muted); font-size: 16px; font-weight: 400; }
+  .stop p { color: var(--muted); margin: 0 0 12px; font-size: 15px; }
+  .stop p strong { color: var(--paper); font-weight: 600; }
+  .stop ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 15px; }
+  .stop li { margin: 6px 0; }
+  .stop li strong { color: var(--paper); font-weight: 600; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } .stop { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+  </nav>
+
+  <p class="kicker">NAVI // ROADMAP</p>
+  <h1>where we're <span>headed.</span></h1>
+  <p class="lede">mika is the stable foundation. Everything after it builds on that foundation rather than blurring the line between what's ready now and what's still being explored.</p>
+
+  <section class="stop now">
+    <p class="state">NOW // STABLE</p>
+    <h2>navi 1.2 <small>“mika”</small></h2>
+    <p><strong>The first stable release.</strong> A dependable Debian base, the wired tiling desktop (Wayland-first, X11 fallback), open agent tools baked in from first boot, and the smallweb application layer — ready to install today.</p>
+    <ul>
+      <li><strong>wired desktop</strong> — sway + i3, waybar, rofi, nightshadeNeon everywhere</li>
+      <li><strong>agent-native</strong> — ollama, opencode, omp, pi, crush, herdr, and navi-Q on Alt+A</li>
+      <li><strong>webapp layer</strong> — naviApps store, navi radio, neighborli, glyyph</li>
+      <li><strong>permacomputing</strong> — validated on a 2015 Acer Cloudbook; legacy BIOS + UEFI</li>
+    </ul>
+    <p style="margin-top:14px"><a href="https://github.com/xvoidsx/navi/releases/tag/v1.2-mika">download 1.2 “mika” ↗</a></p>
+  </section>
+
+  <section class="stop next">
+    <p class="state">UP NEXT // POINT RELEASE</p>
+    <h2>navi 1.2.1 <small>maintenance</small></h2>
+    <p><strong>Small, careful fixes on the stable foundation.</strong> Documentation updates, polish, and anything the wider world finds now that mika is public. No new features — that's what eiri is for.</p>
+  </section>
+
+  <section class="stop future">
+    <p class="state">FUTURE // NAVI 2 // DIRECTION</p>
+    <h2>navi 2 <small>“eiri” — the coherence release</small></h2>
+    <p><strong>Coherence through ownership.</strong> One nightshadeNeon design language flowing through every layer xvoidsx builds — the same tokens and interaction grammar in terminal UIs, GTK apps, and the web. Our own stack, from the bottom to the top.</p>
+    <ul>
+      <li><strong>navi mods</strong> — waybar-driven clickable modules (networks, calendar, reminders, volume, bluetooth) launching small floating TUIs</li>
+      <li><strong>nightshadeNeon as a system</strong> — bubbletea/lipgloss TUIs, a GTK3 theme, and web, all speaking one visual language</li>
+      <li><strong>Hey Lain!</strong> — a local voice assistant (faster-whisper + piper-tts, no cloud) that can operate the desktop</li>
+      <li><strong>enhance, don't replace</strong> — mods sharpen the daily surface without taking Linux away; choice is preserved</li>
+    </ul>
+    <p style="margin-top:14px; color: var(--muted); font-size: 13px;">Eiri is in active exploration on our dev machines. It ships when it's ready — mika stays stable underneath it.</p>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
