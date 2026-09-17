@@ -88,6 +88,18 @@
 
   <article class="post">
     <p class="date">17 SEPTEMBER 2026</p>
+    <h2>navi 1.4.4 “mika” — maintenance</h2>
+    <p><strong>sudo, finished properly.</strong> 1.4.3 put you in the <code>sudo</code> group — but group membership only takes effect on your next login, so installers expecting <code>sudo</code> (ani-cli, the nightly browsers, our own <code>scripts/installers</code>) still failed in the same session. 1.4.4 writes a dedicated rule for your user in <code>/etc/sudoers.d/10-navi-user</code>, validated with <code>visudo -c</code>: it takes effect on the very next <code>sudo</code> call, no logout required. Password-required, same feel as doas <code>permit persist</code>. doas stays the navi-native way up; sudo is the compatibility layer.</p>
+    <p><strong>The notification viewer got its glow-up.</strong> <code>navi-notifs</code> now gives every notification room to breathe — pink index, dimmed app name, the summary bold on its own line, the body word-wrapped beneath, actions in neon green, separators between entries. And it finally floats: clicking the panel bell opens through a launcher that tells the compositor to float and center the window, so it works on customized sway configs too (the stock-config rule stays as a backstop).</p>
+    <p><strong>Panel feng shui.</strong> The update indicator moved left of the volume control — no more rubbing shoulders with the notification bell. It already checks <code>navi-update --check</code> automatically every 15 minutes and lights up when updates are waiting.</p>
+    <p><strong>Manual, aligned.</strong> The built-in manual (<code>Super+Shift+H</code>) and the online copy now document doas vs sudo, the notification viewer, and the update indicator — both copies updated together.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.4-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.4.4.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.4-mika">navi-1.4.4-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
+    <p class="date">17 SEPTEMBER 2026</p>
     <h2>navi 1.4.3 “mika” — maintenance</h2>
     <p><strong>Two Cloudbook-found bugs, fixed.</strong> The notification viewer (<code>navi-notifs</code>) crashed on real data — it parsed <code>dunstctl history</code> as plain strings, but real dunst output is busctl JSON where every D-Bus variant arrives wrapped as <code>{"type": "&lt;sig&gt;", "data": &lt;value&gt;}</code>. Every field read now goes through an unwrap helper, tested against the real shape. And <code>sudo</code> ships on every install and update: added to the base package set, the user lands in the <code>sudo</code> group, and a temporary passwordless rule during provisioning is locked back down at the end of the install — mirroring the doas flow. doas remains the navi-native way up; sudo is there for compatibility.</p>
     <p>Also fixed: the Dropbox icon rendered black (invisible) on the dark theme — it was the only icon in the set missing its white fill.</p>
