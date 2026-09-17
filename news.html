@@ -88,6 +88,15 @@
 
   <article class="post">
     <p class="date">17 SEPTEMBER 2026</p>
+    <h2>navi 1.4.2 “mika” — patch</h2>
+    <p><strong>the notification viewer works now.</strong> 1.4 shipped <code>navi-notifs</code> with a Python syntax error that kept it from listing anything — fixed, along with two latent crashes hiding behind the first one. The viewer also got its nightshadeNeon colors (neon pink header, neon green actions) and now floats instead of tiling.</p>
+    <p>Also in this patch: the installer banner and success screen say 1.4.2 (they were still showing 1.3), and the ISO release checklist now covers every human-facing version string so it can't go stale again.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/latest">navi-1.4.2-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
+    <p class="date">17 SEPTEMBER 2026</p>
     <h2>navi 1.4 “mika” — maintenance</h2>
     <p><strong>navi learns to update itself.</strong> 1.4 brings <code>navi-update</code> — pull the release channel and redeploy the desktop layer while keeping every config you've customized — plus <code>navi-wired-restore</code>, which shows you exactly how your setup drifted from stock and restores what you choose, with backups of everything it touches.</p>
     <p>Also new: two waybar mods (an update indicator and a notification bell with a viewer), Dropbox as a default webapp, and maintenance fixes — <code>imv</code>, <code>filezilla</code> and <code>gufw</code> in the installer, <code>/usr/sbin</code> on the PATH, and passwordless flatpak management for the local user.</p>
