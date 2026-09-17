@@ -88,6 +88,17 @@
 
   <article class="post">
     <p class="date">17 SEPTEMBER 2026</p>
+    <h2>navi 1.4.3 “mika” — maintenance</h2>
+    <p><strong>Two Cloudbook-found bugs, fixed.</strong> The notification viewer (<code>navi-notifs</code>) crashed on real data — it parsed <code>dunstctl history</code> as plain strings, but real dunst output is busctl JSON where every D-Bus variant arrives wrapped as <code>{"type": "&lt;sig&gt;", "data": &lt;value&gt;}</code>. Every field read now goes through an unwrap helper, tested against the real shape. And <code>sudo</code> ships on every install and update: added to the base package set, the user lands in the <code>sudo</code> group, and a temporary passwordless rule during provisioning is locked back down at the end of the install — mirroring the doas flow. doas remains the navi-native way up; sudo is there for compatibility.</p>
+    <p>Also fixed: the Dropbox icon rendered black (invisible) on the dark theme — it was the only icon in the set missing its white fill.</p>
+    <p><strong>One manual step for existing installs:</strong> if you customized your sway config, the updater correctly kept it — so add <code>for_window [title="navi-notifs"] floating enable</code> to <code>~/.config/sway/config</code> and reload sway (<code>$mod+Shift+c</code>) to float the notification viewer. New installs get it automatically.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.3-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.4.3.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.3-mika">navi-1.4.3-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
+    <p class="date">17 SEPTEMBER 2026</p>
     <h2>navi 1.4.2 “mika” — patch</h2>
     <p><strong>the notification viewer works now.</strong> 1.4 shipped <code>navi-notifs</code> with a Python syntax error that kept it from listing anything — fixed, along with two latent crashes hiding behind the first one. The viewer also got its nightshadeNeon colors (neon pink header, neon green actions) and now floats instead of tiling.</p>
     <p>Also in this patch: the installer banner and success screen say 1.4.2 (they were still showing 1.3), and the ISO release checklist now covers every human-facing version string so it can't go stale again.</p>
