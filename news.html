@@ -65,8 +65,6 @@
   }
   footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
            color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
-  footer .creed { flex-basis: 100%; text-align: center; font-size: 11px;
-           opacity: .6; letter-spacing: .3em; }
   footer a { text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } article.post { padding: 24px 20px; } }
@@ -87,6 +85,16 @@
   <p class="kicker">NAVI // NEWS</p>
   <h1>signals from <span>the wired.</span></h1>
   <p class="lede">Release announcements and project updates, newest first.</p>
+
+  <article class="post">
+    <p class="date">17 SEPTEMBER 2026</p>
+    <h2>navi 1.4 “mika” — maintenance</h2>
+    <p><strong>navi learns to update itself.</strong> 1.4 brings <code>navi-update</code> — pull the release channel and redeploy the desktop layer while keeping every config you've customized — plus <code>navi-wired-restore</code>, which shows you exactly how your setup drifted from stock and restores what you choose, with backups of everything it touches.</p>
+    <p>Also new: two waybar mods (an update indicator and a notification bell with a viewer), Dropbox as a default webapp, and maintenance fixes — <code>imv</code>, <code>filezilla</code> and <code>gufw</code> in the installer, <code>/usr/sbin</code> on the PATH, and passwordless flatpak management for the local user.</p>
+    <p>On release trust: we're deliberately <em>not</em> committing to a signing scheme for 1.x — the ceremony has to fit how we actually work, and that decision deserves real exploration. It's one of the main conversations for the eiri era. Until then, <code>navi-update</code> pulls the channel and says so loudly.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4-mika">navi-1.4-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
 
   <article class="post">
     <p class="date">15 SEPTEMBER 2026</p>
@@ -123,7 +131,7 @@
     <a href="sponsors.html">sponsors</a>
     <a href="labs.html">labs</a>
     <a href="community.html">community</a>
-    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span> <span class="creed">open models, open web</span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
 </body>
