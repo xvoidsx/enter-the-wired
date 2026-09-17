@@ -58,6 +58,16 @@
     box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
     white-space: nowrap;
   }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
   footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
            color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
   footer a { text-decoration: none; }
@@ -83,22 +93,22 @@
 
   <section class="stop now">
     <p class="state">NOW // STABLE</p>
-    <h2>navi 1.2 <small>“mika”</small></h2>
-    <p><strong>The first stable release.</strong> A dependable Debian base, the wired tiling desktop (Wayland-first, X11 fallback), open agent tools baked in from first boot, and the smallweb application layer — ready to install today.</p>
+    <h2>navi 1.3 <small>“mika”</small></h2>
+    <p><strong>The current stable release.</strong> A dependable Debian base, the wired tiling desktop (Wayland-first, X11 fallback), open agent tools baked in from first boot, and the smallweb application layer — ready to install today.</p>
     <ul>
       <li><strong>wired desktop</strong> — sway + i3, waybar, rofi, nightshadeNeon everywhere</li>
       <li><strong>agent-native</strong> — ollama, opencode, omp, goose, herdr, and navi-Q on Alt+A</li>
       <li><strong>webapp layer</strong> — naviApps store, navi radio, neighborli, glyyph</li>
       <li><strong>permacomputing</strong> — validated on a 2015 Acer Cloudbook; legacy BIOS + UEFI</li>
     </ul>
-    <p style="margin-top:14px"><a href="https://github.com/xvoidsx/navi/releases/tag/v1.2-mika">download 1.2 “mika” ↗</a></p>
+    <p style="margin-top:14px"><a href="https://github.com/xvoidsx/navi/releases/tag/v1.3-mika">download 1.3 “mika” ↗</a></p>
+    <p style="margin-top:14px; color: var(--muted); font-size: 13px;">Previously: 1.2 “mika” — our first stable release.</p>
   </section>
 
   <section class="stop next">
     <p class="state">UP NEXT // POINT RELEASE</p>
-    <h2>navi 1.3 <small>maintenance</small></h2>
-    <p><strong>Small, careful fixes on the stable foundation.</strong> An updated manual, <code>glow</code> in the installer live environment for reading markdown docs, and polish. No new features — that's what eiri is for.</p>
-    <p style="margin-top:14px"><a href="https://github.com/xvoidsx/navi/releases/tag/v1.3-mika">download 1.3 “mika” ↗</a></p>
+    <h2>navi 1.4 <small>maintenance</small></h2>
+    <p><strong>Small, careful fixes on the stable foundation.</strong> The changes and fixes accumulating on main — including new installer packages like <code>gufw</code> and <code>filezilla</code> — rolled into the next maintenance release. No new features — that's what eiri is for.</p>
   </section>
 
   <section class="stop future">
@@ -118,8 +128,11 @@
     <span>navi / wired / nightshadeNeon</span>
     <a href="index.html">home</a>
     <a href="news.html">news</a>
+    <span class="active" aria-current="page">roadmap</span>
     <a href="manual/manual.html">manual</a>
     <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
     <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
