@@ -235,6 +235,11 @@ product = """
   <tr><td><code>Space</code> then wait</td><td>which-key shows everything</td></tr>
 </table>
 
+<figure class="shot">
+  <img src="assets/navivim-editing.png" alt="NaviVim editing an HTML file: file explorer, buffers, syntax highlighting">
+  <figcaption>In the wild &mdash; editing the rav3ndust.xyz wiki. Sidebar, buffers, and nightshadeNeon syntax highlighting, doing real work.</figcaption>
+</figure>
+
 <h2>Install</h2>
 <p>On a Debian base today; shipping as navi's default editor from the get-go in <strong>navi 1.5 &ldquo;mika&rdquo; — the NaviVim update</strong>.</p>
 <pre><code>git clone https://github.com/xvoidsx/navivim ~/NaviVim
