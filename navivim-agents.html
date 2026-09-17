@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="The NaviVim contract for contributors and AI agents: layout, keymaps, packaging, rules.">
+<title>NaviVim for agents — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 600px; margin: 0 0 16px; }
+  .srcnote { font-size: 13px; color: var(--muted); margin: 0 0 48px; padding: 12px 18px;
+             border: 1px dashed var(--line); border-radius: 10px; background: rgba(255,16,240,.04); }
+  .doc h2 { color: var(--pink); font-size: clamp(22px, 3.4vw, 30px); letter-spacing: -.01em;
+            margin: 48px 0 16px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  .doc p, .doc li { color: var(--muted); font-size: 15px; }
+  .doc p strong, .doc li strong { color: var(--paper); font-weight: 600; }
+  .doc p { margin: 0 0 14px; }
+  .doc ul { padding-left: 20px; margin: 0 0 16px; }
+  .doc li { margin: 8px 0; }
+  .doc li ul { margin: 8px 0 0; }
+  .doc blockquote { margin: 0 0 24px; padding: 16px 20px; border-left: 3px solid var(--pink);
+                    background: var(--panel); border-radius: 0 10px 10px 0; }
+  .doc blockquote p { color: var(--paper); margin: 0; font-size: 15px; }
+  .doc blockquote strong { color: var(--pink); }
+  .doc code { color: var(--pink); font-size: .88em; background: rgba(255,16,240,.08);
+              padding: 1px 6px; border-radius: 5px; }
+  .doc pre { background: #0a050d; border: 1px solid var(--line); border-radius: 10px;
+             padding: 18px 20px; overflow-x: auto; margin: 0 0 18px; }
+  .doc pre code { color: var(--green); background: none; padding: 0; font-size: 13px; }
+  .doc table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 14px; }
+  .doc th { text-align: left; color: var(--green); font-weight: 600; font-size: 12px;
+            letter-spacing: .12em; text-transform: uppercase; padding: 10px 12px;
+            border-bottom: 1px solid var(--line); }
+  .doc td { color: var(--muted); padding: 10px 12px; border-bottom: 1px solid rgba(255,16,240,.1);
+            vertical-align: top; }
+  .doc td code { white-space: nowrap; }
+  .doc hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+  .shot { margin: 0 0 48px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+          background: var(--panel); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot figcaption { padding: 14px 20px; color: var(--muted); font-size: 13px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+           gap: 12px; margin: 0 0 16px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: var(--panel);
+          text-decoration: none; display: block; }
+  .card:hover { border-color: var(--pink); }
+  .card h3 { margin: 0 0 8px; color: var(--paper); font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 13px; }
+  .card .go { color: var(--pink); font-size: 13px; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">&larr; navi</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <span class="active" aria-current="page">navivim</span>
+  </nav>
+
+  <p class="kicker">NAVI // NAVIVIM FOR AGENTS</p>
+  <h1>the <span>contract.</span></h1>
+  <p class="lede">The rules of the road for anyone — human or agent — working on NaviVim itself.</p>
+  <p class="srcnote">Mirrored from <a href="https://github.com/xvoidsx/navivim/blob/main/AGENTS.md">AGENTS.md</a> in the NaviVim repo. The repo copy is the source of truth.</p>
+
+  <div class="doc">
+<blockquote>
+<p>Share this file with humans and AI agents working on NaviVim.
+It is the contract for this project's editing experience.
+Source of truth: the <strong>NaviVim repo</strong> (<code>~/NaviVim</code>, live at <code>~/.config/nvim</code>
+via symlink). Edit the repo, never the symlink target directly.</p>
+</blockquote>
+<h2>1. What this is</h2>
+<p>NaviVim is the default text-editing experience for Navi — a minimal,
+Debian-based, tiling-focused Linux environment. The distro has its own
+AGENTS.md and handbook; everything below is about NaviVim.</p>
+<p>NaviVim's ambition is a premier, best-in-class Neovim experience: an
+in-terminal IDE that feels like a cohesive whole with the system it ships
+on — welcoming to newcomers (especially people arriving from VSCode)
+without dumbing anything down for veterans. Concretely that means:</p>
+<ul>
+<li><strong>Hand-rolled Neovim 0.11+</strong> with <code>lazy.nvim</code>. No framework distros
+  (no LazyVim / NvChad / LunarVim) — every plugin is chosen on purpose,
+  one file per feature, and the whole config stays readable enough to
+  learn from.</li>
+<li><strong>Doctrine: editor-first, tmux-enhanced.</strong> Neovim must be fully usable
+  standalone; it shines inside tmux, and the two navigate as one.</li>
+<li><strong>Discoverable over memorizable.</strong> Leader-key menus, which-key popups,
+  dashboard shortcut buttons, and a tip-of-the-day mean a first-time user
+  can explore instead of studying.</li>
+<li>Classic <code>vim</code> remains available outside this repo as a fallback. The
+  legacy <code>~/.vimrc</code> (11 lines: number, mouse, hlsearch, incsearch, wrap,
+  autoindent, cursorline) lives on conceptually in <code>lua/config/options.lua</code>.</li>
+</ul>
+<h2>2. Layout</h2>
+<pre><code>~/.config/nvim/
+  init.lua                        -&gt; requires config.options, config.keymaps, config.autocmds, config.lazy
+  lua/config/options.lua          -&gt; vimrc migration + IDE defaults
+  lua/config/keymaps.lua          -&gt; all user keymaps (leader = &lt;Space&gt;)
+  lua/config/autocmds.lua         -&gt; yank-hl, resize, no-autocomment, transparency re-apply
+  lua/config/lazy.lua             -&gt; lazy.nvim bootstrap, spec = { import = &quot;plugins&quot; }
+  lua/plugins/sidebar.lua         -&gt; nvim-tree (toggleable file explorer)
+  lua/plugins/completion.lua      -&gt; blink.cmp + LuaSnip (toggleable autocomplete)
+  lua/plugins/search.lua          -&gt; telescope + fzf-native, flash, hlslens, which-key
+  lua/plugins/lsp.lua             -&gt; mason + native vim.lsp.config/enable + fidget + conform + nvim-lint
+  lua/plugins/treesitter.lua      -&gt; syntax + indent, polyglot parsers
+  lua/plugins/ui.lua              -&gt; lualine, bufferline, alpha dashboard, indent-blankline
+                                  (dashboard: 8 shortcut buttons, random tip-of-day footer,
+                                   boot reveal + neon header cycling when nightshadeNeon is active)
+  lua/plugins/git.lua             -&gt; gitsigns + lazygit
+  lua/plugins/editing.lua         -&gt; Comment, autopairs, surround, todo-comments
+  lua/plugins/terminal.lua        -&gt; toggleterm + vim-tmux-navigator + persistence
+  lua/plugins/theme.lua           -&gt; reads ~/.config/omaterm/nvim.theme, default nightshadeNeon
+  colors/nightshadeNeon.lua       -&gt; house colorscheme (#ff10f0 #39ff14 #00ffff #ff3131 #ffffff on #000000)
+  after/plugin/transparency.lua   -&gt; startup transparency trigger
+  after/syntax/uxntal.vim         -&gt; ported from ~/.vim/pack/plugins/start/uxntal.vim
+  after/ftdetect/uxntal.vim       -&gt; ported uxntal filetype detection
+  after/ftdetect/gemtext.vim      -&gt; belt-and-braces .gmi detection (syntax itself
+                                     ships with Neovim; nightshadeNeon styles its
+                                     Heading/LinkURL/Quote/List groups)
+</code></pre>
+<h2>3. Key UX contract (do not break)</h2>
+<p>Leader is <strong>Space</strong>, tapped in sequence (e.g. <code>&lt;leader&gt;ff</code> = Space, f, f).
+Pressing Space and waiting shows which-key with every option.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Keys</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sidebar toggle</td>
+<td><code>&lt;C-n&gt;</code>, <code>&lt;leader&gt;e</code>, focus <code>&lt;leader&gt;o</code></td>
+<td>nvim-tree, 32 cols left</td>
+</tr>
+<tr>
+<td>Autocomplete toggle</td>
+<td><code>&lt;leader&gt;ua</code></td>
+<td>flips <code>vim.g.navi_completion_enabled</code>, blink.cmp <code>enabled()</code> respects it</td>
+</tr>
+<tr>
+<td>Search in file</td>
+<td><code>/</code>, <code>n</code>/<code>N</code> centered, <code>&lt;Esc&gt;</code> clears</td>
+<td><code>ignorecase+smartcase</code>, hlslens counts, <code>s</code> flash-jump</td>
+</tr>
+<tr>
+<td>Project find/grep</td>
+<td><code>&lt;leader&gt;ff</code> files, <code>&lt;leader&gt;fg</code> grep, <code>&lt;leader&gt;fb</code> buffers, <code>&lt;leader&gt;/</code> buffer-fuzzy</td>
+<td>Telescope + ripgrep + fd</td>
+</tr>
+<tr>
+<td>Save/quit</td>
+<td><code>&lt;C-s&gt;</code> / <code>&lt;leader&gt;w</code>, <code>&lt;leader&gt;q</code></td>
+<td>VSCode muscle memory</td>
+</tr>
+<tr>
+<td>Splits</td>
+<td><code>&lt;leader&gt;\|</code>, <code>&lt;leader&gt;-</code>, <code>&lt;C-h/j/k/l&gt;</code></td>
+<td>tmux-aware via vim-tmux-navigator</td>
+</tr>
+<tr>
+<td>Buffers</td>
+<td><code>&lt;S-h&gt;</code> / <code>&lt;S-l&gt;</code>, <code>&lt;leader&gt;bd</code></td>
+<td>bufferline</td>
+</tr>
+<tr>
+<td>LSP</td>
+<td><code>gd gr K &lt;leader&gt;rn &lt;leader&gt;ca [d ]d</code></td>
+<td>attached via LspAttach autocmd</td>
+</tr>
+<tr>
+<td>Format toggle</td>
+<td><code>&lt;leader&gt;uf</code></td>
+<td>conform.nvim, default ON</td>
+</tr>
+<tr>
+<td>Git</td>
+<td><code>&lt;leader&gt;gg</code> lazygit, <code>&lt;leader&gt;gp</code>/<code>gb</code>, <code>[h</code>/<code>]h</code></td>
+<td>gitsigns gutter</td>
+</tr>
+<tr>
+<td>Terminal</td>
+<td><code>&lt;leader&gt;tt</code> or <code>&lt;C-\&gt;</code>, <code>&lt;Esc&gt;&lt;Esc&gt;</code> exits term mode</td>
+<td>toggleterm</td>
+</tr>
+<tr>
+<td>Session</td>
+<td><code>&lt;leader&gt;qs</code> restore</td>
+<td>persistence.nvim</td>
+</tr>
+<tr>
+<td>Relative numbers</td>
+<td><code>&lt;leader&gt;un</code> toggles</td>
+<td>default ON with number</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Dependencies (for distribution)</h2>
+<ul>
+<li>Must: <code>neovim&gt;=0.11</code>, <code>git</code>, <code>ripgrep</code>, <code>fd-find</code> (binary <code>fd</code>; shim <code>fdfind</code> if needed), <code>node</code>, <code>python3</code>, <code>make</code>/<code>gcc</code> (telescope-fzf-native, treesitter), Nerd Font.</li>
+<li>Neovim source: Debian stable ships 0.10 (too old — mason-lspconfig v2 and
+  friends need 0.11+). Do NOT pin Neovim to Debian testing (testing libc on a
+  stable base). Instead use <code>NaviVim/install.sh</code>, which installs the
+  upstream release tarball (user-space <code>~/.local</code> by default,
+  <code>PREFIX=/usr/local</code> as root for system-wide/ISO use; privilege escalation
+  prefers <code>doas</code>, falling back to <code>sudo</code>).</li>
+<li>Optional but expected: <code>tmux</code>, <code>lazygit</code>, language servers via <code>:Mason</code> (lua_ls, pyright, ts_ls, rust_analyzer, gopls, clangd, bashls, jsonls, yamlls), formatters (stylua, shfmt, black/isort, prettier), linters (flake8, shellcheck).</li>
+<li>Seed path for ISO: <code>/etc/skel/.config/nvim</code> (copy of this config). Theme override: <code>/etc/skel/.config/omaterm/nvim.theme</code>.
+  <code>install.sh --system</code> (run as root from the distro installer) handles the whole
+  system install: tarball to <code>/usr/local</code>, skel seed, <code>editor</code>/<code>vi</code> alternatives,
+  <code>EDITOR</code>/<code>VISUAL</code> via <code>/etc/profile.d</code>, and a deterministic <code>Lazy! restore</code>
+  from <code>lazy-lock.json</code> as a build-time smoke test. User mode (<code>./install.sh</code>)
+  rolls forward with <code>Lazy! sync</code> — commit the updated lockfile.</li>
+<li>uxntal rule: keep <code>~/.vim/pack/plugins/start/uxntal.vim</code> AND <code>after/syntax|ftdetect/uxntal.vim</code> in sync.</li>
+<li>Version pins: <code>nvim-treesitter/*</code> stays on <code>branch = "master"</code> (legacy <code>configs</code> API; migrating to <code>main</code> needs a config rewrite). All other 0.10-era pins are dropped now that NaviVim requires 0.11+.</li>
+</ul>
+<h2>5. Commands agents should use</h2>
+<pre><code class="language-bash"># install / sync plugins (headless)
+nvim --headless &quot;+Lazy! sync&quot; +qa
+# health
+nvim --headless &quot;+checkhealth&quot; +qa
+# LSP servers UI
+nvim &quot;+Mason&quot;
+# smoke test toggles (manual)
+nvim -c &quot;NvimTreeToggle&quot; -c &quot;Telescope find_files&quot;
+</code></pre>
+<p>Test matrix before shipping: open <code>.py .js .ts .lua .c .md .tal</code> files, toggle sidebar (<code>&lt;C-n&gt;</code>), toggle completion (<code>&lt;leader&gt;ua</code> then type in insert mode), <code>/</code> search + <code>Esc</code>, <code>:Telescope live_grep</code>, <code>:checkhealth</code> clean (except optional clipboard warnings outside tmux).</p>
+<h2>6. Rules for contributors / agents</h2>
+<ol>
+<li>Hand-rolled only — do NOT reintroduce LazyVim/NvChad as a dependency.</li>
+<li>Every new plugin gets its own <code>lua/plugins/*.lua</code> file + keymaps with <code>desc</code> (which-key discoverable).</li>
+<li>Every toggle (completion, format, tree) must have a <code>&lt;leader&gt;u*</code> or documented key and persist via <code>vim.g.navi_*</code>.</li>
+<li>Keep standalone-nvim working; tmux integration must degrade gracefully (see <code>vim-tmux-navigator</code> fallback to <code>&lt;C-w&gt;</code> maps).</li>
+<li>Keep transparency behavior: <code>ColorScheme</code> autocmd in <code>config/autocmds.lua</code> + startup trigger. Add new float groups there, not inline.</li>
+<li>Theme changes go through <code>plugins/theme.lua</code> + <code>omaterm/nvim.theme</code>, never hardcoded <code>colorscheme</code> elsewhere.</li>
+<li>Run <code>stylua</code> (2-space, 120 col per <code>stylua.toml</code>) on Lua edits.</li>
+</ol>
+<h2>7. Roadmap / ideas (not yet built)</h2>
+<ul>
+<li><code>nvim-dap + nvim-dap-ui</code> for debugging (Python/JS/C first).</li>
+<li>Migrate <code>nvim-treesitter</code> from <code>master</code> to <code>main</code> branch (new API).</li>
+<li><code>snacks.picker</code> or <code>fzf-lua</code> evaluation if Telescope feels slow on low-end hardware.</li>
+<li>A matching <code>tmux.conf</code> with <code>C-h/j/k/l</code> passthrough + session-restore + statusline theme sync.</li>
+<li><code>:NaviVimWelcome</code> command linking to the handbook.</li>
+</ul>
+  </div>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <span class="active" aria-current="page">navivim</span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>

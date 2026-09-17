@@ -8,6 +8,9 @@ set -euo pipefail
 SRC_URL="https://raw.githubusercontent.com/xvoidsx/navi/main/AGENTS.md"
 OUT="$(cd "$(dirname "$0")" && pwd)/agents.html"
 
+# persistent python deps (markdown) — site builds need them across VM restarts
+export PYTHONPATH="$(cd "$(dirname "$0")/../.pydeps" && pwd):${PYTHONPATH:-}"
+
 python3 - "$SRC_URL" "$OUT" <<'PYEOF'
 import sys, urllib.request, html as htmllib
 import markdown

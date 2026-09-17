@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="The NaviVim user guide: from zero to comfortable in your in-terminal IDE.">
+<title>NaviVim handbook — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 600px; margin: 0 0 16px; }
+  .srcnote { font-size: 13px; color: var(--muted); margin: 0 0 48px; padding: 12px 18px;
+             border: 1px dashed var(--line); border-radius: 10px; background: rgba(255,16,240,.04); }
+  .doc h2 { color: var(--pink); font-size: clamp(22px, 3.4vw, 30px); letter-spacing: -.01em;
+            margin: 48px 0 16px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  .doc p, .doc li { color: var(--muted); font-size: 15px; }
+  .doc p strong, .doc li strong { color: var(--paper); font-weight: 600; }
+  .doc p { margin: 0 0 14px; }
+  .doc ul { padding-left: 20px; margin: 0 0 16px; }
+  .doc li { margin: 8px 0; }
+  .doc li ul { margin: 8px 0 0; }
+  .doc blockquote { margin: 0 0 24px; padding: 16px 20px; border-left: 3px solid var(--pink);
+                    background: var(--panel); border-radius: 0 10px 10px 0; }
+  .doc blockquote p { color: var(--paper); margin: 0; font-size: 15px; }
+  .doc blockquote strong { color: var(--pink); }
+  .doc code { color: var(--pink); font-size: .88em; background: rgba(255,16,240,.08);
+              padding: 1px 6px; border-radius: 5px; }
+  .doc pre { background: #0a050d; border: 1px solid var(--line); border-radius: 10px;
+             padding: 18px 20px; overflow-x: auto; margin: 0 0 18px; }
+  .doc pre code { color: var(--green); background: none; padding: 0; font-size: 13px; }
+  .doc table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 14px; }
+  .doc th { text-align: left; color: var(--green); font-weight: 600; font-size: 12px;
+            letter-spacing: .12em; text-transform: uppercase; padding: 10px 12px;
+            border-bottom: 1px solid var(--line); }
+  .doc td { color: var(--muted); padding: 10px 12px; border-bottom: 1px solid rgba(255,16,240,.1);
+            vertical-align: top; }
+  .doc td code { white-space: nowrap; }
+  .doc hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+  .shot { margin: 0 0 48px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+          background: var(--panel); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot figcaption { padding: 14px 20px; color: var(--muted); font-size: 13px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+           gap: 12px; margin: 0 0 16px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: var(--panel);
+          text-decoration: none; display: block; }
+  .card:hover { border-color: var(--pink); }
+  .card h3 { margin: 0 0 8px; color: var(--paper); font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 13px; }
+  .card .go { color: var(--pink); font-size: 13px; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">&larr; navi</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <span class="active" aria-current="page">navivim</span>
+  </nav>
+
+  <p class="kicker">NAVI // NAVIVIM HANDBOOK</p>
+  <h1>the <span>handbook.</span></h1>
+  <p class="lede">Your in-terminal IDE, from zero to comfortable. Close the world. Open the Wired.</p>
+  <p class="srcnote">Mirrored from <a href="https://github.com/xvoidsx/navivim/blob/main/HANDBOOK.md">HANDBOOK.md</a> in the NaviVim repo. The repo copy is the source of truth.</p>
+
+  <div class="doc">
+<blockquote>
+<p>Your in-terminal IDE. Close the world. Open the Wired.</p>
+</blockquote>
+<p>New here? This guide takes you from zero to comfortable. Looking for
+contributor/agent docs instead? See <a href="navivim-agents.html">the NaviVim AGENTS.md</a>.</p>
+<h2>0. The one thing to learn first: <code>&lt;leader&gt;</code></h2>
+<p>Almost every shortcut in this book starts with <code>&lt;leader&gt;</code>. That's just a
+name for a <strong>prefix key</strong> — and in NaviVim it's the <strong>Space bar</strong>.</p>
+<ul>
+<li>You <strong>tap</strong> it, you don't hold it (unlike Ctrl).</li>
+<li>So <code>&lt;leader&gt;ff</code> means: tap <strong>Space</strong>, tap <code>f</code>, tap <code>f</code>.</li>
+<li><code>&lt;leader&gt;ua</code> means: tap <strong>Space</strong>, tap <code>u</code>, tap <code>a</code>.</li>
+<li>Stuck? Tap <strong>Space</strong> and wait half a second — a menu pops up showing
+  every shortcut available from there. You never have to memorize.</li>
+</ul>
+<h2>1. First launch</h2>
+<pre><code class="language-bash">nvim
+</code></pre>
+<p>You'll land on the NaviVim dashboard — the logo boots up line by line,
+then cycles through the neon palette in celebration of the Wired.
+From there:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f</code></td>
+<td>Find a file by name</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>Open the file explorer</td>
+</tr>
+<tr>
+<td><code>g</code></td>
+<td>Search text in your project</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Switch between open buffers</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>Open a terminal</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>Manage language servers (<code>:Mason</code>)</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>Manage plugins (<code>:Lazy</code>)</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>Quit</td>
+</tr>
+</tbody>
+</table>
+<p>Each visit also shows a random <strong>tip of the day</strong> at the bottom —
+little shortcuts worth learning one at a time.</p>
+<p>On first launch, also run <code>:Mason</code> to install language servers
+(Python, JavaScript, Rust, Go, C, Lua, and more). Pick what you use —
+everything else is optional.</p>
+<h2>2. The sidebar (file explorer)</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+n</code></td>
+<td>Toggle the sidebar</td>
+</tr>
+<tr>
+<td><code>Space e</code></td>
+<td>Toggle the sidebar (backup if <code>Ctrl+n</code> is swallowed by tmux)</td>
+</tr>
+<tr>
+<td><code>Space o</code></td>
+<td>Jump to your current file in the tree</td>
+</tr>
+</tbody>
+</table>
+<p>Inside the tree:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j</code> / <code>k</code></td>
+<td>Move up / down</td>
+</tr>
+<tr>
+<td><code>Enter</code>/<code>l</code></td>
+<td>Open file / expand folder</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>Collapse folder</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>Create file / folder</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>Delete</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Rename</td>
+</tr>
+<tr>
+<td><code>x</code> <code>c</code> <code>p</code></td>
+<td>Cut, copy, paste</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td>Refresh</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Full help overlay</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>Close the sidebar</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Searching</h2>
+<ul>
+<li><code>/</code> — search inside the current file (<code>n</code> / <code>N</code> jump between hits,
+  <code>Esc</code> clears the highlight).</li>
+<li><code>s</code> — flash-jump: labels appear on screen, type one to teleport.</li>
+<li><code>Space ff</code> — find files by name across the project.</li>
+<li><code>Space fg</code> — grep text across the whole project.</li>
+<li><code>Space /</code> — fuzzy-find inside the current file.</li>
+<li><code>Space fb</code> — switch between open buffers.</li>
+</ul>
+<h2>4. Everyday editing</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+s</code> / <code>Space w</code></td>
+<td>Save</td>
+</tr>
+<tr>
+<td><code>Space q</code></td>
+<td>Quit</td>
+</tr>
+<tr>
+<td><code>gcc</code></td>
+<td>Comment / uncomment a line (<code>gc</code> works on selections too)</td>
+</tr>
+<tr>
+<td><code>Alt+j</code> / <code>Alt+k</code></td>
+<td>Move line / selection down / up</td>
+</tr>
+<tr>
+<td><code>&lt;</code> / <code>&gt;</code> (visual)</td>
+<td>Indent, staying selected</td>
+</tr>
+<tr>
+<td><code>Space un</code></td>
+<td>Toggle relative line numbers</td>
+</tr>
+</tbody>
+</table>
+<p>Autocomplete appears as you type in insert mode. Full toggle below.</p>
+<h2>5. The three toggles</h2>
+<p>These are the heart of NaviVim — flip behaviors on and off at will:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Space ua</code></td>
+<td>Autocomplete on / off</td>
+</tr>
+<tr>
+<td><code>Space uf</code></td>
+<td>Format-on-save on / off</td>
+</tr>
+<tr>
+<td><code>Space un</code></td>
+<td>Relative line numbers on / off</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Code intelligence (LSP)</h2>
+<p>With a language server installed via <code>:Mason</code>, you get:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gd</code></td>
+<td>Go to definition</td>
+</tr>
+<tr>
+<td><code>gr</code></td>
+<td>Find references</td>
+</tr>
+<tr>
+<td><code>K</code></td>
+<td>Hover documentation</td>
+</tr>
+<tr>
+<td><code>Space rn</code></td>
+<td>Rename symbol</td>
+</tr>
+<tr>
+<td><code>Space ca</code></td>
+<td>Code actions</td>
+</tr>
+<tr>
+<td><code>[d</code> / <code>]d</code></td>
+<td>Previous / next problem</td>
+</tr>
+</tbody>
+</table>
+<h2>7. Splits, buffers, terminal</h2>
+<ul>
+<li><code>Space |</code> / <code>Space -</code> — vertical / horizontal split.</li>
+<li><code>Ctrl+h/j/k/l</code> — move between splits (tmux-aware).</li>
+<li><code>Shift+h</code> / <code>Shift+l</code> — previous / next buffer. <code>Space bd</code> closes one.</li>
+<li><code>Space tt</code> (or <code>Ctrl+\</code>) — floating terminal. <code>Esc Esc</code> gets you back out.</li>
+<li><code>Space qs</code> — restore your last session.</li>
+</ul>
+<h2>8. Git</h2>
+<p>The gutter shows <code>+</code> added, <code>~</code> changed, <code>_</code> deleted lines.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Space gg</code></td>
+<td>Open LazyGit (full UI)</td>
+</tr>
+<tr>
+<td><code>Space gp</code></td>
+<td>Preview the hunk under your cursor</td>
+</tr>
+<tr>
+<td><code>Space gb</code></td>
+<td>Blame the current line</td>
+</tr>
+<tr>
+<td><code>]h</code> / <code>[h</code></td>
+<td>Next / previous change</td>
+</tr>
+</tbody>
+</table>
+<h2>9. Theme</h2>
+<p>NaviVim ships with <strong>nightshadeNeon</strong> — neon pink <code>#ff10f0</code>,
+neon green <code>#39ff14</code>, cyan <code>#00ffff</code>, neon red <code>#ff3131</code>,
+white on black. To try something else:</p>
+<pre><code class="language-bash">echo &quot;tokyonight&quot; &gt; ~/.config/omaterm/nvim.theme
+</code></pre>
+<p>Delete the file (or write <code>nightshadeNeon</code> into it) to come home.</p>
+<h2>10. Troubleshooting</h2>
+<ul>
+<li><strong><code>Ctrl+n</code> does nothing</strong> — your terminal or tmux ate it. Use <code>Space e</code>.</li>
+<li><strong>No autocomplete / squiggles in a language</strong> — run <code>:Mason</code>, install
+  that language's server, restart.</li>
+<li><strong>Something looks broken</strong> — run <code>:checkhealth</code>, then
+  <code>nvim --headless "+Lazy! sync" +qa</code> from your shell to reinstall plugins.</li>
+<li><strong>Lost?</strong> — press <code>Space</code> and wait half a second. A popup lists
+  everything you can do from there.</li>
+</ul>
+<hr />
+<p><em>Present day. Present time. Happy hacking.</em></p>
+  </div>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <span class="active" aria-current="page">navivim</span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
