@@ -88,6 +88,17 @@
 
   <article class="post">
     <p class="date">17 SEPTEMBER 2026</p>
+    <h2>navi 1.4.6 “mika” — maintenance</h2>
+    <p><strong>The bell floats now. Really.</strong> 1.4.5's <code>mod-open.sh</code> floated the notification viewer on paper, but on real hardware the window still tiled — the launcher trusted environment variables and matched the window by title, and both can lie. Now it <em>probes</em> the compositor with a real round-trip instead of guessing, and the backstop floats the window by <strong>PID</strong>, which no TUI can rename out from under it. It also leaves a one-line log at <code>~/.local/share/navi/mod-open.log</code> per launch, so any future misbehavior leaves footprints.</p>
+    <p><strong><code>navi-update</code> now reloads waybar.</strong> The updater deployed new waybar configs but never told the running bar — so new on-clicks and modules only took effect after a re-login, and fresh launchers sat idle on live systems. After deploying configs, the installer now sends waybar its documented config-reload signal. One more quiet paper cut gone.</p>
+    <p><strong>Waybar CSS fix rides along.</strong> The <code>@keyframes</code> comma selector that broke GTK's CSS parser in 1.4.5's stylesheet is fixed in this tag — updaters get the pink pulse with no manual edit.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.6-mika</strong> as the newest tag — run <code>navi-update</code> and the bar reloads itself; the bell should float immediately.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.6-mika">navi-1.4.6-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
+    <p class="date">17 SEPTEMBER 2026</p>
     <h2>navi 1.4.5 “mika” — maintenance</h2>
     <p><strong>Floating, for real this time.</strong> 1.4.4's notification launcher floated the viewer with a single sleep-then-float — a race slower machines kept losing, so the window tiled. The new <code>mod-open.sh</code> launcher installs a runtime <code>for_window</code> rule <em>before</em> the window maps (no race possible), then polls and floats directly as a backstop. Both the notification bell and the update indicator open through it — standing rule going forward: <strong>navi mods always float.</strong></p>
     <p><strong><code>navi-wired-adopt</code> — take the new desktop wholesale.</strong> <code>navi-update</code> preserves your customized configs by design, which means new stock defaults wait for you to say otherwise. <code>navi-wired-adopt</code> is the otherwise: it lays the current stock wired configs over yours, with a backup first and a loud warning before anything changes — because adopt means adopt. <code>--dry-run</code> to preview, and it offers to reload the window manager and bar when it's done.</p>
