@@ -106,6 +106,17 @@
 
   <article class="post">
     <p class="date">17 SEPTEMBER 2026</p>
+    <h2>navi 1.5 “mika” — the NaviVim update</h2>
+    <p><strong>navi ships a default terminal IDE.</strong> NaviVim — the full Neovim distribution — is now baked into the distro from the get-go: neovim 0.12.5 from the upstream tarball (Debian stable's 0.10 is too old for the plugin stack, and pinning to testing would drag testing libc onto a stable base), installed system-wide with <code>editor</code>/<code>vi</code> alternatives, <code>EDITOR</code>/<code>VISUAL</code> set for every shell, and <code>/etc/skel</code> seeding so every new user lands in it. There's a rofi entry too — just type NaviVim.</p>
+    <p><strong>Pinned, reproducible, offline-safe.</strong> The ISO stages the NaviVim tree and the neovim tarball at build time, so fresh installs never reach for the network to get an editor. Both pins live next to the code that consumes them — a version bump is one edit plus a restage.</p>
+    <p><strong>Your config is sacred.</strong> The installer seeds <code>~/.config/nvim</code> only when you don't already have one — existing setups are never touched. And <code>navi-update</code> stays cheap: when the pinned neovim is already installed, it skips the binary entirely and just refreshes the config.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.5-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.5. The first run downloads the plugin set headlessly, so give it a few minutes.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.5-mika">navi-1.5-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
+    <p class="date">17 SEPTEMBER 2026</p>
     <h2>navi 1.4.6 “mika” — maintenance</h2>
     <p><strong>The bell floats now. Really.</strong> 1.4.5's <code>mod-open.sh</code> floated the notification viewer on paper, but on real hardware the window still tiled — the launcher trusted environment variables and matched the window by title, and both can lie. Now it <em>probes</em> the compositor with a real round-trip instead of guessing, and the backstop floats the window by <strong>PID</strong>, which no TUI can rename out from under it. It also leaves a one-line log at <code>~/.local/share/navi/mod-open.log</code> per launch, so any future misbehavior leaves footprints.</p>
     <p><strong><code>navi-update</code> now reloads waybar.</strong> The updater deployed new waybar configs but never told the running bar — so new on-clicks and modules only took effect after a re-login, and fresh launchers sat idle on live systems. After deploying configs, the installer now sends waybar its documented config-reload signal. One more quiet paper cut gone.</p>
@@ -126,22 +137,24 @@
     <p class="signoff">— xvoidsx</p>
   </article>
 
-  <article class="post">
-    <p class="date">17 SEPTEMBER 2026</p>
-    <h2>navi 1.4.4 “mika” — maintenance</h2>
-    <p><strong>sudo, finished properly.</strong> 1.4.3 put you in the <code>sudo</code> group — but group membership only takes effect on your next login, so installers expecting <code>sudo</code> (ani-cli, the nightly browsers, our own <code>scripts/installers</code>) still failed in the same session. 1.4.4 writes a dedicated rule for your user in <code>/etc/sudoers.d/10-navi-user</code>, validated with <code>visudo -c</code>: it takes effect on the very next <code>sudo</code> call, no logout required. Password-required, same feel as doas <code>permit persist</code>. doas stays the navi-native way up; sudo is the compatibility layer.</p>
-    <p><strong>The notification viewer got its glow-up.</strong> <code>navi-notifs</code> now gives every notification room to breathe — pink index, dimmed app name, the summary bold on its own line, the body word-wrapped beneath, actions in neon green, separators between entries. And it finally floats: clicking the panel bell opens through a launcher that tells the compositor to float and center the window, so it works on customized sway configs too (the stock-config rule stays as a backstop).</p>
-    <p><strong>Panel feng shui.</strong> The update indicator moved left of the volume control — no more rubbing shoulders with the notification bell. It already checks <code>navi-update --check</code> automatically every 15 minutes and lights up when updates are waiting.</p>
-    <p><strong>Manual, aligned.</strong> The built-in manual (<code>Super+Shift+H</code>) and the online copy now document doas vs sudo, the notification viewer, and the update indicator — both copies updated together.</p>
-    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.4-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.4.4.</p>
-    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.4-mika">navi-1.4.4-mika.iso + SHA256SUMS ↗</a></p>
-    <p class="signoff">— xvoidsx</p>
-  </article>
-
   <section class="archive" aria-label="Older news">
     <p class="kicker">FROM THE ARCHIVE</p>
     <h2 class="archive-title">older <span>signals.</span></h2>
     <p class="lede">Everything below is kept for the record — click to expand.</p>
+
+    <details class="post">
+      <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.4 “mika” — maintenance</span></summary>
+      <div class="abody">
+        <p><strong>sudo, finished properly.</strong> 1.4.3 put you in the <code>sudo</code> group — but group membership only takes effect on your next login, so installers expecting <code>sudo</code> (ani-cli, the nightly browsers, our own <code>scripts/installers</code>) still failed in the same session. 1.4.4 writes a dedicated rule for your user in <code>/etc/sudoers.d/10-navi-user</code>, validated with <code>visudo -c</code>: it takes effect on the very next <code>sudo</code> call, no logout required. Password-required, same feel as doas <code>permit persist</code>. doas stays the navi-native way up; sudo is the compatibility layer.</p>
+        <p><strong>The notification viewer got its glow-up.</strong> <code>navi-notifs</code> now gives every notification room to breathe — pink index, dimmed app name, the summary bold on its own line, the body word-wrapped beneath, actions in neon green, separators between entries. And it finally floats: clicking the panel bell opens through a launcher that tells the compositor to float and center the window, so it works on customized sway configs too (the stock-config rule stays as a backstop).</p>
+        <p><strong>Panel feng shui.</strong> The update indicator moved left of the volume control — no more rubbing shoulders with the notification bell. It already checks <code>navi-update --check</code> automatically every 15 minutes and lights up when updates are waiting.</p>
+        <p><strong>Manual, aligned.</strong> The built-in manual (<code>Super+Shift+H</code>) and the online copy now document doas vs sudo, the notification viewer, and the update indicator — both copies updated together.</p>
+        <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.4-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.4.4.</p>
+        <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.4-mika">navi-1.4.4-mika.iso + SHA256SUMS ↗</a></p>
+        <p class="signoff">— xvoidsx</p>
+      </div>
+    </details>
+
 
     <details class="post">
       <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.3 “mika” — maintenance</span></summary>
