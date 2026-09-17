@@ -47,6 +47,17 @@
   nav.top { margin: 0 0 48px; font-size: 14px; }
   nav.top a { margin-right: 18px; text-decoration: none; }
   nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
   footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
            color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
   footer a { text-decoration: none; }
@@ -62,8 +73,7 @@
     <a href="manual/manual.html">manual</a>
     <a href="sponsors.html">sponsors</a>
     <a href="labs.html">labs</a>
-    <a href="community.html">community</a>
-    <span style="color: var(--muted);">community</span>
+    <span class="active" aria-current="page">community</span>
   </nav>
 
   <p class="kicker">NAVI // COMMUNITY</p>
