@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="navi labs — where navi is tuned to be the premier experience on specific machines, and where hardware manufacturers can partner with xvoidsx.">
+<title>labs — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 600px; margin: 0 0 56px; }
+  .stop { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 24px; background: var(--panel); }
+  .stop.now { border-color: var(--green); }
+  .stop.next { border-color: var(--cyan); }
+  .stop .state { font-size: 11px; letter-spacing: .24em; margin: 0 0 10px; }
+  .stop.now .state { color: var(--green); }
+  .stop.next .state { color: var(--cyan); }
+  .stop.future .state { color: var(--pink); }
+  .stop h2 { margin: 0 0 6px; font-size: 32px; letter-spacing: -.01em; }
+  .stop h2 small { color: var(--muted); font-size: 16px; font-weight: 400; }
+  .stop p { color: var(--muted); margin: 0 0 12px; font-size: 15px; }
+  .stop p strong { color: var(--paper); font-weight: 600; }
+  .stop ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 15px; }
+  .stop li { margin: 6px 0; }
+  .stop li strong { color: var(--paper); font-weight: 600; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } .stop { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <span style="color: var(--muted);">labs</span>
+    <a href="community.html">community</a>
+  </nav>
+
+  <p class="kicker">NAVI // LABS</p>
+  <h1>tuned, <span>not just installed.</span></h1>
+  <p class="lede">navi runs on just about anything — that&apos;s the perma-computing promise. But on lab machines it doesn&apos;t just run. We get the hardware, we run the full matrix — wifi, suspend, battery, display, keys, firmware — and we tune until the machine feels like it was <em>made</em> for navi. Then we publish the notes, so you can see exactly what we did and why.</p>
+
+  <section class="stop now">
+    <p class="state">GET THE MACHINE</p>
+    <h2>how the lab works</h2>
+    <ul>
+      <li><strong>We get the machine.</strong> Bought, borrowed, or sent by a manufacturer. Lab machines stay on the bench and get re-tested every release — no review units that go back in a padded envelope.</li>
+      <li><strong>We run the matrix.</strong> Suspend/resume, wifi chipsets, function keys, display quirks, battery behavior, firmware blobs. Everything navi touches on real hardware, measured on <em>that</em> hardware.</li>
+      <li><strong>We publish the notes.</strong> Every tuning decision lands in the machine&apos;s lab card — kernel params, firmware, config deltas. If we can&apos;t explain a change, it doesn&apos;t ship.</li>
+    </ul>
+  </section>
+
+  <section class="stop">
+    <p class="state">IN THE LAB NOW</p>
+    <h2>Acer Aspire Cloudbook <small>2015 · the perma-computing bench</small></h2>
+    <p>Eleven-year-old Celeron, 2&nbsp;GB of RAM — and navi 1.3 flies on it. If the installer works here, it&apos;ll work anywhere. This machine is why we can promise &ldquo;old hardware stays useful&rdquo; without crossing our fingers.</p>
+  </section>
+
+  <section class="stop">
+    <p class="state">IN THE LAB NOW</p>
+    <h2>ThinkPad x200 <small>the elder</small></h2>
+    <p>Stepped down from active testing, but not retired: it still runs navi fine — it just can&apos;t do animated gifpapers. Some limits are hardware, and we say so.</p>
+  </section>
+
+  <section class="stop">
+    <p class="state">IN THE LAB NOW</p>
+    <h2>ThinkPad T440p <small>the tinker&apos;s bench</small></h2>
+    <p>Classic keyboard, socketed CPU, endlessly repairable — the kind of machine navi respects. The eiri experiments live here.</p>
+  </section>
+
+  <section class="stop">
+    <p class="state">IN THE LAB NOW</p>
+    <h2>ThinkCentre M92p <small>the desktop check</small></h2>
+    <p>Legacy-BIOS business tower, navi 1.3 installed and validated. The lab isn&apos;t just laptops.</p>
+  </section>
+
+  <section class="stop future">
+    <p class="state">PARTNERS</p>
+    <h2>no partners yet — the tier is open.</h2>
+    <p>A navi hardware partner means: early hardware access, a direct line between your engineers and ours, co-published tuning notes, and a lab card with your name on it. What it never means: influence over the roadmap. Sponsors and partners get our thanks and our best work — never control.</p>
+    <p><em>The empty tier is deliberate. It fills when the relationship is real.</em></p>
+  </section>
+
+  <section class="stop next">
+    <p class="state">FOR MANUFACTURERS</p>
+    <h2>make hardware that respects its owner?</h2>
+    <p>We&apos;d rather tune navi for ten machines deeply than ship a generic image for a thousand. If you build repairable, open, well-documented hardware — the kind of machine someone keeps for a decade — we want it in the lab.</p>
+    <p>What working with us looks like: you send hardware and give us an engineer to talk to. We do the tuning, publish the notes, and make your machine the best place to run navi. Small team, short loop, no committees. You&apos;ll talk to the people who actually build the OS.</p>
+    <p><strong><a href="mailto:rav3nwing@proton.me?subject=navi%20labs%3A%20%5Byour%20machine%5D">Get in touch →</a></strong></p>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="community.html">community</a>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+  <p style="color: var(--muted); font-size: 12px; margin-top: 24px;">navi labs machines are bought or loaned; reviews are never for sale, and a lab card is earned by testing, not by payment.</p>
+</div>
+</body>
+</html>
