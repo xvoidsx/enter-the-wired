@@ -87,13 +87,11 @@
     <a href="index.html">&larr; navi</a>
     <a href="news.html">news</a>
     <a href="roadmap.html">roadmap</a>
-    <a href="eiri.html">eiri</a>
     <a href="manual/manual.html">manual</a>
     <a href="sponsors.html">sponsors</a>
     <a href="labs.html">labs</a>
     <a href="community.html">community</a>
     <span class="active" aria-current="page">agents</span>
-    <a href="navivim.html">navivim</a>
   </nav>
 
   <p class="kicker">NAVI // AGENTS.MD</p>
@@ -210,16 +208,26 @@ system via <code>--deploy-only</code> (this is what <code>navi-update</code> run
   ALL</code>, password-required), validated with <code>visudo -c</code>, self-removing on
   check failure. Effective on the <em>next</em> sudo call — no re-login (group
   membership needs a re-login; a sudoers rule doesn't).</li>
+<li>Third-party installers (<code>scripts/installers/</code>: nightly browsers, ani-cli,
+  charm, cliamp) are <strong>not</strong> run by the installer — one failure there used
+  to abort the whole install under <code>set -e</code>, and <code>--yes</code>/<code>ASSUME_YES</code>
+  auto-ran all of them silently. They're deployed to
+  <code>/usr/share/navi/installers/</code> and offered through the <strong><code>navi-extras</code></strong>
+  post-install menu instead (<code>/usr/bin/navi-extras</code>, rofi-visible,
+  <code>alacritty -e navi-extras</code>).</li>
 </ul>
 <h2>The self-maintenance layer</h2>
 <p>Three commands, three jobs. Don't confuse them:</p>
 <ul>
-<li><strong><code>navi-update</code></strong> — pulls the release <em>channel</em> (release <strong>tags</strong>, never
+<li><strong><code>navi-update</code></strong> — pulls the release <em>channel</em> and re-runs deploy.
+  Two channels, Debian-style: <strong>stable</strong> follows release <strong>tags</strong> (never
   arbitrary main commits — a fix on main is invisible to the updater until
-  it's in a tag) and re-runs deploy. <code>--check</code> for dry status; <code>--channel</code>
-  for channel selection. Two-mode trust: signing key provisioned → verify
-  fail-closed; no key → <strong>loud warning</strong> + unsigned pull. Preserves
-  customized configs by design.</li>
+  it's in a tag); <strong>eiri</strong> is rolling and tracks the <code>eiri</code> branch head
+  (deployed commit remembered in <code>/var/lib/navi/navi-update.state</code>).
+  <code>--check</code> for dry status; <code>--channel</code> for channel selection (switching
+  asks first, then pins <code>/etc/navi/channel</code>). Two-mode trust: signing key
+  provisioned → verify fail-closed; no key → <strong>loud warning</strong> + unsigned
+  pull. Preserves customized configs by design.</li>
 <li><strong><code>navi-wired-restore</code></strong> — shows how the live setup drifted from stock and
   restores what you choose, with backups of everything it touches.</li>
 <li><strong><code>navi-wired-adopt</code></strong> — the explicit "give me the new stock desktop"
@@ -265,7 +273,15 @@ lose).</p>
 </ol>
 <p><strong>Release naming:</strong> 1.x = <strong>"mika"</strong>, 2.x = <strong>"eiri"</strong>. Tags look like
 <code>v1.4.6-mika</code>. The updater discovers "newer" via <code>sort -V</code> over tags
-matching <code>^v1\.[0-9]+</code>, so patch versions sort correctly.</p>
+matching <code>^v1\.[0-9]+</code>, so patch versions sort correctly. <strong>Eiri is never
+tagged</strong> — it has no <code>v2.x</code> tags by design; the rolling channel is the
+<code>eiri</code> branch head, full stop. Don't create one.</p>
+<p><strong>Channel / artifact policy (standing):</strong> stable ships as <strong>GitHub
+releases</strong> from tags; eiri ships as <strong>branch-scoped workflow artifacts</strong>
+only and <strong>never touches the releases page</strong>. <code>/releases/latest</code> always
+resolves to stable (currently 1.5 "mika"). The site's download buttons
+track <code>/releases/latest</code> for exactly this reason — never pin them to a
+tag, and never point them at an eiri artifact.</p>
 <p><strong>Never claim</strong> publication, updater success, hardware validation, or public
 deployment without verifying it. The ping/announcement is a contract — keep
 it, and only for what's actually done.</p>
@@ -322,6 +338,17 @@ file limit so they can ship in the repo.)</p>
 <li><strong>News archive convention:</strong> the 3 newest posts stay full; older posts move
   into the "older signals" archive as <code>&lt;details&gt;</code> collapsibles. When adding
   a post, demote the 4th-newest.</li>
+<li>This repo's <code>AGENTS.md</code> is mirrored to the website as <code>agents.html</code>. After
+  changing this file, re-run <code>build-agents-page.sh</code> in the site repo and push
+  — the repo copy stays the source of truth.</li>
+<li>NaviVim (xvoidsx/navivim, navi's default editor from 1.5) has its own site
+  section: <code>navivim.html</code> (hand-written product page), <code>navivim-handbook.html</code>
+  (mirror of its HANDBOOK.md), <code>navivim-agents.html</code> (mirror of its AGENTS.md)
+  — all built by <code>build-navivim-pages.sh</code> in the site repo. The NaviVim repo
+  copies stay the source of truth.</li>
+<li>Doc-mirror build scripts need the Python <code>markdown</code> package. Make sure it's
+  installed somewhere that survives your environment rebuilds — a plain system
+  pip install may not be.</li>
 <li>Footer creed: "open models, open web" — quiet, not shouty.</li>
 </ul>
 <h2>House conventions</h2>
@@ -345,13 +372,11 @@ verified.</p>
     <a href="index.html">home</a>
     <a href="news.html">news</a>
     <a href="roadmap.html">roadmap</a>
-    <a href="eiri.html">eiri</a>
     <a href="manual/manual.html">manual</a>
     <a href="sponsors.html">sponsors</a>
     <a href="labs.html">labs</a>
     <a href="community.html">community</a>
     <span class="active" aria-current="page">agents</span>
-    <a href="navivim.html">navivim</a>
     <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
