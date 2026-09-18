@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="eiri — navi's rolling channel. The coherence release, landing daily.">
+<title>eiri — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .88em; background: rgba(255,16,240,.08);
+    border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px;
+    color: var(--paper); white-space: nowrap;
+  }
+  pre {
+    background: #0a050d; border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.7;
+    color: var(--green);
+  }
+  pre .c { color: var(--muted); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 600px; margin: 0 0 56px; }
+  .lede strong { color: var(--paper); }
+  .stop { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 24px; background: var(--panel); }
+  .stop .state { font-size: 11px; letter-spacing: .24em; margin: 0 0 10px; color: var(--pink); }
+  .stop.roll .state { color: var(--cyan); }
+  .stop.calm .state { color: var(--green); }
+  .stop.warn { border-color: var(--pink); }
+  .stop h2 { margin: 0 0 6px; font-size: 32px; letter-spacing: -.01em; }
+  .stop h2 small { color: var(--muted); font-size: 16px; font-weight: 400; }
+  .stop p { color: var(--muted); margin: 0 0 12px; font-size: 15px; }
+  .stop p strong { color: var(--paper); font-weight: 600; }
+  .stop ul { margin: 0 0 12px; padding-left: 20px; color: var(--muted); font-size: 15px; }
+  .stop li { margin: 6px 0; }
+  .stop li strong { color: var(--paper); font-weight: 600; }
+  .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0 4px; }
+  .path { border: 1px solid var(--line); border-radius: 10px; padding: 20px; background: rgba(255,16,240,.03); }
+  .path h3 { margin: 0 0 8px; font-size: 18px; }
+  .path h3 .n { color: var(--cyan); margin-right: 8px; }
+  .path p { font-size: 14px; margin: 0 0 10px; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) {
+    .wrap { padding: 32px 18px 64px; }
+    .stop { padding: 22px 18px; }
+    .paths { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <span class="active" aria-current="page">eiri</span>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+  </nav>
+
+  <p class="kicker">NAVI // ROLLING CHANNEL</p>
+  <h1>ride the <span>rolling edge.</span></h1>
+  <p class="lede"><strong>eiri is navi's rolling channel</strong> — the coherence release, landing daily. The Debian model, the navi way: mika stays stable on careful release tags while eiri moves fast on the branch. Same machine, same files, your call which train you're on.</p>
+
+  <section class="stop roll">
+    <p class="state">HOW IT WORKS</p>
+    <h2>one system, <small>two channels</small></h2>
+    <p><code>navi-update</code> knows two channels. <strong>stable</strong> follows release tags — that's mika, the dependable foundation. <strong>eiri</strong> tracks the eiri branch head and rolls forward whenever new work lands; the updater remembers the deployed commit and only moves when there's something new.</p>
+    <p>Switching channels asks first, then pins your choice — your customizations are preserved in both directions, because the updater redeploys <em>around</em> them, never over them.</p>
+  </section>
+
+  <section class="stop">
+    <p class="state">JOIN EIRI</p>
+    <h2>two ways <small>in</small></h2>
+    <div class="paths">
+      <div class="path">
+        <h3><span class="n">A</span>switch in place</h3>
+        <p>Already on mika? No re-install, no lost files. One command opts you into the rolling channel:</p>
+        <pre>navi-update --channel eiri</pre>
+        <p class="c" style="font-size:13px">It asks first, pins <code>/etc/navi/channel</code>, and pulls the latest eiri.</p>
+      </div>
+      <div class="path">
+        <h3><span class="n">B</span>fresh bench ISO</h3>
+        <p>Starting from bare metal? Grab a bench ISO cut straight from the eiri branch and install it like any navi release.</p>
+        <p><a href="https://github.com/xvoidsx/navi/actions/workflows/iso-eiri.yml" target="_blank" rel="noreferrer">eiri bench ISOs ↗</a></p>
+        <p style="font-size:13px">Fresh installs carry the rolling updater from the start.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop">
+    <p class="state">WHAT'S LANDING</p>
+    <h2>the coherence <small>release, in motion</small></h2>
+    <p><strong>Coherence through ownership</strong> — one nightshadeNeon design language flowing through every layer xvoidsx builds:</p>
+    <ul>
+      <li><strong>navi mods</strong> — waybar-driven clickable modules (networking, calendar, audio, bluetooth) launching small floating TUIs</li>
+      <li><strong>Hey Lain!</strong> — a local voice assistant (faster-whisper + piper-tts, no cloud) that operates the desktop</li>
+      <li><strong>nightshadeNeon as a system</strong> — bubbletea/lipgloss TUIs, GTK theming, and web, all speaking one visual language</li>
+      <li><strong>enhance, don't replace</strong> — mods sharpen the daily surface without taking Linux away; choice is preserved</li>
+    </ul>
+  </section>
+
+  <section class="stop warn">
+    <p class="state">THE HONEST FINE PRINT</p>
+    <h2>moves fast, <small>occasionally breaks</small></h2>
+    <p>Rolling means rolling. Eiri gets the newest work the day it lands — and occasionally the newest bugs, too. Best on a bench machine or a secondary install, not the one you need for Monday morning.</p>
+    <p>Changed your mind? One command takes you home:</p>
+    <pre>navi-update --channel stable</pre>
+    <p style="font-size:13px">Back on mika's release tags, customizations intact. No re-install either way — that's the whole point.</p>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <span class="active" aria-current="page">eiri</span>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
