@@ -126,6 +126,7 @@
     <h2>one system, <small>two channels</small></h2>
     <p><code>navi-update</code> knows two channels. <strong>stable</strong> follows release tags — that's mika, the dependable foundation. <strong>eiri</strong> tracks the eiri branch head and rolls forward whenever new work lands; the updater remembers the deployed commit and only moves when there's something new.</p>
     <p>Switching channels asks first, then pins your choice — your customizations are preserved in both directions, because the updater redeploys <em>around</em> them, never over them.</p>
+    <p>And the loop closes over time: <strong>features that prove themselves on eiri graduate down into mika's stable releases.</strong> Rolling is the greenhouse; stable is the harvest.</p>
   </section>
 
   <section class="stop">
@@ -142,6 +143,7 @@
         <h3><span class="n">B</span>fresh bench ISO</h3>
         <p>Starting from bare metal? Grab a bench ISO cut straight from the eiri branch and install it like any navi release.</p>
         <p><a href="https://github.com/xvoidsx/navi/actions/workflows/iso-eiri.yml" target="_blank" rel="noreferrer">eiri bench ISOs ↗</a></p>
+        <p style="font-size:13px">Eiri ISOs are <strong>date-stamped snapshots, not versions</strong> — <em>navi 2 eiri — 18 September 2026</em>. mika gets version numbers; eiri gets dates. A date tells you exactly how fresh your snapshot is.</p>
         <p style="font-size:13px">Fresh installs carry the rolling updater from the start.</p>
       </div>
     </div>
