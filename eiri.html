@@ -98,6 +98,13 @@
   @media (max-width: 560px) {
     .wrap { padding: 32px 18px 64px; }
     .stop { padding: 22px 18px; }
+    .shots { grid-template-columns: 1fr; }
+  }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0 4px; }
+  .shot { margin: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #0a050d; }
+  .shot img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+  .shot figcaption { padding: 12px 14px; font-size: 13px; color: var(--muted); }
+  .shot figcaption strong { display: block; color: var(--pink); font-size: 14px; letter-spacing: .04em; margin-bottom: 2px; }
     .paths { grid-template-columns: 1fr; }
   }
 </style>
@@ -159,6 +166,31 @@
       <li><strong>nightshadeNeon as a system</strong> — bubbletea/lipgloss TUIs, GTK theming, and web, all speaking one visual language</li>
       <li><strong>enhance, don't replace</strong> — mods sharpen the daily surface without taking Linux away; choice is preserved</li>
     </ul>
+  </section>
+
+
+  <section class="stop">
+    <p class="state">SEEN ON EIRI</p>
+    <h2>fresh from <small>the rolling edge</small></h2>
+    <p>Real screenshots from the eiri bench machine — the mods and the voice assistant, as they look right now.</p>
+    <div class="shots">
+      <figure class="shot">
+        <img src="assets/mod-networking.png" alt="the navi-networking mod running a live speed test in a floating terminal" loading="lazy">
+        <figcaption><strong>navi-networking</strong><span>wifi, dns and a live speed test in one floating TUI</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/mod-audio.png" alt="the navi-audio mod with playback, recording, outputs, inputs and config tabs" loading="lazy">
+        <figcaption><strong>navi-audio</strong><span>pavucontrol parity, floating &mdash; &ldquo;the Wired is silent, listening&rdquo;</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/mod-calendar.png" alt="the navi-calendar mod with a September 2026 month view and a Friday agenda" loading="lazy">
+        <figcaption><strong>navi-calendar</strong><span>month view and agenda, popped from the waybar clock</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/hey-lain.png" alt="Hey Lain! voice assistant launching chromium from a spoken command" loading="lazy">
+        <figcaption><strong>hey lain!</strong><span>&ldquo;open chromium&rdquo; &mdash; heard on the machine, launched instantly</span></figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="stop warn">
