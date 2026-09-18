@@ -617,13 +617,20 @@
     .operator p { max-width: 290px; margin: 20px auto 0; color: var(--muted); font-size: 13px; }
 
     .finale { text-align: center; padding: 156px 0 116px; }
+    .doctrine-head h2 span { color: var(--cyan); }
+    .doctrine-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 48px; }
+    .doctrine-item { background: var(--ink); padding: 30px 28px; }
+    .doctrine-item .n { color: var(--green); font-size: 11px; letter-spacing: .24em; font-family: var(--mono); }
+    .doctrine-item blockquote { margin: 14px 0 12px; padding: 0; font: 400 clamp(18px, 1.6vw, 22px)/1.4 var(--display); color: var(--paper); }
+    .doctrine-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    @media (max-width: 900px) { .doctrine-grid { grid-template-columns: 1fr; } }
     .finale .symbol { color: var(--red); font-size: 30px; }
     .finale h2 { max-width: 940px; margin: 20px auto 24px; }
     .finale h2 span { color: var(--cyan); }
     .finale p { max-width: 670px; margin: 0 auto 35px; color: var(--muted); }
     .availability { margin-top: 19px; color: var(--green); font-size: 11px; }
-    .gh-star { margin: 16px 0 0; }
-    .gh-star img { vertical-align: middle; }
+    .finale .gh-star { display: flex; justify-content: center; margin: 18px 0 0; }
+    .finale .gh-star img { display: block; }
     .support-line { margin-top: 14px; font-size: 13px; color: var(--muted); }
     .site-footer {
       display: flex;
@@ -784,6 +791,7 @@
         <a class="ws" href="#install" aria-label="Install">IV</a>
         <a class="ws" href="#roadmap" aria-label="Roadmap">V</a>
         <a class="ws" href="#people" aria-label="People">VI</a>
+        <a class="ws" href="#doctrine" aria-label="Doctrine">VII</a>
       </div>
       <div class="status-center" id="clock" aria-label="Current date and time"></div>
       <div class="system">
@@ -1253,6 +1261,50 @@
       </div>
     </section>
 
+    <section class="content" id="doctrine">
+      <header class="chapter-head doctrine-head">
+        <div>
+          <p class="chapter-label">11 // THE DOCTRINE</p>
+          <h2>what the wired<br><span>believes.</span></h2>
+        </div>
+        <div class="chapter-copy">
+          <p>Six principles, in Lain's words — not a launch manifesto, the creed the system is actually built on. Bench-tested on old hardware, kept honest by the rolling channel.</p>
+        </div>
+      </header>
+      <div class="doctrine-grid">
+        <article class="doctrine-item">
+          <span class="n">01</span>
+          <blockquote>“old hardware isn't obsolete. it's proven.”</blockquote>
+          <p>perma-computing: the test bench is a 2015 cloudbook. if navi installs there, it runs anywhere.</p>
+        </article>
+        <article class="doctrine-item">
+          <span class="n">02</span>
+          <blockquote>“your computer should feel like a room of your own, not a store someone else owns.”</blockquote>
+          <p>ownership: no landlord. your machine answers to you, your files stay yours.</p>
+        </article>
+        <article class="doctrine-item">
+          <span class="n">03</span>
+          <blockquote>“an agent-native system doesn't give you apps. it gives you help.”</blockquote>
+          <p>agents from the first boot — ollama, opencode, omp, goose. your ai friends are here from the start.</p>
+        </article>
+        <article class="doctrine-item">
+          <span class="n">04</span>
+          <blockquote>“the smallweb is the web remembering what it was for.”</blockquote>
+          <p>gemini, local pages, neighborli — small, human-scale, one click from the desktop.</p>
+        </article>
+        <article class="doctrine-item">
+          <span class="n">05</span>
+          <blockquote>“beauty isn't decoration. it's how you know something was made with care.”</blockquote>
+          <p>nightshadeNeon through every layer, terminal to webapp — coherence you can feel.</p>
+        </article>
+        <article class="doctrine-item">
+          <span class="n">06</span>
+          <blockquote>“enhance, don't replace.”</blockquote>
+          <p>choice is preserved: mods sharpen the daily surface without taking linux away.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="finale" id="signal">
       <div class="symbol">∅</div>
       <h2>close the world.<br><span>enter the nExt.</span></h2>
@@ -1262,7 +1314,7 @@
         <a class="button secondary" href="#top">return to signal <span>↑</span></a>
       </div>
       <div class="availability">● STABLE CHANNEL // NAVI 1.5.1 MIKA &nbsp;·&nbsp; ● ROLLING CHANNEL // NAVI 2 EIRI</div>
-      <p class="gh-star"><a href="https://github.com/xvoidsx/navi" target="_blank" rel="noreferrer"><img src="https://img.shields.io/github/stars/xvoidsx/navi?style=social" alt="Star navi on GitHub" loading="lazy"></a></p>
+      <div class="gh-star"><a href="https://github.com/xvoidsx/navi" target="_blank" rel="noreferrer"><img src="https://img.shields.io/github/stars/xvoidsx/navi?style=social" alt="Star navi on GitHub" loading="lazy"></a></div>
       <p class="support-line">need a hand? find us on <a href="https://neighborli.xyz/@rav3ndust" target="_blank" rel="noreferrer">neighborli</a>, Discord (coming soon), or <a href="https://github.com/xvoidsx/navi/issues" target="_blank" rel="noreferrer">open an issue on GitHub</a>.</p>
     </section>
 
