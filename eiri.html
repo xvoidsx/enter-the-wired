@@ -40,7 +40,14 @@
   .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
   .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
   h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
-  h1 span { color: var(--pink); }
+  h1 span { color: var(--pink); animation: eiri-glitch 7s infinite; }
+  @keyframes eiri-glitch {
+    0%, 93%, 100% { text-shadow: none; }
+    94% { text-shadow: 2px 0 var(--cyan), -2px 0 var(--green); }
+    96% { text-shadow: -3px 0 var(--cyan), 3px 0 var(--green); }
+    98% { text-shadow: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { h1 span { animation: none; } }
   .lede { color: var(--muted); max-width: 600px; margin: 0 0 56px; }
   .lede strong { color: var(--paper); }
   .stop { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 24px; background: var(--panel); }
