@@ -106,6 +106,16 @@
   <p class="lede">Release announcements and project updates, newest first. Older posts live in the archive below.</p>
 
   <article class="post">
+    <p class="date">18 SEPTEMBER 2026</p>
+    <h2>navi 1.5.1 “mika” — patch</h2>
+    <p><strong>Our first field-reported bug, fixed.</strong> A friend installing navi in a VM watched the installer die at the network screen — despite working internet. The culprit: the installer's screen-clear calls ran unguarded under <code>set -e</code>, and the first one fires right before network setup. On VM consoles and minimal shells where <code>clear</code> fails, the whole installer exited instantly with no error message. All three sites are now failure-proof, so installs complete and real errors actually print.</p>
+    <p><strong>The connectivity check retries.</strong> Starting NetworkManager can flap the link for a few seconds; the probe now tries three times before concluding a machine is offline, so a momentarily flapping connection doesn't abort an install on a machine that's actually online.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.5.1-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.5.1. No desktop or package changes: 1.5.1 is 1.5 plus the installer fix.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.5.1-mika">navi-1.5.1-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
     <p class="date">17 SEPTEMBER 2026</p>
     <h2>navi 1.5 “mika” — the NaviVim update</h2>
     <p><strong>navi ships a default terminal IDE.</strong> NaviVim — the full Neovim distribution — is now baked into the distro from the get-go: neovim 0.12.5 from the upstream tarball (Debian stable's 0.10 is too old for the plugin stack, and pinning to testing would drag testing libc onto a stable base), installed system-wide with <code>editor</code>/<code>vi</code> alternatives, <code>EDITOR</code>/<code>VISUAL</code> set for every shell, and <code>/etc/skel</code> seeding so every new user lands in it. There's a rofi entry too — just type NaviVim.</p>
@@ -127,21 +137,23 @@
     <p class="signoff">— xvoidsx</p>
   </article>
 
-  <article class="post">
-    <p class="date">17 SEPTEMBER 2026</p>
-    <h2>navi 1.4.5 “mika” — maintenance</h2>
-    <p><strong>Floating, for real this time.</strong> 1.4.4's notification launcher floated the viewer with a single sleep-then-float — a race slower machines kept losing, so the window tiled. The new <code>mod-open.sh</code> launcher installs a runtime <code>for_window</code> rule <em>before</em> the window maps (no race possible), then polls and floats directly as a backstop. Both the notification bell and the update indicator open through it — standing rule going forward: <strong>navi mods always float.</strong></p>
-    <p><strong><code>navi-wired-adopt</code> — take the new desktop wholesale.</strong> <code>navi-update</code> preserves your customized configs by design, which means new stock defaults wait for you to say otherwise. <code>navi-wired-adopt</code> is the otherwise: it lays the current stock wired configs over yours, with a backup first and a loud warning before anything changes — because adopt means adopt. <code>--dry-run</code> to preview, and it offers to reload the window manager and bar when it's done.</p>
-    <p><strong>The panel got its neon.</strong> The update indicator and bell always reported state, but the stylesheet never styled it — everything looked the same lit or dim. Now the quiet states sit dim, the bell glows cyan when notifications wait, and the update indicator pulses neon pink while updates are pending.</p>
-    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.5-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.4.5. Then <code>navi-wired-adopt</code> if you want the new panel behavior on a customized config.</p>
-    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.5-mika">navi-1.4.5-mika.iso + SHA256SUMS ↗</a></p>
-    <p class="signoff">— xvoidsx</p>
-  </article>
 
   <section class="archive" aria-label="Older news">
     <p class="kicker">FROM THE ARCHIVE</p>
     <h2 class="archive-title">older <span>signals.</span></h2>
     <p class="lede">Everything below is kept for the record — click to expand.</p>
+
+    <details class="post">
+      <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.5 “mika” — maintenance</span></summary>
+      <div class="abody">
+          <p><strong>Floating, for real this time.</strong> 1.4.4's notification launcher floated the viewer with a single sleep-then-float — a race slower machines kept losing, so the window tiled. The new <code>mod-open.sh</code> launcher installs a runtime <code>for_window</code> rule <em>before</em> the window maps (no race possible), then polls and floats directly as a backstop. Both the notification bell and the update indicator open through it — standing rule going forward: <strong>navi mods always float.</strong></p>
+          <p><strong><code>navi-wired-adopt</code> — take the new desktop wholesale.</strong> <code>navi-update</code> preserves your customized configs by design, which means new stock defaults wait for you to say otherwise. <code>navi-wired-adopt</code> is the otherwise: it lays the current stock wired configs over yours, with a backup first and a loud warning before anything changes — because adopt means adopt. <code>--dry-run</code> to preview, and it offers to reload the window manager and bar when it's done.</p>
+          <p><strong>The panel got its neon.</strong> The update indicator and bell always reported state, but the stylesheet never styled it — everything looked the same lit or dim. Now the quiet states sit dim, the bell glows cyan when notifications wait, and the update indicator pulses neon pink while updates are pending.</p>
+          <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.5-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.4.5. Then <code>navi-wired-adopt</code> if you want the new panel behavior on a customized config.</p>
+          <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.5-mika">navi-1.4.5-mika.iso + SHA256SUMS ↗</a></p>
+          <p class="signoff">— xvoidsx</p>
+      </div>
+    </details>
 
     <details class="post">
       <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.4 “mika” — maintenance</span></summary>
