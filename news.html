@@ -107,6 +107,17 @@
 
   <article class="post">
     <p class="date">18 SEPTEMBER 2026</p>
+    <h2>navi 1.6 “mika” — the cohesion merge</h2>
+    <p><strong>The eiri work lands in main.</strong> Everything the eiri branch has been building — the design-language overhaul, the new theme, the refreshed panel stack — has merged into main as <strong>1.6 “mika”</strong>. Both ISOs are green: the stable 1.6 build and the eiri rolling build. The tag <strong>v1.6-mika</strong> is cut and the GitHub release is published — <code>/releases/latest</code> now serves 1.6.</p>
+    <p><strong>One design language, everywhere.</strong> This is the big one. navi now ships xvoidsx’s own <strong>nightshadeNeon GTK theme</strong> (GTK3 + GTK4) with <strong>Moka icons</strong>, wired through the installer into GTK2/3/4 settings, dconf, and Flatpak overrides — so file managers, dialogs, and settings panels all speak the same neon. The rofi launcher, dunst notifications, conky panel, and waybar were rebuilt in the same pass: obsidian-glass bar, the green/pink selection treatment, the glitch accents. Terminal, bar, launcher, notifications, toolkit — one stack, one voice. We own the whole stack now.</p>
+    <p><strong>What stable gets, what stays on eiri.</strong> The theme, icons, and the rofi/dunst/conky/waybar refresh ride the <strong>stable</strong> channel in 1.6. The new waybar mods — <code>navi-networking</code>, <code>navi-audio</code>, <code>navi-calendar</code> — and the <strong>Hey Lain!</strong> voice assistant stay on the <strong>eiri</strong> channel for now, where they’re still being tuned. eiri remains rolling and branch-scoped: it never gets tagged, and its ISOs never touch the releases page. Switch channels any time with <code>navi-update --channel eiri</code> / <code>--channel stable</code> — your customized configs survive the trip either way.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.6-mika</strong> as the newest tag — run <code>navi-update</code> and you’re on 1.6. Want the new panel defaults on a customized config? <code>navi-wired-adopt</code> lays the stock wired configs over yours, backup first.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/latest">navi-1.6-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
+    <p class="date">18 SEPTEMBER 2026</p>
     <h2>navi 1.5.1 “mika” — patch</h2>
     <p><strong>Our first field-reported bug, fixed.</strong> A friend installing navi in a VM watched the installer die at the network screen — despite working internet. The culprit: the installer's screen-clear calls ran unguarded under <code>set -e</code>, and the first one fires right before network setup. On VM consoles and minimal shells where <code>clear</code> fails, the whole installer exited instantly with no error message. All three sites are now failure-proof, so installs complete and real errors actually print.</p>
     <p><strong>The connectivity check retries.</strong> Starting NetworkManager can flap the link for a few seconds; the probe now tries three times before concluding a machine is offline, so a momentarily flapping connection doesn't abort an install on a machine that's actually online.</p>
@@ -126,22 +137,24 @@
     <p class="signoff">— xvoidsx</p>
   </article>
 
-  <article class="post">
-    <p class="date">17 SEPTEMBER 2026</p>
-    <h2>navi 1.4.6 “mika” — maintenance</h2>
-    <p><strong>The bell floats now. Really.</strong> 1.4.5's <code>mod-open.sh</code> floated the notification viewer on paper, but on real hardware the window still tiled — the launcher trusted environment variables and matched the window by title, and both can lie. Now it <em>probes</em> the compositor with a real round-trip instead of guessing, and the backstop floats the window by <strong>PID</strong>, which no TUI can rename out from under it. It also leaves a one-line log at <code>~/.local/share/navi/mod-open.log</code> per launch, so any future misbehavior leaves footprints.</p>
-    <p><strong><code>navi-update</code> now reloads waybar.</strong> The updater deployed new waybar configs but never told the running bar — so new on-clicks and modules only took effect after a re-login, and fresh launchers sat idle on live systems. After deploying configs, the installer now sends waybar its documented config-reload signal. One more quiet paper cut gone.</p>
-    <p><strong>Waybar CSS fix rides along.</strong> The <code>@keyframes</code> comma selector that broke GTK's CSS parser in 1.4.5's stylesheet is fixed in this tag — updaters get the pink pulse with no manual edit.</p>
-    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.6-mika</strong> as the newest tag — run <code>navi-update</code> and the bar reloads itself; the bell should float immediately.</p>
-    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.6-mika">navi-1.4.6-mika.iso + SHA256SUMS ↗</a></p>
-    <p class="signoff">— xvoidsx</p>
-  </article>
 
 
   <section class="archive" aria-label="Older news">
     <p class="kicker">FROM THE ARCHIVE</p>
     <h2 class="archive-title">older <span>signals.</span></h2>
     <p class="lede">Everything below is kept for the record — click to expand.</p>
+
+    <details class="post">
+      <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.6 “mika” — maintenance</span></summary>
+      <div class="abody">
+          <p><strong>The bell floats now. Really.</strong> 1.4.5's <code>mod-open.sh</code> floated the notification viewer on paper, but on real hardware the window still tiled — the launcher trusted environment variables and matched the window by title, and both can lie. Now it <em>probes</em> the compositor with a real round-trip instead of guessing, and the backstop floats the window by <strong>PID</strong>, which no TUI can rename out from under it. It also leaves a one-line log at <code>~/.local/share/navi/mod-open.log</code> per launch, so any future misbehavior leaves footprints.</p>
+          <p><strong><code>navi-update</code> now reloads waybar.</strong> The updater deployed new waybar configs but never told the running bar — so new on-clicks and modules only took effect after a re-login, and fresh launchers sat idle on live systems. After deploying configs, the installer now sends waybar its documented config-reload signal. One more quiet paper cut gone.</p>
+          <p><strong>Waybar CSS fix rides along.</strong> The <code>@keyframes</code> comma selector that broke GTK's CSS parser in 1.4.5's stylesheet is fixed in this tag — updaters get the pink pulse with no manual edit.</p>
+          <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.4.6-mika</strong> as the newest tag — run <code>navi-update</code> and the bar reloads itself; the bell should float immediately.</p>
+          <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.4.6-mika">navi-1.4.6-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+      </div>
+    </details>
 
     <details class="post">
       <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.5 “mika” — maintenance</span></summary>
