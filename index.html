@@ -361,6 +361,18 @@
       box-shadow: 14px 14px 0 rgba(0,255,255,.07);
     }
     .tour-screen { position: relative; min-height: 0; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+    .video-shell {
+      position: relative;
+      border: 1px solid var(--pink);
+      background: #000;
+      box-shadow: 14px 14px 0 rgba(255,16,240,.07);
+      aspect-ratio: 16/9;
+      margin: 0 0 56px;
+    }
+    .video-shell iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; border: 0;
+    }
     .tour-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .35s ease; }
     .tour-slide.active { opacity: 1; visibility: visible; }
     .tour-slide img { width: 100%; height: 100%; object-fit: cover; }
@@ -902,9 +914,13 @@
           <h2>live from<br>the wired.</h2>
         </div>
         <div class="chapter-copy">
-          <p>The screenshots below are the system itself: tiled workspaces, agents, radio, the local app catalog and real desktops in daily use. Pick a channel.</p>
+          <p>Watch the full video tour, or browse the screenshots below — the system itself: tiled workspaces, agents, radio, the local app catalog and real desktops in daily use. Pick a channel.</p>
         </div>
       </header>
+
+      <div class="video-shell">
+        <iframe src="https://www.youtube.com/embed/yEzP3WZTMuQ" title="navi video tour" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      </div>
 
       <div class="tour-shell" aria-label="navi screenshot carousel">
         <div class="tour-screen" aria-live="polite">
