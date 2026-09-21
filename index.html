@@ -783,6 +783,59 @@
       .site-footer { flex-direction: column; }
     }
 
+    /* 03 // THE PANEL — a living waybar demo. The face cycles through its
+       real states on a 16s loop; the captions crossfade in step. */
+    .panel-demo { margin-top: 64px; }
+    .panel-bar {
+      display: flex; align-items: center; gap: 18px;
+      background:
+        linear-gradient(115deg, rgba(255,255,255,.06), transparent 30%, transparent 70%, rgba(57,255,20,.03)),
+        linear-gradient(180deg, rgba(22,5,20,.92), rgba(0,0,0,.94));
+      border: 1px solid rgba(255,16,240,.36);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-family: var(--mono); font-size: 14px; color: var(--paper);
+      box-shadow: 0 4px 18px rgba(0,0,0,.6), 0 0 24px rgba(255,16,240,.14), inset 0 1px 0 rgba(255,255,255,.08);
+      overflow-x: auto; white-space: nowrap;
+    }
+    .panel-launcher { color: var(--pink); }
+    .panel-ws { color: var(--muted); letter-spacing: 6px; }
+    .panel-ws b { color: var(--paper); font-weight: normal; }
+    .panel-window { color: var(--muted); font-size: 13px; }
+    .panel-spacer { flex: 1 1 auto; min-width: 12px; }
+    .panel-face {
+      font-size: 19px; line-height: 1;
+      animation: face-cycle 16s ease-in-out infinite;
+      text-shadow: 0 0 10px currentColor;
+    }
+    @keyframes face-cycle {
+      0%, 22% { color: rgba(255,255,255,.32); }
+      25%, 47% { color: var(--cyan); }
+      50%, 72% { color: var(--green); }
+      75%, 97% { color: var(--pink); }
+      100% { color: rgba(255,255,255,.32); }
+    }
+    .panel-captions {
+      position: relative; height: 1.8em; margin-top: 16px;
+      font-family: var(--mono); font-size: 13px;
+    }
+    .panel-captions span {
+      position: absolute; top: 0; left: 2px; opacity: 0;
+      animation: caption-cycle 16s linear infinite;
+    }
+    .panel-captions span:nth-child(1) { color: var(--muted); }
+    .panel-captions span:nth-child(2) { color: var(--cyan); animation-delay: 4s; }
+    .panel-captions span:nth-child(3) { color: var(--green); animation-delay: 8s; }
+    .panel-captions span:nth-child(4) { color: var(--pink); animation-delay: 12s; }
+    @keyframes caption-cycle {
+      0% { opacity: 0; }
+      2% { opacity: 1; }
+      22% { opacity: 1; }
+      25%, 100% { opacity: 0; }
+    }
+    .panel-note { margin-top: 10px; font-size: 13px; color: var(--muted); font-family: var(--mono); }
+    .panel-note a { color: var(--cyan); }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -989,10 +1042,60 @@
       </div>
     </section>
 
+    <section class="content" id="panel">
+      <header class="chapter-head">
+        <div>
+          <p class="chapter-label">03 // THE PANEL</p>
+          <h2>the bar<br>is alive.</h2>
+        </div>
+        <div class="chapter-copy">
+          <p>It's the part of navi you never stop looking at — so it's the part that works the hardest. Weather, updates, notifications, the clock: <strong>every module earns its pixels, and everything you see opens something.</strong> Glance up. The system tells you what it needs.</p>
+        </div>
+      </header>
+
+      <div class="panel-demo" aria-label="Animated demonstration of the navi panel's agent status">
+        <div class="panel-bar" aria-hidden="true">
+          <span class="panel-launcher">∅</span>
+          <span class="panel-ws"><b>I</b> II III</span>
+          <span class="panel-window">foot — ~/wired</span>
+          <span class="panel-spacer"></span>
+          <span class="panel-face">◉</span>
+          <span class="panel-mod">22°</span>
+          <span class="panel-mod">○</span>
+          <span class="panel-mod">Mon 21 Sep</span>
+        </div>
+        <div class="panel-captions" aria-live="polite">
+          <span>nothing happening — the bar is quiet</span>
+          <span>agents standing by — backend ready</span>
+          <span>opencode is working in herdr</span>
+          <span>pi needs you — permission requested</span>
+        </div>
+        <p class="panel-note">the real bar runs this live on your machine — the agent face is <a href="eiri.html">new on the eiri channel</a>.</p>
+      </div>
+
+      <div class="principles" aria-label="Why the panel matters">
+        <article class="principle">
+          <span class="principle-num">01</span>
+          <h3>AGENT STATUS</h3>
+          <p>A little face on the bar reports what your agents are doing — working in herdr, standing by, or waiting on you. When one needs a decision, the panel says so before you go looking. New on the eiri rolling channel.</p>
+        </article>
+        <article class="principle">
+          <span class="principle-num">02</span>
+          <h3>EVERYTHING REPORTS</h3>
+          <p>Weather, updates, notifications, battery, the clock. Nothing sits up there as decoration — the bar breathes through cyan, pink and green as the system changes underneath it.</p>
+        </article>
+        <article class="principle">
+          <span class="principle-num">03</span>
+          <h3>CLICK ANYTHING</h3>
+          <p>The panel is a control surface, not a display. The bell opens notifications, the date opens the calendar, the face opens your agents — the strip that's always on screen is the fastest way to drive the machine.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="content" id="navivim">
       <header class="chapter-head navivim-head">
         <div>
-          <p class="chapter-label">03 // THE EDITOR</p>
+          <p class="chapter-label">04 // THE EDITOR</p>
           <h2>close the world.<br><span>open navivim.</span></h2>
         </div>
         <div class="chapter-copy">
@@ -1021,7 +1124,7 @@
     <section class="content" id="play">
       <header class="chapter-head play-head">
         <div>
-          <p class="chapter-label">04 // FOR PLAY</p>
+          <p class="chapter-label">05 // FOR PLAY</p>
           <h2>navi is also<br><span>for play.</span></h2>
         </div>
         <div class="chapter-copy">
@@ -1079,7 +1182,7 @@
     <section class="content" id="system">
       <div class="system-grid">
         <div class="manifesto">
-          <p class="chapter-label">05 // INSIDE MIKA</p>
+          <p class="chapter-label">06 // INSIDE MIKA</p>
           <h2>opinionated,<br><span>not closed.</span></h2>
           <p>navi chooses a coherent starting point so the machine feels finished on first boot. Every piece is still yours: plain-text configs, familiar packages, open tools.</p>
           <div class="stack" aria-label="Core navi tools">
@@ -1131,7 +1234,7 @@
     <section class="content" aria-labelledby="apps-title">
       <header class="chapter-head apps-philosophy">
         <div>
-          <p class="chapter-label">06 // THE APPLICATION LAYER</p>
+          <p class="chapter-label">07 // THE APPLICATION LAYER</p>
           <h2 id="apps-title">the web is an<br><span>open canvas.</span></h2>
         </div>
         <div class="chapter-copy">
@@ -1163,7 +1266,7 @@
     <section class="content" id="install">
       <header class="chapter-head">
         <div>
-          <p class="chapter-label">07 // INSTALL</p>
+          <p class="chapter-label">08 // INSTALL</p>
           <h2>answer a few<br>questions. reboot.</h2>
         </div>
         <div class="chapter-copy">
@@ -1190,7 +1293,7 @@
     <section class="content" id="machines">
       <header class="chapter-head">
         <div>
-          <p class="chapter-label">08 // NAVI MACHINES</p>
+          <p class="chapter-label">09 // NAVI MACHINES</p>
           <h2>hardware with<br>a point of view.</h2>
         </div>
         <div class="chapter-copy">
@@ -1217,7 +1320,7 @@
     <section class="content" id="roadmap">
       <header class="chapter-head roadmap-title">
         <div>
-          <p class="chapter-label">09 // CHANNELS</p>
+          <p class="chapter-label">10 // CHANNELS</p>
           <h2>mika is home.<br><span>eiri is the rolling edge.</span></h2>
         </div>
         <div class="chapter-copy">
@@ -1248,7 +1351,7 @@
     <section class="content" id="people">
       <header class="chapter-head">
         <div>
-          <p class="chapter-label">10 // OPERATORS</p>
+          <p class="chapter-label">11 // OPERATORS</p>
           <h2>the people behind<br>the signal.</h2>
         </div>
         <div class="chapter-copy">
@@ -1288,7 +1391,7 @@
     <section class="content" id="covenant">
       <header class="chapter-head covenant-head">
         <div>
-          <p class="chapter-label">11 // THE COVENANT</p>
+          <p class="chapter-label">12 // THE COVENANT</p>
           <h2>what the wired<br><span>believes.</span></h2>
         </div>
         <div class="chapter-copy">
