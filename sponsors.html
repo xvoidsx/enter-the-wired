@@ -44,6 +44,28 @@
   .stop ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 15px; }
   .stop li { margin: 6px 0; }
   .stop li strong { color: var(--paper); font-weight: 600; }
+  .sponsor-btns { display: flex; gap: 16px; margin: 20px 0 8px; flex-wrap: wrap; }
+  .sponsor-btn {
+    display: inline-block; padding: 14px 30px; border-radius: 999px;
+    text-decoration: none; font-weight: 700; font-size: 15px; letter-spacing: .02em;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .sponsor-btn.gh {
+    color: #0a0410; background: var(--pink);
+    box-shadow: 0 0 18px rgba(255,16,240,.5), inset 0 0 12px rgba(255,255,255,.15);
+  }
+  .sponsor-btn.gh:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(255,16,240,.8), inset 0 0 12px rgba(255,255,255,.2);
+  }
+  .sponsor-btn.kofi {
+    color: #0a0410; background: var(--cyan);
+    box-shadow: 0 0 18px rgba(0,229,255,.5), inset 0 0 12px rgba(255,255,255,.15);
+  }
+  .sponsor-btn.kofi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(0,229,255,.8), inset 0 0 12px rgba(255,255,255,.2);
+  }
   nav.top { margin: 0 0 48px; font-size: 14px; }
   nav.top a { margin-right: 18px; text-decoration: none; }
   nav.top a:hover { text-decoration: underline; }
@@ -108,7 +130,11 @@
   <section class="stop">
     <p class="state">DIRECT FUNDING</p>
     <h2>financial sponsors</h2>
-    <p>Direct funding goes to full-time navi development and upstream contributions to the projects beneath us. Support us through <a href="https://github.com/sponsors/rav3ndust">GitHub Sponsors</a> or <a href="https://ko-fi.com/rav3ndust">Ko-fi</a>.</p>
+    <p>Direct funding goes to full-time navi development and upstream contributions to the projects beneath us. Choose whichever suits you best:</p>
+    <div class="sponsor-btns">
+      <a class="sponsor-btn gh" href="https://github.com/sponsors/rav3ndust">Sponsor on GitHub</a>
+      <a class="sponsor-btn kofi" href="https://ko-fi.com/rav3ndust">Support on Ko-fi</a>
+    </div>
     <p><strong>Individual and corporate sponsors get credited by name on this page</strong> — your support is public, and so is our thanks.</p>
   </section>
 
