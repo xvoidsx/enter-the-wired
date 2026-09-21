@@ -5,7 +5,7 @@
 # script after every AGENTS.md change and push the result.
 set -euo pipefail
 
-SRC_URL="https://raw.githubusercontent.com/xvoidsx/navi/main/AGENTS.md"
+SRC_URL="https://raw.githubusercontent.com/xvoidsx/navi/eiri/AGENTS.md"
 OUT="$(cd "$(dirname "$0")" && pwd)/agents.html"
 
 # persistent python deps (markdown) — site builds need them across VM restarts
@@ -18,6 +18,11 @@ import markdown
 src_url, out = sys.argv[1], sys.argv[2]
 with urllib.request.urlopen(src_url) as r:
     text = r.read().decode("utf-8")
+
+# The handbook uses <agent> as a bare placeholder in one rofi-menu string;
+# raw-HTML passthrough would turn it into a real (unclosed) element and break
+# the page, so escape it before rendering. The repo file stays untouched.
+text = text.replace("<agent>", "&lt;agent&gt;")
 
 # Drop the markdown's own h1 — the page template supplies the header.
 lines = text.split("\n")
@@ -125,7 +130,7 @@ page = """<!doctype html>
   <p class="kicker">NAVI // AGENTS.MD</p>
   <h1>how we build <span>navi.</span></h1>
   <p class="lede">The project's shared brain — conventions, release process, and hard-won rules — written for agents and humans alike. Read it and hit the ground running.</p>
-  <p class="srcnote">Mirrored from <a href="https://github.com/xvoidsx/navi/blob/main/AGENTS.md">AGENTS.md</a> in the navi repo. The repo copy is the source of truth.</p>
+  <p class="srcnote">Mirrored from <a href="https://github.com/xvoidsx/navi/blob/eiri/AGENTS.md">AGENTS.md</a> on the eiri rolling branch. The repo copy is the source of truth.</p>
 
   <div class="doc">
 """ + body + """

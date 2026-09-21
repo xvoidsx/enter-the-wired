@@ -97,7 +97,7 @@
   <p class="kicker">NAVI // AGENTS.MD</p>
   <h1>how we build <span>navi.</span></h1>
   <p class="lede">The project's shared brain — conventions, release process, and hard-won rules — written for agents and humans alike. Read it and hit the ground running.</p>
-  <p class="srcnote">Mirrored from <a href="https://github.com/xvoidsx/navi/blob/main/AGENTS.md">AGENTS.md</a> in the navi repo. The repo copy is the source of truth.</p>
+  <p class="srcnote">Mirrored from <a href="https://github.com/xvoidsx/navi/blob/eiri/AGENTS.md">AGENTS.md</a> on the eiri rolling branch. The repo copy is the source of truth.</p>
 
   <div class="doc">
 <blockquote>
@@ -210,11 +210,18 @@ system via <code>--deploy-only</code> (this is what <code>navi-update</code> run
   membership needs a re-login; a sudoers rule doesn't).</li>
 <li>Third-party installers (<code>scripts/installers/</code>: nightly browsers, ani-cli,
   charm, cliamp) are <strong>not</strong> run by the installer — one failure there used
-  to abort the whole install under <code>set -e</code>, and <code>--yes</code>/<code>ASSUME_YES</code>
-  auto-ran all of them silently. They're deployed to
+  to abort the whole install under <code>set -e</code>. They're deployed to
   <code>/usr/share/navi/installers/</code> and offered through the <strong><code>navi-extras</code></strong>
-  post-install menu instead (<code>/usr/bin/navi-extras</code>, rofi-visible,
-  <code>alacritty -e navi-extras</code>).</li>
+  post-install menu instead (<code>/usr/bin/navi-extras</code>, rofi-visible).</li>
+<li><strong>Hey Lain</strong> (eiri): <code>setup_heylain</code> deploys <code>mods/hey-lain/</code> to
+  <code>/usr/share/navi/hey-lain</code> and builds its STT/TTS venv in place
+  (faster-whisper + piper + whisper model). The venv survives redeploys —
+  the <code>.venv-ready</code> marker stores a hash of <code>requirements.txt</code>, so
+  unchanged requirements mean "refresh scripts, keep venv"; a PyPI outage
+  warns and continues instead of wedging the install. Logs go to
+  <code>$XDG_STATE_HOME/hey-lain/log</code> (<code>HEY_LAIN_LOG_DIR</code>) because the deploy
+  tree is root-owned. Alt+V is bound in the shipped sway config;
+  <code>warmup.sh</code> runs at login.</li>
 </ul>
 <h2>The self-maintenance layer</h2>
 <p>Three commands, three jobs. Don't confuse them:</p>
@@ -253,6 +260,42 @@ lose).</p>
    misbehavior must leave footprints.</li>
 <li>If there's no compositor at all, just run the command (plain-open path).</li>
 </ol>
+<h2>The agent mod (<code>custom/agent</code>)</h2>
+<p>The little robot face on the panel — navi's agent-status integration.
+<code>wired/waybar/agent-mod.sh</code> polls every 5s and emits waybar JSON with one of
+five classes; <code>wired/waybar/agent-menu.sh</code> is the right-click rofi dispatcher.</p>
+<p>State priority (first match wins): <code>agent-blocked</code> (a herdr agent waits on the
+user) → <code>agent-listening</code> (Hey Lain mic hot via
+<code>$XDG_RUNTIME_DIR/hey-lain/rec.pid</code>, or thinking via <code>processing.lock</code>) →
+<code>agent-working</code> → <code>agent-ready</code> (agents idle, or ollama reachable) →
+<code>agent-asleep</code>. Herdr states come from <code>herdr agent list</code>
+(<code>idle</code>/<code>working</code>/<code>blocked</code>/<code>done</code>/<code>unknown</code>); the server-down shape is JSON
+with an <code>error</code> key and exit code 0, so parse the body, don't trust the exit.</p>
+<p>Click contract: left → the agent center (<code>navi-agents-config</code>, floating),
+middle → <code>herdr</code> attach (floating), right → the rofi menu, which leads
+with blocked agents ("⚠ &lt;agent&gt; needs you — jump to herdr") when any are
+blocked.</p>
+<p>The center's tabs: status (live herdr agents with waybar-style faces,
+enter jumps to one via <code>herdr agent attach</code> addressed at the pane id —
+herdr doesn't resolve bare agent labels, so the label is display-only;
+r reads recent output the same way),
+models (ollama service on/off via doas, pull/delete models),
+harnesses (installed harnesses, default agent — also what navi-Q opens),
+autonomy (opencode permission profiles - ask me / balanced / yolo -
+written to <code>~/.config/opencode/opencode.json</code>, preserving other keys;
+other harnesses keep their own settings for now),
+evals (model compare: an 8-prompt built-in set run against selected pulled
+ollama models, each response scored 1-5 by a local judge model,
+scoreboard with averages and a winner),
+providers (API keys). The default agent is stored in
+<code>~/.config/navi/default-agent</code> (whitelisted to known harness binaries);
+<code>navi-Q</code>/<code>navi-Qx</code> read it, falling back to opencode.</p>
+<p>Scope is honest by design: herdr only sees its own panes, so bare-terminal
+agents are invisible — tooltips say "in herdr" and never claim global
+awareness. CSS lives in <code>wired/waybar/style.css</code> (<code>#custom-agent</code> + state
+classes; GTK CSS rules apply). Customized waybar configs are preserved by
+navi-update, so users on customized configs need <code>navi-wired-adopt</code> (or a
+manual module add) to see new modules.</p>
 <h2>Release process, end to end</h2>
 <ol>
 <li>Bump <code>wired/VERSION</code>; run the <strong>iso.yml RELEASE CHECKLIST</strong> (every
@@ -273,15 +316,7 @@ lose).</p>
 </ol>
 <p><strong>Release naming:</strong> 1.x = <strong>"mika"</strong>, 2.x = <strong>"eiri"</strong>. Tags look like
 <code>v1.4.6-mika</code>. The updater discovers "newer" via <code>sort -V</code> over tags
-matching <code>^v1\.[0-9]+</code>, so patch versions sort correctly. <strong>Eiri is never
-tagged</strong> — it has no <code>v2.x</code> tags by design; the rolling channel is the
-<code>eiri</code> branch head, full stop. Don't create one.</p>
-<p><strong>Channel / artifact policy (standing):</strong> stable ships as <strong>GitHub
-releases</strong> from tags; eiri ships as <strong>branch-scoped workflow artifacts</strong>
-only and <strong>never touches the releases page</strong>. <code>/releases/latest</code> always
-resolves to stable (currently 1.5 "mika"). The site's download buttons
-track <code>/releases/latest</code> for exactly this reason — never pin them to a
-tag, and never point them at an eiri artifact.</p>
+matching <code>^v1\.[0-9]+</code>, so patch versions sort correctly.</p>
 <p><strong>Never claim</strong> publication, updater success, hardware validation, or public
 deployment without verifying it. The ping/announcement is a contract — keep
 it, and only for what's actually done.</p>
@@ -323,6 +358,15 @@ Chromium ignoring CLI flags when already running breaks it. The catalog
 ships <strong>inlined</strong> as <code>wired/naviApps/catalog.js</code>, generated from
 <code>apps.json</code> by <code>wired/naviApps/build-catalog.sh</code>. <strong>Re-run the script and
 push BOTH files whenever <code>apps.json</code> changes.</strong></p>
+<ul>
+<li><strong>Pass the app object to every card helper.</strong> A bare <code>${badgeFor()}</code>
+  threw on <code>a.source</code> and stuck the whole store on "loading curated apps"
+  — one uncaught TypeError kills the first render.</li>
+<li><strong>Attribute third-party agents honestly.</strong> omp is Can Bölük's fork of
+  pi, hermes is Nous Research's, herdr is Can Celik's, Muse Code is Meta's
+  harness for Muse models. navi ships and themes them; it doesn't own
+  them. Never claim others' work as xvoidsx's.</li>
+</ul>
 <h2>Seamless GIF loops</h2>
 <p>Modulo-wrapping a position does NOT make a loop seamless. Every translating
 element must move an <strong>integer number of spatial periods per loop</strong>
