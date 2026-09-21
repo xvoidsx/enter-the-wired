@@ -106,6 +106,17 @@
   <p class="lede">Release announcements and project updates, newest first. Older posts live in the archive below.</p>
 
   <article class="post">
+    <p class="date">21 SEPTEMBER 2026</p>
+    <h2>eiri: the agent center grows up</h2>
+    <p><strong>One room for every agent — now with opinions and a scoreboard.</strong> The agent center (<code>navi-agents-config</code>, one click on the panel's robot face) is now <strong>six tabs</strong>: status, models, harnesses, <strong>autonomy</strong>, <strong>evals</strong>, and providers. It's becoming the one place the whole agent layer of the machine is run from, instead of a pile of scattered config files.</p>
+    <p><strong>Autonomy: how much your agents ask.</strong> A real dial, not a placebo — it writes OpenCode <code>permission</code> profiles to <code>~/.config/opencode/opencode.json</code> (every other key in the file is preserved): <strong>ask me</strong> makes every tool check with you first, <strong>balanced</strong> lets reads and search run free while edits, commands, and subagents ask — with <code>rm</code> and <code>sudo</code> denied outright — and <strong>yolo</strong> gets out of the way. We scoped it honestly: herdr exposes no approval lever and no harness reads navi's files, so a cross-harness autonomy switch would have been theater. Other harnesses keep their own settings, and the UI says so.</p>
+    <p><strong>Evals: race your models.</strong> Pick any of your pulled Ollama models and run them against an eight-prompt built-in set — code, reasoning, instruction following, writing, math, explanation, JSON, summarization. A local judge model scores every answer 1–5, and you get per-prompt scores, averages, and a winner. Token-capped, cancellable mid-run, all on your machine.</p>
+    <p><strong>Super+Ctrl+H opens herdr anywhere.</strong> The agent workspace manager, one chord away, in a floating terminal. And jumping to an agent from the status tab now attaches by pane id — the floating window morphs straight into the agent's terminal, quick and into the conversation.</p>
+    <p><strong>On the eiri channel now:</strong> run <code>navi-update</code> on eiri and the center is six tabs. One honest note: if your sway config is customized, the updater preserves it by design, so add the new keybinding yourself or run <code>navi-wired-adopt</code> — and reload sway after any update that touches keybindings.</p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
     <p class="date">18 SEPTEMBER 2026</p>
     <h2>navi 1.6 “mika” — the cohesion merge</h2>
     <p><strong>The eiri work lands in main.</strong> Everything the eiri branch has been building — the design-language overhaul, the new theme, the refreshed panel stack — has merged into main as <strong>1.6 “mika”</strong>. Both ISOs are green: the stable 1.6 build and the eiri rolling build. The tag <strong>v1.6-mika</strong> is cut and the GitHub release is published — <code>/releases/latest</code> now serves 1.6.</p>
@@ -126,16 +137,7 @@
     <p class="signoff">— xvoidsx</p>
   </article>
 
-  <article class="post">
-    <p class="date">17 SEPTEMBER 2026</p>
-    <h2>navi 1.5 “mika” — the NaviVim update</h2>
-    <p><strong>navi ships a default terminal IDE.</strong> NaviVim — the full Neovim distribution — is now baked into the distro from the get-go: neovim 0.12.5 from the upstream tarball (Debian stable's 0.10 is too old for the plugin stack, and pinning to testing would drag testing libc onto a stable base), installed system-wide with <code>editor</code>/<code>vi</code> alternatives, <code>EDITOR</code>/<code>VISUAL</code> set for every shell, and <code>/etc/skel</code> seeding so every new user lands in it. There's a rofi entry too — just type NaviVim.</p>
-    <p><strong>Pinned, reproducible, offline-safe.</strong> The ISO stages the NaviVim tree and the neovim tarball at build time, so fresh installs never reach for the network to get an editor. Both pins live next to the code that consumes them — a version bump is one edit plus a restage.</p>
-    <p><strong>Your config is sacred.</strong> The installer seeds <code>~/.config/nvim</code> only when you don't already have one — existing setups are never touched. And <code>navi-update</code> stays cheap: when the pinned neovim is already installed, it skips the binary entirely and just refreshes the config.</p>
-    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.5-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.5. The first run downloads the plugin set headlessly, so give it a few minutes.</p>
-    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.5-mika">navi-1.5-mika.iso + SHA256SUMS ↗</a></p>
-    <p class="signoff">— xvoidsx</p>
-  </article>
+
 
 
 
@@ -143,6 +145,19 @@
     <p class="kicker">FROM THE ARCHIVE</p>
     <h2 class="archive-title">older <span>signals.</span></h2>
     <p class="lede">Everything below is kept for the record — click to expand.</p>
+
+    <details class="post">
+      <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.5 “mika” — the NaviVim update</span></summary>
+      <div class="abody">
+    <p><strong>navi ships a default terminal IDE.</strong> NaviVim — the full Neovim distribution — is now baked into the distro from the get-go: neovim 0.12.5 from the upstream tarball (Debian stable's 0.10 is too old for the plugin stack, and pinning to testing would drag testing libc onto a stable base), installed system-wide with <code>editor</code>/<code>vi</code> alternatives, <code>EDITOR</code>/<code>VISUAL</code> set for every shell, and <code>/etc/skel</code> seeding so every new user lands in it. There's a rofi entry too — just type NaviVim.</p>
+    <p><strong>Pinned, reproducible, offline-safe.</strong> The ISO stages the NaviVim tree and the neovim tarball at build time, so fresh installs never reach for the network to get an editor. Both pins live next to the code that consumes them — a version bump is one edit plus a restage.</p>
+    <p><strong>Your config is sacred.</strong> The installer seeds <code>~/.config/nvim</code> only when you don't already have one — existing setups are never touched. And <code>navi-update</code> stays cheap: when the pinned neovim is already installed, it skips the binary entirely and just refreshes the config.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.5-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.5. The first run downloads the plugin set headlessly, so give it a few minutes.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.5-mika">navi-1.5-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+      </div>
+    </details>
+
 
     <details class="post">
       <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.4.6 “mika” — maintenance</span></summary>
