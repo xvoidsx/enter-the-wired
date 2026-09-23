@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <meta name="description" content="How a browser engine became part of the operating system — navi's webapp runtime, managed policy, browser lineup, upstream work, blackice, Helium, and accela.">
+<meta property="og:title" content="chromium — navi">
+<meta property="og:description" content="On navi, the browser is not just an app. It is an application runtime, a policy surface, a visual layer, and eventually a platform xvoidsx intends to shape.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xvoidsx.github.io/enter-the-wired/chromium.html">
+<meta property="og:image" content="https://xvoidsx.github.io/enter-the-wired/assets/edge-nightshade-neon.png">
+<meta name="twitter:card" content="summary_large_image">
 <title>chromium — navi</title>
 <style>
   :root {
@@ -45,6 +51,7 @@
     text-shadow: 0 0 10px rgba(255,16,240,.9);
     box-shadow: 0 0 12px rgba(255,16,240,.3);
   }
+  .chapters a .n { color: var(--green); margin-right: 6px; font-size: 11px; letter-spacing: .08em; }
   .stop { border: 1px solid var(--line); border-radius: 12px; padding: 32px; margin: 0 0 28px; background: var(--panel); scroll-margin-top: 24px; }
   .stop.now { border-color: var(--green); }
   .stop.next { border-color: var(--cyan); }
@@ -127,15 +134,15 @@
   <a class="pdflink" href="assets/chromium-on-navi.pdf">↓ take this page offline — the full report as a PDF</a>
 
   <nav class="chapters" aria-label="Chapters">
-    <a href="#runtime">the webapp runtime</a>
-    <a href="#policy">managed policy</a>
-    <a href="#lineup">the browser lineup</a>
-    <a href="#edge">edge on navi</a>
-    <a href="#upstream">upstream citizenship</a>
-    <a href="#blackice">blackice</a>
-    <a href="#helium">why helium leads</a>
-    <a href="#accela">accela's product layer</a>
-    <a href="#roadmap">roadmap &amp; guardrails</a>
+    <a href="#runtime"><span class="n">01</span> the webapp runtime</a>
+    <a href="#policy"><span class="n">02</span> managed policy</a>
+    <a href="#lineup"><span class="n">03</span> the browser lineup</a>
+    <a href="#edge"><span class="n">04</span> edge on navi</a>
+    <a href="#upstream"><span class="n">05</span> upstream citizenship</a>
+    <a href="#blackice"><span class="n">06</span> blackice</a>
+    <a href="#helium"><span class="n">07</span> why helium leads</a>
+    <a href="#accela"><span class="n">08</span> accela's product layer</a>
+    <a href="#roadmap"><span class="n">09</span> roadmap &amp; guardrails</a>
   </nav>
 
   <section class="stop now" id="runtime">

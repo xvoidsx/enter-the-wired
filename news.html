@@ -107,6 +107,15 @@
   <p class="lede">Release announcements and project updates, newest first. Older posts live in the archive below.</p>
 
   <article class="post">
+    <p class="date">23 SEPTEMBER 2026</p>
+    <h2>chromium on navi: the browser is part of the OS</h2>
+    <p><strong>The site has a new page, and it's one of our strongest positions.</strong> <a href="chromium.html">chromium</a> tells the full story of how a browser engine became part of the operating system — nine chapters, from the shipped work to the horizon.</p>
+    <p><strong>What's on the page:</strong> the webapp runtime (72 launchers, the <code>navi-webapp</code> CLI, local-first catalog engineering), managed policy (nightshadeNeon, uBlock Origin Lite, Proton Pass — small, explicit, and honest about ownership), the browser lineup (Chromium default, Helium dogfooding, Edge as an evaluated option), our public Edge-on-Linux issue tracker and the evidence-rich submissions behind it, blackice's staged path from dogfood to owned privacy infrastructure, why Helium leads as accela's likely base, and the roadmap with its guardrails — what ships, what's dogfooding, what's planned.</p>
+    <p><strong>The throughline:</strong> navi can be opinionated about the integration layer without pretending there's one correct browser for everyone. Choice comes from making the integration legible, keeping alternatives available, and separating what ships from what is merely planned.</p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
     <p class="date">21 SEPTEMBER 2026</p>
     <h2>eiri: the agent center grows up</h2>
     <p><strong>One room for every agent — now with opinions and a scoreboard.</strong> The agent center (<code>navi-agents-config</code>, one click on the panel's robot face) is now <strong>six tabs</strong>: status, models, harnesses, <strong>autonomy</strong>, <strong>evals</strong>, and providers. It's becoming the one place the whole agent layer of the machine is run from, instead of a pile of scattered config files.</p>
@@ -128,16 +137,6 @@
     <p class="signoff">— xvoidsx</p>
   </article>
 
-  <article class="post">
-    <p class="date">18 SEPTEMBER 2026</p>
-    <h2>navi 1.5.1 “mika” — patch</h2>
-    <p><strong>Our first field-reported bug, fixed.</strong> A friend installing navi in a VM watched the installer die at the network screen — despite working internet. The culprit: the installer's screen-clear calls ran unguarded under <code>set -e</code>, and the first one fires right before network setup. On VM consoles and minimal shells where <code>clear</code> fails, the whole installer exited instantly with no error message. All three sites are now failure-proof, so installs complete and real errors actually print.</p>
-    <p><strong>The connectivity check retries.</strong> Starting NetworkManager can flap the link for a few seconds; the probe now tries three times before concluding a machine is offline, so a momentarily flapping connection doesn't abort an install on a machine that's actually online.</p>
-    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.5.1-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.5.1. No desktop or package changes: 1.5.1 is 1.5 plus the installer fix.</p>
-    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.5.1-mika">navi-1.5.1-mika.iso + SHA256SUMS ↗</a></p>
-    <p class="signoff">— xvoidsx</p>
-  </article>
-
 
 
 
@@ -146,6 +145,17 @@
     <p class="kicker">FROM THE ARCHIVE</p>
     <h2 class="archive-title">older <span>signals.</span></h2>
     <p class="lede">Everything below is kept for the record — click to expand.</p>
+
+    <details class="post">
+      <summary><span class="adate">18 SEPTEMBER 2026</span><span class="atitle">navi 1.5.1 “mika” — patch</span></summary>
+      <div class="abody">
+    <p><strong>Our first field-reported bug, fixed.</strong> A friend installing navi in a VM watched the installer die at the network screen — despite working internet. The culprit: the installer's screen-clear calls ran unguarded under <code>set -e</code>, and the first one fires right before network setup. On VM consoles and minimal shells where <code>clear</code> fails, the whole installer exited instantly with no error message. All three sites are now failure-proof, so installs complete and real errors actually print.</p>
+    <p><strong>The connectivity check retries.</strong> Starting NetworkManager can flap the link for a few seconds; the probe now tries three times before concluding a machine is offline, so a momentarily flapping connection doesn't abort an install on a machine that's actually online.</p>
+    <p><strong>Updating:</strong> <code>navi-update --check</code> sees <strong>v1.5.1-mika</strong> as the newest tag — run <code>navi-update</code> and you're on 1.5.1. No desktop or package changes: 1.5.1 is 1.5 plus the installer fix.</p>
+    <p><strong>Download:</strong> <a href="https://github.com/xvoidsx/navi/releases/tag/v1.5.1-mika">navi-1.5.1-mika.iso + SHA256SUMS ↗</a></p>
+    <p class="signoff">— xvoidsx</p>
+      </div>
+    </details>
 
     <details class="post">
       <summary><span class="adate">17 SEPTEMBER 2026</span><span class="atitle">navi 1.5 “mika” — the NaviVim update</span></summary>
