@@ -133,6 +133,7 @@
       <header><span class="id">EDGE-LINUX-001</span><h3>Copilot toolbar button does nothing on Linux</h3><span class="st st-upstream">reported upstream</span></header>
       <p><strong>What's broken:</strong> in Microsoft Edge on Linux, the Copilot toolbar button is present but non-functional — clicking it does nothing. The feature works on other platforms, so this is a Linux-specific gap, not a disabled feature.</p>
       <p><strong>What we've done:</strong> submitted through Edge's built-in feedback system on 23 September 2026 with a screenshot, a screen recording, and a detailed write-up, identifying as a navi maintainer evaluating Edge as a reliable distro browser option. The full submission is logged in our public <a href="https://github.com/xvoidsx/navi/blob/eiri/docs/edge-linux-feedback.md">Edge-on-Linux feedback tracker</a>.</p>
+      <p><strong>Update — likely root cause:</strong> community reports indicate the Linux build ships without the <code>HubApps</code> profile file the Copilot sidebar needs — placing it in <code>~/.config/microsoft-edge/Default/</code> restores the sidebar. That reframes this from "button does nothing" to a Linux packaging gap, which is a much more actionable report. The same symptoms are tracked publicly at <a href="https://github.com/MicrosoftEdge/DevTools/issues/278">MicrosoftEdge/DevTools#278</a> across Mint, NixOS, Fedora, and Arch. We're folding both into our tracker. (We're not shipping the manual file-drop as a fix — downloading an unsigned profile file from a stranger's dotfiles repo is not something a distro should bless.)</p>
       <p><strong>What it blocks:</strong> nothing we ship — Edge is an evaluated option, not a default. But it matters for the evaluation: a flagship AI feature dead on arrival on Linux is exactly the kind of paper cut that keeps a browser out of a distro's recommendations.</p>
     </article>
 
@@ -155,10 +156,10 @@
     </article>
 
     <article class="issue" id="volume-osd">
-      <header><span class="id">NAVI-OSD-001</span><h3>volume OSD daemon can serve a stale UI after updates</h3><span class="st st-verify">awaiting verification</span></header>
+      <header><span class="id">NAVI-OSD-001</span><h3>volume OSD daemon can serve a stale UI after updates</h3><span class="st st-fixed">fixed</span></header>
       <p><strong>What was happening:</strong> the volume OSD is a single-flight daemon, so replacing its script didn't replace the running server — the old code kept serving the old UI and a real fix looked broken on updated machines.</p>
-      <p><strong>What we've done:</strong> the daemon now self-retires stale servers — a pidfile carrying the script's code id, a client-side staleness check before connecting, and <code>/proc</code> cmdline verification before signaling anything. Shipped on the eiri channel.</p>
-      <p><strong>What's next:</strong> confirmation on real hardware. If the OSD background is still transparent after updating, we revert to the pre-batch OSD and go back to the drawing board.</p>
+      <p><strong>What we did:</strong> the daemon now self-retires stale servers — a pidfile carrying the script's code id, a client-side staleness check before connecting, and <code>/proc</code> cmdline verification before signaling anything.</p>
+      <p><strong>Confirmed fixed</strong> on real hardware, 23 September 2026 — updates now show the new UI immediately.</p>
     </article>
 
     <article class="issue" id="waybar-cycle">
