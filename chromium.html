@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="How navi integrates Chromium and Chromium-based browsers — the webapp runtime, managed policy, the browser lineup, upstream work, blackice, and accela.">
+<title>chromium — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 600px; margin: 0 0 16px; }
+  .dl { display: inline-block; margin: 0 0 56px; padding: 10px 22px; border: 1px solid var(--green);
+        border-radius: 999px; color: var(--green); text-decoration: none; font-size: 14px;
+        box-shadow: 0 0 12px rgba(57,255,20,.25); }
+  .dl:hover { background: rgba(57,255,20,.08); }
+  .stop { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 24px; background: var(--panel); }
+  .stop.now { border-color: var(--green); }
+  .stop.next { border-color: var(--cyan); }
+  .stop .state { font-size: 11px; letter-spacing: .24em; margin: 0 0 10px; }
+  .stop.now .state { color: var(--green); }
+  .stop.next .state { color: var(--cyan); }
+  .stop.future .state { color: var(--pink); }
+  .stop h2 { margin: 0 0 6px; font-size: 32px; letter-spacing: -.01em; }
+  .stop h2 small { color: var(--muted); font-size: 16px; font-weight: 400; }
+  .stop p { color: var(--muted); margin: 0 0 12px; font-size: 15px; }
+  .stop p strong { color: var(--paper); font-weight: 600; }
+  .stop ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 15px; }
+  .stop li { margin: 6px 0; }
+  .stop li strong { color: var(--paper); font-weight: 600; }
+  .stop code { color: var(--cyan); font-size: 13.5px; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } .stop { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <span class="active" aria-current="page">chromium</span>
+  </nav>
+
+  <p class="kicker">NAVI // CHROMIUM</p>
+  <h1>the browser is <span>part of the OS.</span></h1>
+  <p class="lede">On navi, the browser isn't just an app — it's an application runtime, a policy surface, a visual layer, and eventually a platform we intend to shape ourselves. This page documents how Chromium integrates with navi today, what we're pushing upstream, and where <strong>accela</strong>, our future Chromium fork, fits in.</p>
+  <a class="dl" href="assets/chromium-on-navi.pdf">↓ download the full report (PDF)</a>
+
+  <section class="stop now">
+    <p class="state">SHIPPED</p>
+    <h2>the webapp runtime</h2>
+    <p>A navi webapp isn't a bookmark. It's an installed desktop entry with its own icon, its own window, and the same launcher visibility as a native application. <strong>72 launchers</strong> ship today, each one a Chromium <code>--app</code> window with <code>--force-dark-mode</code>.</p>
+    <p>The public CLI is <code>navi-webapp</code> — <code>install</code>, <code>uninstall</code>, <code>list</code>, <code>doctor</code>. First-party front doors (navi radio, neighborli, glyyph, the naviApps storefront) show the strategy: the distro's own services arrive as web technology without feeling bolted on.</p>
+    <p>Local-first engineering shaped the design. The naviApps storefront once read its catalog with <code>fetch()</code> — which breaks under <code>file://</code> when a browser process is already running. The fix was architectural: <code>apps.json</code> stays the source of truth, but <code>build-catalog.sh</code> emits an inlined <code>catalog.js</code>. No hidden server, no launch-flag roulette.</p>
+    <ul>
+      <li><strong>App mode matters:</strong> independent compositor window, rofi launch by name and icon, task switching treats it as an application.</li>
+      <li><strong>Deterministic dark mode:</strong> a wrapper puts <code>--force-dark-mode</code> first, so sway gets a dark browser even when the desktop portal isn't answering — and an explicit <code>--force-light-mode</code> can still override it. A curated default, not a lock.</li>
+    </ul>
+  </section>
+
+  <section class="stop now">
+    <p class="state">SHIPPED</p>
+    <h2>managed policy</h2>
+    <p>navi uses Chromium's managed policy layer to install a small, explicit baseline: the <strong>nightshadeNeon theme</strong>, <strong>uBlock Origin Lite</strong>, and <strong>Proton Pass</strong> — pinned stable extension IDs, force-installed, stored as JSON under <code>/etc/chromium/policies/managed/</code>.</p>
+    <p>What it buys: <strong>coherence</strong> (a new profile still looks and behaves like navi), <strong>privacy by default</strong> (blocking is present before anyone shops for an extension), and <strong>supportability</strong> (bug reports start from a known baseline).</p>
+    <p>What it obligates: keep the list small — a non-removable default carries more responsibility than a recommendation. Pin stable channels only. State ownership honestly: uBOL is upstream's, Proton Pass is Proton's. Coherence is useful only when the user can understand what's being enforced and why.</p>
+  </section>
+
+  <section class="stop">
+    <p class="state">THE LINEUP</p>
+    <h2>one runtime contract, <small>several browsers</small></h2>
+    <p>navi can be opinionated about the integration layer without pretending there's one correct browser for everyone.</p>
+    <ul>
+      <li><strong>Chromium (default today).</strong> Debian's Chromium is the known baseline — the wrapper, launcher overrides, app windows, and policy are designed around it.</li>
+      <li><strong>Helium (dogfooding).</strong> imput's open-source Chromium fork, based on ungoogled-chromium. Raven runs it as his daily driver while navi evaluates it as the likely base for accela — watching security-update lag across releases and keeping the divergence list short.</li>
+      <li><strong>Microsoft Edge (optional).</strong> Being evaluated as a user choice, not a default. Its sleeping-tab controls are unusually granular — a real story on low-power machines. Its telemetry model doesn't fit navi's zero-telemetry direction, so that tradeoff is stated plainly rather than buried in fine print.</li>
+      <li><strong>More via navi-extras.</strong> The post-install menu offers user-driven browser additions; installer scripts live under <code>scripts/installers/</code> and are never run by the main installer — one optional browser failure must never endanger the OS install.</li>
+    </ul>
+    <p><strong>Planned:</strong> a settings TUI to choose which installed Chromium-family browser the webapps launch through. Scope stays Chromium-based — app mode and managed policy are the contract navi can support consistently.</p>
+  </section>
+
+  <section class="stop now">
+    <p class="state">UPSTREAM CITIZENSHIP</p>
+    <h2>fix upstream, <small>don't just patch around</small></h2>
+    <p>navi's first response to a browser bug shouldn't always be a distro-only patch. When the failure belongs upstream, the useful work is evidence, a clear report, and verification when a fix lands.</p>
+    <p>Our public tracker (<code>docs/edge-linux-feedback.md</code> in the navi repo) currently carries two Edge-on-Linux issues: <strong>EDGE-LINUX-001</strong>, the Copilot toolbar button not functioning on Linux, and <strong>EDGE-LINUX-002</strong>, the "use system title bar" toggle doing nothing at all. On 23 September 2026, Raven submitted both to the Edge Linux team through Edge's feedback system — screenshot, screen recording, detailed write-up — identifying himself as a navi maintainer who wants Edge to be a reliable distro option.</p>
+    <p>A distro maintainer lobbying Microsoft for better Linux support is unusual leverage. Spend it deliberately: reproducible behavior, visual evidence, one public status page, no inflated claims. A vendor response is not the same as a verified fix — we'll test on real navi hardware before closing anything.</p>
+  </section>
+
+  <section class="stop next">
+    <p class="state">DOGFOODING</p>
+    <h2>blackice</h2>
+    <p><strong>blackice</strong> is xvoidsx's Manifest V3 ad and tracker blocker — a fork of uBlock Origin Lite with a nightshadeNeon interface. Raymond Hill's copyright and the uBlock contributors' notices stay intact; xvoidsx adds its copyright only to its own interface, branding, defaults, and genuine curated-list work.</p>
+    <p>The transition is staged on purpose: <strong>uBlock Origin Lite is still the force-installed policy blocker today.</strong> blackice is dogfooding now, and only after it earns the job does the policy ID change. Later, a native adblock-rust component inside accela becomes the deeper engine — one brand, two engines.</p>
+    <p>Boundaries that protect credibility: never present it as an official uBlock project, never dogfood it beside uBO or uBOL, never show fake statistics or placeholder lists.</p>
+  </section>
+
+  <section class="stop future">
+    <p class="state">THE HORIZON</p>
+    <h2>accela</h2>
+    <p><strong>accela</strong> is xvoidsx's planned Chromium-based browser — where the browser becomes an owned interface to the wired. Forking raw ungoogled-chromium would maximize control and release-engineering burden simultaneously; <strong>Helium is the practical starting point</strong>, with a clean, legible patch stack and an escape hatch back to plain UGC if its direction or cadence stops fitting.</p>
+    <ul>
+      <li><strong>Smallweb built in</strong> — gemini and other smallweb paths as first-class navigation.</li>
+      <li><strong>Zero telemetry</strong> — privacy as an architecture constraint, not a setting.</li>
+      <li><strong>Hey Lain</strong> — local and cloud agent support replacing the generic "AI Mode" story.</li>
+      <li><strong>Private search</strong> — with a smallweb-scoped index as the long-term wedge.</li>
+      <li><strong>Native bangs</strong> — <code>!radio</code>, <code>!nl</code>, <code>!apps</code>, <code>!wired</code>: the address bar as a map of navi's front doors.</li>
+    </ul>
+    <p><strong>"Wallpaper is the theme":</strong> Chromium's native color extraction can tint the whole browser chrome from a new-tab-page wallpaper. In testing, navi gifpapers each produced coherent palettes — pulsegrid is the leading default, jellyfish the showcase alternative. The selected gifpaper becomes the browser's visual source of truth.</p>
+    <p>Sequencing matters: accela comes after the desktop navi launch, navidroid, and eiri work. Firefox remains on the roadmap as a cross-engine hedge; Safari is explicitly out of scope.</p>
+  </section>
+
+  <section class="stop">
+    <p class="state">REFERENCE</p>
+    <h2>paths &amp; links</h2>
+    <ul>
+      <li><code>wired/naviApps/</code> — catalog, launchers, icons, local store</li>
+      <li><code>wired/scripts/naviwebapp.sh</code> — the public webapp CLI</li>
+      <li><code>wired/chromium/</code> — policy and dark-mode wrapper</li>
+      <li><code>scripts/installers/</code> — optional browser installers</li>
+      <li><code>docs/edge-linux-feedback.md</code> — public Edge issue tracker</li>
+    </ul>
+    <p><a href="https://github.com/xvoidsx/navi">github.com/xvoidsx/navi</a> · <a href="https://github.com/xvoidsx/blackice">github.com/xvoidsx/blackice</a></p>
+    <p style="font-size: 13px;">Status note: "shipped", "dogfooding", and "planned" describe project state as of 23 September 2026. Planned items are not presented as shipped features. — <em>open models, open web</em></p>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="eiri.html">eiri</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <span class="active" aria-current="page">chromium</span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
