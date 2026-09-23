@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Known issues tracked in the open — navi's own bugs and navi-affecting upstream bugs, with status and what xvoidsx is doing about each.">
+<meta property="og:title" content="issues — navi">
+<meta property="og:description" content="Every bug we know about — ours and upstream's — with its status and what we're doing about it. Tracked in the open.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xvoidsx.github.io/enter-the-wired/issues.html">
+<meta property="og:image" content="https://xvoidsx.github.io/enter-the-wired/assets/edge-nightshade-neon.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>issues — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  code { color: var(--cyan); font-size: .92em; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 640px; margin: 0 0 40px; font-size: 17px; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 48px; }
+  .legend span {
+    font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+    border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px; color: var(--muted);
+  }
+  .st { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; border-radius: 999px; padding: 3px 12px; border: 1px solid; white-space: nowrap; }
+  .st-upstream { color: var(--pink); border-color: rgba(255,16,240,.5); background: rgba(255,16,240,.08); }
+  .st-verify { color: var(--cyan); border-color: rgba(0,229,255,.5); background: rgba(0,229,255,.07); }
+  .st-known { color: var(--muted); border-color: rgba(154,143,160,.4); }
+  .st-fixed { color: var(--green); border-color: rgba(57,255,20,.5); background: rgba(57,255,20,.07); }
+  section.group { margin: 0 0 56px; }
+  section.group > h2 { font-size: clamp(28px, 5vw, 44px); letter-spacing: -.02em; margin: 0 0 8px; line-height: 1.05; }
+  section.group > h2 span { color: var(--pink); }
+  section.group > p.intro { color: var(--muted); max-width: 640px; margin: 0 0 24px; }
+  article.issue { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 18px; background: var(--panel); }
+  article.issue header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin: 0 0 6px; }
+  article.issue h3 { margin: 0; font-size: 21px; letter-spacing: -.01em; }
+  article.issue .id { color: var(--green); font-size: 12px; letter-spacing: .18em; }
+  article.issue p { color: var(--muted); font-size: 15px; margin: 0 0 12px; }
+  article.issue p strong { color: var(--paper); font-weight: 600; }
+  article.issue p:last-child { margin-bottom: 0; }
+  .file { border: 1px solid var(--line); border-radius: 12px; padding: 32px; background: var(--panel); margin: 0 0 24px; }
+  .file h2 { font-size: clamp(28px, 5vw, 44px); letter-spacing: -.02em; margin: 0 0 12px; line-height: 1.05; }
+  .file h2 span { color: var(--pink); }
+  .file p { color: var(--muted); font-size: 15px; margin: 0 0 12px; }
+  .file p strong { color: var(--paper); }
+  .file ul { color: var(--muted); font-size: 15px; padding-left: 20px; margin: 0 0 12px; }
+  .file li { margin: 6px 0; }
+  .file li strong { color: var(--paper); }
+  .cta { display: inline-block; margin-top: 8px; padding: 10px 22px; border: 1px solid var(--pink); border-radius: 999px; text-decoration: none; font-weight: 600; box-shadow: 0 0 16px rgba(255,16,240,.3); }
+  .cta:hover { background: rgba(255,16,240,.12); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } article.issue, .file { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <a href="chromium.html">chromium</a>
+    <span class="active" aria-current="page">issues</span>
+  </nav>
+
+  <p class="kicker">NAVI // ISSUES</p>
+  <h1>known issues, <span>tracked in the open.</span></h1>
+  <p class="lede">Every bug we know about — ours and upstream's — with its status and what we're doing about it. No silent known-issues list buried in a wiki. If you hit something that isn't here, file it: the tracker is open and we'd rather hear it from you than discover it ourselves.</p>
+
+  <div class="legend" aria-label="Status legend">
+    <span><b style="color:var(--pink)">■</b> reported upstream</span>
+    <span><b style="color:var(--cyan)">■</b> awaiting verification</span>
+    <span><b style="color:var(--green)">■</b> fixed</span>
+    <span><b style="color:var(--muted)">■</b> known</span>
+  </div>
+
+  <section class="group">
+    <h2>upstream issues <span>affecting navi</span></h2>
+    <p class="intro">navi builds on other people's software — Debian, Chromium, Microsoft Edge, GTK. When upstream breaks, our users feel it. So we file evidence-rich reports, track them publicly, and say plainly what each one blocks. This is what upstream citizenship looks like from the distro side.</p>
+
+    <article class="issue" id="edge-linux-001">
+      <header><span class="id">EDGE-LINUX-001</span><h3>Copilot toolbar button does nothing on Linux</h3><span class="st st-upstream">reported upstream</span></header>
+      <p><strong>What's broken:</strong> in Microsoft Edge on Linux, the Copilot toolbar button is present but non-functional — clicking it does nothing. The feature works on other platforms, so this is a Linux-specific gap, not a disabled feature.</p>
+      <p><strong>What we've done:</strong> submitted through Edge's built-in feedback system on 23 September 2026 with a screenshot, a screen recording, and a detailed write-up, identifying as a navi maintainer evaluating Edge as a reliable distro browser option. The full submission is logged in our public <a href="https://github.com/xvoidsx/navi/blob/eiri/docs/edge-linux-feedback.md">Edge-on-Linux feedback tracker</a>.</p>
+      <p><strong>What it blocks:</strong> nothing we ship — Edge is an evaluated option, not a default. But it matters for the evaluation: a flagship AI feature dead on arrival on Linux is exactly the kind of paper cut that keeps a browser out of a distro's recommendations.</p>
+    </article>
+
+    <article class="issue" id="edge-linux-002">
+      <header><span class="id">EDGE-LINUX-002</span><h3>"Use system title bar and borders" has no effect on Linux</h3><span class="st st-upstream">reported upstream</span></header>
+      <p><strong>What's broken:</strong> enabling <em>Use system title bar and borders</em> in Edge's appearance settings produces no visual change on Linux. The toggle exists, the window ignores it.</p>
+      <p><strong>What we've done:</strong> submitted alongside EDGE-LINUX-001 on 23 September 2026, same evidence package, same public log. Two issues, one submission session.</p>
+      <p><strong>What it blocks:</strong> desktop integration. navi is a coherent desktop; a browser that can't hand its window chrome to the system compositor is a browser that always looks slightly foreign. Small, visible, fixable.</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>navi's own <span>issues</span></h2>
+    <p class="intro">Our bugs, owned. Fixes land on the <a href="eiri.html">eiri channel</a> first and ride toward stable when they're proven on real hardware.</p>
+
+    <article class="issue" id="mod-open-float">
+      <header><span class="id">NAVI-MOD-001</span><h3>launching a mod steals focus from a floating window behind it</h3><span class="st st-known">known</span></header>
+      <p><strong>What's happening:</strong> launching a mod while another window is already floating also centers the pre-existing window behind it. The likely cause is overly broad match criteria in <code>mod-open.sh</code>.</p>
+      <p><strong>What we're doing:</strong> nothing, for now — deliberately. The common case (no floating window behind the launch) works correctly, and we'd rather not churn the launcher on a cosmetic edge case while bigger eiri work is in flight. It's documented here so nobody has to rediscover it.</p>
+    </article>
+
+    <article class="issue" id="volume-osd">
+      <header><span class="id">NAVI-OSD-001</span><h3>volume OSD daemon can serve a stale UI after updates</h3><span class="st st-verify">awaiting verification</span></header>
+      <p><strong>What was happening:</strong> the volume OSD is a single-flight daemon, so replacing its script didn't replace the running server — the old code kept serving the old UI and a real fix looked broken on updated machines.</p>
+      <p><strong>What we've done:</strong> the daemon now self-retires stale servers — a pidfile carrying the script's code id, a client-side staleness check before connecting, and <code>/proc</code> cmdline verification before signaling anything. Shipped on the eiri channel.</p>
+      <p><strong>What's next:</strong> confirmation on real hardware. If the OSD background is still transparent after updating, we revert to the pre-batch OSD and go back to the drawing board.</p>
+    </article>
+
+    <article class="issue" id="waybar-cycle">
+      <header><span class="id">NAVI-WAYBAR-001</span><h3>waybar neon color cycling needs hardware verification</h3><span class="st st-verify">awaiting verification</span></header>
+      <p><strong>What's new:</strong> waybar text and pill borders now animate through the nightshadeNeon cycle — cyan to pink to green — with state cues (battery warnings, mute, idle inhibitor) keeping their solid colors via <code>animation: none</code>.</p>
+      <p><strong>What's next:</strong> verification via <code>navi-update</code> on the Cloudbook test bench. Animation on a panel is the kind of thing that looks right in a stylesheet and wrong on a 2015 Celeron; it ships when hardware says so.</p>
+    </article>
+  </section>
+
+  <section class="file">
+    <h2>hit something? <span>file it.</span></h2>
+    <p>The full tracker lives on GitHub — every issue, every discussion, open to everyone:</p>
+    <p><a class="cta" href="https://github.com/xvoidsx/navi/issues">github.com/xvoidsx/navi/issues</a></p>
+    <p><strong>What makes a report actionable:</strong></p>
+    <ul>
+      <li><strong>Channel and version</strong> — mika stable (which release) or eiri (which date you last updated).</li>
+      <li><strong>Hardware</strong> — machine, or at least CPU/GPU. navi keeps old hardware useful, so old hardware reports are welcome, not embarrassing.</li>
+      <li><strong>Steps to reproduce</strong> — what you did, what you expected, what happened instead.</li>
+      <li><strong>Evidence</strong> — screenshots and screen recordings. They're how we file our own reports — see the Edge submissions above.</li>
+    </ul>
+    <p>On the eiri channel, rough edges are expected — reporting them is contributing. On stable, a bug report is a gift: it means someone cared enough to tell us instead of quietly switching distros.</p>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="eiri.html">eiri</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <a href="chromium.html">chromium</a>
+    <span class="active" aria-current="page">issues</span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
