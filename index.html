@@ -367,12 +367,30 @@
       background: #000;
       box-shadow: 14px 14px 0 rgba(255,16,240,.07);
       aspect-ratio: 16/9;
-      margin: 0 0 56px;
+      margin: 0 0 22px;
     }
-    .video-shell iframe {
+    .vid-screen { position: relative; width: 100%; height: 100%; }
+    .vid-slide { position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden; transition: opacity .35s ease; }
+    .vid-slide.active { opacity: 1; visibility: visible; }
+    .vid-slide iframe {
       position: absolute; inset: 0;
       width: 100%; height: 100%; border: 0;
     }
+    .vid-caption {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 24px; margin: 0 0 18px;
+    }
+    .vid-caption h3 { margin: 0 0 6px; color: var(--paper); font: 400 clamp(22px, 3vw, 34px)/1 var(--display); }
+    .vid-caption p { margin: 0; max-width: 640px; color: var(--muted); font-size: 13px; }
+    .vid-count { color: var(--green); font-size: 11px; white-space: nowrap; }
+    .vid-controls {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+      margin: 0 0 56px;
+    }
+    .vid-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
     .tour-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .35s ease; }
     .tour-slide.active { opacity: 1; visibility: visible; }
     .tour-slide img { width: 100%; height: 100%; object-fit: cover; }
@@ -1001,12 +1019,34 @@
           <h2>live from<br>the wired.</h2>
         </div>
         <div class="chapter-copy">
-          <p>Watch the full video tour, or browse the screenshots below — the system itself: tiled workspaces, agents, radio, the local app catalog and real desktops in daily use. Pick a channel.</p>
+          <p>Watch the videos, or browse the screenshots below — the system itself: tiled workspaces, agents, radio, the local app catalog and real desktops in daily use. Pick a channel.</p>
         </div>
       </header>
 
-      <div class="video-shell">
-        <iframe src="https://www.youtube.com/embed/yEzP3WZTMuQ" title="navi video tour" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      <div class="video-shell" aria-label="navi video carousel">
+        <div class="vid-screen" aria-live="polite">
+          <figure class="vid-slide active" data-title="eiri updates" data-copy="Fresh off the rolling channel — the new agent panel for jumping into any running agent's conversation, plus the naviApps curated catalog with automated installs." data-meta="01 / 02">
+            <iframe src="https://www.youtube-nocookie.com/embed/WTXu-h7YN5Y" title="navi 2.0 'eiri' updates — fresh agent panel and curated app-store" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+          </figure>
+          <figure class="vid-slide" data-title="the full tour" data-copy="The guided walkthrough of the whole system — tiled workspaces, agents, radio, the app catalog and real desktops in daily use." data-meta="02 / 02" aria-hidden="true">
+            <iframe data-src="https://www.youtube-nocookie.com/embed/yEzP3WZTMuQ" title="navi video tour" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+          </figure>
+        </div>
+      </div>
+      <div class="vid-caption">
+        <div>
+          <h3 id="vid-title">eiri updates</h3>
+          <p id="vid-copy">Fresh off the rolling channel — the new agent panel for jumping into any running agent's conversation, plus the naviApps curated catalog with automated installs.</p>
+        </div>
+        <span class="vid-count" id="vid-count">01 / 02</span>
+      </div>
+      <div class="vid-controls">
+        <button class="tour-arrow" type="button" id="vid-prev" aria-label="Previous video">←</button>
+        <div class="vid-tabs" role="tablist" aria-label="Choose a video">
+          <button class="tour-tab vid-tab active" type="button" role="tab" aria-selected="true">eiri updates</button>
+          <button class="tour-tab vid-tab" type="button" role="tab" aria-selected="false" tabindex="-1">video tour</button>
+        </div>
+        <button class="tour-arrow" type="button" id="vid-next" aria-label="Next video">→</button>
       </div>
 
       <div class="tour-shell" aria-label="navi screenshot carousel">
@@ -1610,6 +1650,61 @@
     document.querySelector('.tour-shell').addEventListener('mouseleave', startCarousel);
     showSlide(0);
     startCarousel();
+
+    // video carousel: manual only (no auto-advance — never cut a video off),
+    // and the hidden slide's iframe is unloaded so its audio stops.
+    const vidSlides = [...document.querySelectorAll('.vid-slide')];
+    const vidTabs = [...document.querySelectorAll('.vid-tab')];
+    const vidTitle = document.getElementById('vid-title');
+    const vidCopy = document.getElementById('vid-copy');
+    const vidCount = document.getElementById('vid-count');
+    let activeVid = 0;
+
+    const loadVid = slide => {
+      const frame = slide.querySelector('iframe');
+      if (!frame.dataset.src) frame.dataset.src = frame.getAttribute('src') || '';
+      if (frame.dataset.src && frame.getAttribute('src') !== frame.dataset.src) {
+        frame.setAttribute('src', frame.dataset.src);
+      }
+    };
+    const unloadVid = slide => {
+      const frame = slide.querySelector('iframe');
+      if (frame.dataset.src) frame.removeAttribute('src');
+    };
+
+    const showVid = index => {
+      activeVid = (index + vidSlides.length) % vidSlides.length;
+      vidSlides.forEach((slide, slideIndex) => {
+        const active = slideIndex === activeVid;
+        slide.classList.toggle('active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+        if (active) loadVid(slide); else unloadVid(slide);
+      });
+      vidTabs.forEach((tab, tabIndex) => {
+        const active = tabIndex === activeVid;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      const current = vidSlides[activeVid];
+      vidTitle.textContent = current.dataset.title;
+      vidCopy.textContent = current.dataset.copy;
+      vidCount.textContent = current.dataset.meta;
+    };
+
+    vidTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => showVid(index));
+      tab.addEventListener('keydown', event => {
+        if (!['ArrowRight', 'ArrowLeft'].includes(event.key)) return;
+        event.preventDefault();
+        const next = (index + (event.key === 'ArrowRight' ? 1 : -1) + vidTabs.length) % vidTabs.length;
+        showVid(next);
+        vidTabs[next].focus();
+      });
+    });
+    document.getElementById('vid-prev').addEventListener('click', () => showVid(activeVid - 1));
+    document.getElementById('vid-next').addEventListener('click', () => showVid(activeVid + 1));
+    showVid(0);
 
     const workspaceLinks = [...document.querySelectorAll('.ws')];
     const watchedSections = workspaceLinks
