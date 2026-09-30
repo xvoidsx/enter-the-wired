@@ -92,8 +92,6 @@
     <a href="labs.html">labs</a>
     <a href="community.html">community</a>
     <span class="active" aria-current="page">agents</span>
-    <a href="chromium.html">chromium</a>
-    <a href="issues.html">issues</a>
   </nav>
 
   <p class="kicker">NAVI // AGENTS.MD</p>
@@ -193,6 +191,40 @@ human-facing is derived from it at deploy time:</p>
 <p><strong>Rule:</strong> <code>iso.yml</code> carries a RELEASE CHECKLIST (including a POST-RELEASE
 section). Follow it every release. It exists because every item on it was
 once a shipped bug.</p>
+<h2>Browser strategy (Raven's call, 2026-09-29)</h2>
+<p><strong>Brave is navi's default browser</strong> — full Brave, not Origin. Stock
+Chromium stays installed out of the box as the vanilla alternative.
+Firefox ESR ships too. The OS suggests, the user decides.</p>
+<ul>
+<li><code>install.sh</code>'s <code>setup_brave</code> adds Brave's official apt repo, installs
+  <code>brave-browser</code>, and seeds navi's appearance defaults: <strong>ultradark
+  theme</strong> (<code>brave.darker_mode</code>), <strong>dark color scheme</strong>
+  (<code>browser.theme.color_scheme2: 2</code>), <strong>wide address bar</strong>
+  (<code>brave.location_bar_is_wide</code>) in <code>Default/Preferences</code>, and
+  <strong>compact horizontal tabs</strong> (<code>brave.tabs.compact_horizontal_tabs</code>) in
+  <code>Local State</code>. Compact tabs is a Local State pref — seeding it in
+  Preferences silently does nothing. Both files land in <code>/etc/skel</code>
+  (future users) and the invoking user's <code>$HOME</code>; existing files are
+  never overwritten, and seeding is skipped while Brave is running (it
+  rewrites Preferences on exit).</li>
+<li><strong>Brave gets the light touch, always:</strong> no managed policy, no
+  force-installed extensions. Shields covers ad/tracker blocking, so
+  <strong>blackice stays Chromium-only</strong>. The forcelist
+  (<code>wired/chromium/policies/managed/navi.json</code>) is just the nightshadeNeon
+  theme + blackice — <strong>Proton Pass was removed 2026-09-29</strong>; no password
+  manager is imposed anywhere, users bring their own (Proton Pass remains
+  a one-click webapp in naviApps).</li>
+<li>The <strong>navi-browser</strong> picker (<code>mods/navi-browser</code>, prebuilt binary
+  committed) is how users switch the default browser <em>and</em> the webapp
+  runtime: it writes <code>~/.config/navi/default-browser</code>, offers the xdg
+  system default, and deploys navi's managed policy to the chosen
+  browser — except Brave/brave-origin, which are <code>SkipPolicy</code> and never
+  get the policy offer. <code>navi-browser-run</code> (what webapp launchers Exec)
+  resolves <code>navi-browser --print-binary</code>: configured default, then brave,
+  then chromium, then first installed.</li>
+<li>This arrangement is <strong>experimental</strong>: Raven is bench-testing it on new
+  installs first, and it reverts in one commit if they don't like it.</li>
+</ul>
 <h2>install.sh — installer and deployer</h2>
 <p><code>install.sh</code> does double duty: fresh installs <em>and</em> redeploys onto a live
 system via <code>--deploy-only</code> (this is what <code>navi-update</code> runs after pulling).</p>
@@ -431,8 +463,6 @@ verified.</p>
     <a href="labs.html">labs</a>
     <a href="community.html">community</a>
     <span class="active" aria-current="page">agents</span>
-    <a href="chromium.html">chromium</a>
-    <a href="issues.html">issues</a>
     <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
