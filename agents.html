@@ -121,7 +121,7 @@ whole desktop.</p>
 <li><strong>Additive, not purist.</strong> We add our stack alongside upstream tools; we
   don't purge theirs. doas is the navi-native way up, sudo stays as the
   compatibility layer. GTK3 stays as long as possible; choice is preserved.</li>
-<li><strong>Agent-native.</strong> ollama, opencode, omp, goose, and herdr ship out of the
+<li><strong>Agent-native.</strong> ollama, wisp, opencode, omp, goose, and herdr ship out of the
   box. The OS is a window to the smallweb (amfora for Gemini, glyyph for
   Nostr, neighborli fediverse instance, navi radio).</li>
 <li><strong>Customized configs are sacred.</strong> The updater <em>preserves</em> user-customized
@@ -224,6 +224,23 @@ Firefox ESR ships too. The OS suggests, the user decides.</p>
   then chromium, then first installed.</li>
 <li>This arrangement is <strong>experimental</strong>: Raven is bench-testing it on new
   installs first, and it reverts in one commit if they don't like it.</li>
+</ul>
+<h2>Out-of-the-box apps: balenaEtcher (Raven's call, 2026-09-30)</h2>
+<p><strong>balenaEtcher</strong> ships by default — flash OS images to SD cards/USB drives,
+safely and easily, no terminal required. This removes the need to reach for
+GNOME Disks for flashing. Long-term, Raven wants a native nightshadeNeon
+<strong>navi-disks</strong> for this; Etcher holds the fort until then.</p>
+<ul>
+<li><code>install.sh</code>'s <code>setup_etcher</code> adds balena's official Cloudsmith apt repo
+  (keyring + sources file, replicated manually — never piped-to-bash) and
+  installs <code>balena-etcher-electron</code>. The old Bintray <code>deb.etcher.io</code> repo
+  is long dead; Cloudsmith is the current official channel.</li>
+<li><strong>DISABLED 2026-10-01:</strong> balena-etcher-electron hard-depends on gconf2,
+  which Debian removed from trixie entirely — apt refuses the install.
+  Both <code>setup_etcher</code> call sites in install.sh are commented out. Re-enable
+  if balena fixes their packaging, or retire when navi-imprint lands.</li>
+<li>Listed in the manual (disks &amp; images) and naviApps (<code>native-etcher</code>).</li>
+<li>The .deb ships its own .desktop file, so it appears in rofi automatically.</li>
 </ul>
 <h2>install.sh — installer and deployer</h2>
 <p><code>install.sh</code> does double duty: fresh installs <em>and</em> redeploys onto a live
@@ -427,11 +444,15 @@ file limit so they can ship in the repo.)</p>
 <li>This repo's <code>AGENTS.md</code> is mirrored to the website as <code>agents.html</code>. After
   changing this file, re-run <code>build-agents-page.sh</code> in the site repo and push
   — the repo copy stays the source of truth.</li>
-<li>NaviVim (xvoidsx/navivim, navi's default editor from 1.5) has its own site
+<li>NaviVim (xvoidsx/navivim, navi's default terminal editor from 1.5) has its own site
   section: <code>navivim.html</code> (hand-written product page), <code>navivim-handbook.html</code>
   (mirror of its HANDBOOK.md), <code>navivim-agents.html</code> (mirror of its AGENTS.md)
   — all built by <code>build-navivim-pages.sh</code> in the site repo. The NaviVim repo
   copies stay the source of truth.</li>
+<li>naviCode (xvoidsx/naviCode, navi's graphical editor from eiri) is VScodium
+  with the nightshadeNeon theme and Rina Hermes ACP pre-installed —
+  installed by <code>setup_navicode</code> in install.sh (official apt repo, package
+  <code>codium</code>). The in-editor agent is Lain via <code>hermes acp</code>.</li>
 <li>Doc-mirror build scripts need the Python <code>markdown</code> package. Make sure it's
   installed somewhere that survives your environment rebuilds — a plain system
   pip install may not be.</li>
@@ -463,7 +484,7 @@ verified.</p>
     <a href="labs.html">labs</a>
     <a href="community.html">community</a>
     <span class="active" aria-current="page">agents</span>
-    <span>built with care by <a href="https://xvoidsx.org">xvoidsx</a></span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
 </body>
