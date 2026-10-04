@@ -108,6 +108,20 @@
   <p class="lede">Release announcements and project updates, newest first. Older posts live in the archive below.</p>
 
   <article class="post">
+    <p class="date">04 OCTOBER 2026</p>
+    <h2>eiri heats up: Brave by default, Bluetooth that just works, and five new themes</h2>
+    <p><strong>Three big things landed on eiri this week, and they're all about making navi feel like home.</strong> Brave is now the default browser, native Bluetooth pairing finally works the way it should, and the panel has five new themes to wear.</p>
+    <p><strong>Brave is navi's default browser.</strong> It installs from Brave's official apt repo, becomes the system default and the webapp runtime, and ships with navi's light touch — no forced extensions, no managed policy, no imposed password manager. Shields handles the ad-blocking. Stock Chromium stays right beside it for anyone who wants vanilla. And <code>navi-browser</code> lets you switch the default anytime, with Chrome Canary now in the lineup for those who live on the edge.</p>
+    <p style="margin: 20px 0;"><img src="assets/eiri-brave.png" alt="Brave browser with the nightshadeNeon theme on navi" style="width: 100%; border-radius: 8px; border: 1px solid var(--line);"></p>
+    <p><strong>Bluetooth pairing, the native way.</strong> <code>navi-bluetooth</code> now pairs devices over BlueZ D-Bus directly — no terminal, no MAC hunting, no blueman. Pick your device from the list, and keyboards pair with a single keypress. The road here was a proper debugging saga: a one-character godbus bug (<code>obj.Go(..., nil, nil)</code> passing a nil variadic as a real argument) silently killed every pairing attempt, and it took a live hardware session to find it. Full write-up in the repo. If you've been waiting for wireless to "just work" on navi, update and try it.</p>
+    <p style="margin: 20px 0;"><img src="assets/eiri-bluetooth.png" alt="navi-bluetooth TUI with a connected keyboard" style="width: 100%; border-radius: 8px; border: 1px solid var(--line);"></p>
+    <p><strong>Five new panel themes.</strong> The waybar theme picker (<code>Mod1+t</code>) now has five new looks alongside the default, each with its own personality — and every one carries the pill styling, status colors, and animations consistently. Here's patchbay showing off:</p>
+    <p style="margin: 20px 0;"><img src="assets/eiri-patchbay.png" alt="navi desktop with the patchbay waybar theme" style="width: 100%; border-radius: 8px; border: 1px solid var(--line);"></p>
+    <p><strong>On eiri now:</strong> run <code>navi-update</code> and it's all there. One honest note: if your waybar config is customized, the updater preserves it by design — run <code>navi-wired-adopt</code> to pick up the new themes and the Bluetooth module.</p>
+    <p class="signoff">— xvoidsx</p>
+  </article>
+
+  <article class="post">
     <p class="date">24 SEPTEMBER 2026</p>
     <h2>eiri: browser picker, navi-get, and the panel watches your agents</h2>
     <p><strong><code>navi-update</code> on eiri picks up three things at once: webapps now run in the browser <em>you</em> choose, the catalog gets a real action surface, and the panel keeps an eye on your agents.</strong> All three landed this week, and two of them were tuned against real hardware reports.</p>
@@ -127,21 +141,24 @@
     <p class="signoff">— xvoidsx</p>
   </article>
 
-  <article class="post">
-    <p class="date">21 SEPTEMBER 2026</p>
-    <h2>eiri: the agent center grows up</h2>
-    <p><strong>One room for every agent — now with opinions and a scoreboard.</strong> The agent center (<code>navi-agents-config</code>, one click on the panel's robot face) is now <strong>six tabs</strong>: status, models, harnesses, <strong>autonomy</strong>, <strong>evals</strong>, and providers. It's becoming the one place the whole agent layer of the machine is run from, instead of a pile of scattered config files.</p>
-    <p><strong>Autonomy: how much your agents ask.</strong> A real dial, not a placebo — it writes OpenCode <code>permission</code> profiles to <code>~/.config/opencode/opencode.json</code> (every other key in the file is preserved): <strong>ask me</strong> makes every tool check with you first, <strong>balanced</strong> lets reads and search run free while edits, commands, and subagents ask — with <code>rm</code> and <code>sudo</code> denied outright — and <strong>yolo</strong> gets out of the way. We scoped it honestly: herdr exposes no approval lever and no harness reads navi's files, so a cross-harness autonomy switch would have been theater. Other harnesses keep their own settings, and the UI says so.</p>
-    <p><strong>Evals: race your models.</strong> Pick any of your pulled Ollama models and run them against an eight-prompt built-in set — code, reasoning, instruction following, writing, math, explanation, JSON, summarization. A local judge model scores every answer 1–5, and you get per-prompt scores, averages, and a winner. Token-capped, cancellable mid-run, all on your machine.</p>
-    <p><strong>Super+Ctrl+H opens herdr anywhere.</strong> The agent workspace manager, one chord away, in a floating terminal. And jumping to an agent from the status tab now attaches by pane id — the floating window morphs straight into the agent's terminal, quick and into the conversation.</p>
-    <p><strong>On the eiri channel now:</strong> run <code>navi-update</code> on eiri and the center is six tabs. One honest note: if your sway config is customized, the updater preserves it by design, so add the new keybinding yourself or run <code>navi-wired-adopt</code> — and reload sway after any update that touches keybindings.</p>
-    <p class="signoff">— xvoidsx</p>
-  </article>
+
 
   <section class="archive" aria-label="Older news">
     <p class="kicker">FROM THE ARCHIVE</p>
     <h2 class="archive-title">older <span>signals.</span></h2>
     <p class="lede">Everything below is kept for the record — click to expand.</p>
+
+    <details class="post">
+      <summary><span class="adate">21 SEPTEMBER 2026</span> <span class="atitle">eiri: the agent center grows up</span></summary>
+      <div class="abody">
+    <p><strong>One room for every agent — now with opinions and a scoreboard.</strong> The agent center (<code>navi-agents-config</code>, one click on the panel's robot face) is now <strong>six tabs</strong>: status, models, harnesses, <strong>autonomy</strong>, <strong>evals</strong>, and providers. It's becoming the one place the whole agent layer of the machine is run from, instead of a pile of scattered config files.</p>
+        <p><strong>Autonomy: how much your agents ask.</strong> A real dial, not a placebo — it writes OpenCode <code>permission</code> profiles to <code>~/.config/opencode/opencode.json</code> (every other key in the file is preserved): <strong>ask me</strong> makes every tool check with you first, <strong>balanced</strong> lets reads and search run free while edits, commands, and subagents ask — with <code>rm</code> and <code>sudo</code> denied outright — and <strong>yolo</strong> gets out of the way. We scoped it honestly: herdr exposes no approval lever and no harness reads navi's files, so a cross-harness autonomy switch would have been theater. Other harnesses keep their own settings, and the UI says so.</p>
+        <p><strong>Evals: race your models.</strong> Pick any of your pulled Ollama models and run them against an eight-prompt built-in set — code, reasoning, instruction following, writing, math, explanation, JSON, summarization. A local judge model scores every answer 1–5, and you get per-prompt scores, averages, and a winner. Token-capped, cancellable mid-run, all on your machine.</p>
+        <p><strong>Super+Ctrl+H opens herdr anywhere.</strong> The agent workspace manager, one chord away, in a floating terminal. And jumping to an agent from the status tab now attaches by pane id — the floating window morphs straight into the agent's terminal, quick and into the conversation.</p>
+        <p><strong>On the eiri channel now:</strong> run <code>navi-update</code> on eiri and the center is six tabs. One honest note: if your sway config is customized, the updater preserves it by design, so add the new keybinding yourself or run <code>navi-wired-adopt</code> — and reload sway after any update that touches keybindings.</p>
+        <p class="signoff">— xvoidsx</p>
+      </div>
+    </details>
 
     <details class="post">
       <summary><span class="adate">18 SEPTEMBER 2026</span><span class="atitle">navi 1.6 “mika” — the cohesion merge</span></summary>
