@@ -361,6 +361,8 @@
       box-shadow: 14px 14px 0 rgba(0,255,255,.07);
     }
     .tour-screen { position: relative; min-height: 0; aspect-ratio: 16/10; overflow: hidden; background: #000; }
+    /* themes carousel: screenshots are 16:9, so the bar spans the full width uncropped */
+    #aesthetics .tour-screen { aspect-ratio: 16/9; }
     .video-shell {
       position: relative;
       border: 1px solid var(--pink);
@@ -774,6 +776,7 @@
       .principle p { grid-column: 2; }
       .tour-shell { box-shadow: 7px 7px 0 rgba(0,255,255,.07); }
       .tour-screen { aspect-ratio: 16/10; }
+      #aesthetics .tour-screen { aspect-ratio: 16/9; }
       .tour-slide img { object-position: center; }
       .tour-overlay { grid-template-columns: 1fr; padding-top: 74px; }
       .tour-count { display: none; }
