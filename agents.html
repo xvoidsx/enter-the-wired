@@ -108,8 +108,11 @@ something the hard way, add it here so the next one doesn't have to.</p>
 </blockquote>
 <h2>What navi is</h2>
 <p>navi is xvoidsx's Linux distro: a complete, opinionated, <strong>agent-native</strong>
-desktop OS on a dependable <strong>Debian (trixie) base</strong>. Wayland-first
-(<strong>sway</strong>, our "wired" session), X11 fallback (<strong>i3</strong>). Deep blacks, neon
+desktop OS on a dependable <strong>Debian (trixie) base</strong>. <strong>Wayland-only</strong>
+(<strong>sway</strong>, our "wired" session) since 2026-10-08 — the X11 session (i3)
+was retired; even the 2008 ThinkPad x200 renders sway fine, so the
+compat argument was dead. XWayland covers X11 apps. The i3/picom/polybar
+configs stay in the repo as the port-back kit. Deep blacks, neon
 pink, phosphor green — the <strong>nightshadeNeon</strong> design language across the
 whole desktop.</p>
 <p>Guiding ideas:</p>
@@ -206,20 +209,33 @@ Firefox ESR ships too. The OS suggests, the user decides.</p>
   Preferences silently does nothing. Both files land in <code>/etc/skel</code>
   (future users) and the invoking user's <code>$HOME</code>; existing files are
   never overwritten, and seeding is skipped while Brave is running (it
-  rewrites Preferences on exit).</li>
+  rewrites Preferences on exit). <strong>Every installed Brave variant gets
+  the same vision</strong> (2026-10-08): release, nightly
+  (<code>Brave-Browser-Nightly</code>), origin (<code>Brave-Origin</code> — verified from the
+  binary; origin nightly shares it). install.sh seeds installed variants;
+  the variant installers (<code>nightly-browsers.sh</code>, <code>brave-origin*.sh</code>)
+  seed via <code>scripts/installers/brave-seed-lib.sh</code> right after install.</li>
 <li><strong>Brave gets the light touch, always:</strong> no managed policy, no
   force-installed extensions. Shields covers ad/tracker blocking, so
-  <strong>blackice stays Chromium-only</strong>. The forcelist
-  (<code>wired/chromium/policies/managed/navi.json</code>) is just the nightshadeNeon
-  theme + blackice — <strong>Proton Pass was removed 2026-09-29</strong>; no password
-  manager is imposed anywhere, users bring their own (Proton Pass remains
-  a one-click webapp in naviApps).</li>
+  <strong>blackice stays Chromium-only</strong>. <strong>Proton Pass was removed 2026-09-29</strong>;
+  no password manager is imposed anywhere, users bring their own (Proton
+  Pass remains a one-click webapp in naviApps).</li>
+<li><strong>Chromium's extensions are per-user, not policy</strong> (2026-10-08): the old
+  <code>ExtensionInstallForcelist</code> at <code>/etc/chromium/policies/managed/navi.json</code>
+  leaked into Helium (Chromium forks share that policy dir), so it was
+  retired — install.sh removes it on existing machines. The nightshadeNeon
+  theme + blackice now install via Chromium's External Extensions
+  mechanism, scoped to <code>~/.config/chromium</code> (<code>wired/chromium/
+  external-extensions/*.json</code>, deployed to <code>$HOME</code> and <code>/etc/skel</code>), so
+  forks never see them. Unlike force-install, the user can remove them.</li>
 <li>The <strong>navi-browser</strong> picker (<code>mods/navi-browser</code>, prebuilt binary
   committed) is how users switch the default browser <em>and</em> the webapp
   runtime: it writes <code>~/.config/navi/default-browser</code>, offers the xdg
   system default, and deploys navi's managed policy to the chosen
-  browser — except Brave/brave-origin, which are <code>SkipPolicy</code> and never
-  get the policy offer. <code>navi-browser-run</code> (what webapp launchers Exec)
+  browser — except Brave/brave-origin/<strong>chromium</strong>/<strong>helium</strong>, which are
+  <code>SkipPolicy</code> and never get the policy offer (chromium's extensions are
+  handled per-user by install.sh; helium shares chromium's policy dir,
+  so policy there would pollute both). <code>navi-browser-run</code> (what webapp launchers Exec)
   resolves <code>navi-browser --print-binary</code>: configured default, then brave,
   then chromium, then first installed.</li>
 <li>This arrangement is <strong>experimental</strong>: Raven is bench-testing it on new
@@ -248,6 +264,13 @@ system via <code>--deploy-only</code> (this is what <code>navi-update</code> run
 <ul>
 <li>Writes a deploy manifest to <code>/var/lib/navi/deploy-manifest.tsv</code>
   (<code>sha256/version/relpath/dest/mode</code>) so drift can be detected later.</li>
+<li><strong>All <code>deploy_config</code> calls must live in <code>deploy_configs()</code></strong> (2026-10-08):
+  <code>manifest_write</code> clears <code>MANIFEST_TMP</code> when it finishes, and <code>setup_*</code>
+  functions run <em>after</em> it — a <code>deploy_config</code> in a <code>setup_*</code> function
+  hits <code>&gt;&gt; ""</code> and dies with <code>: No such file or directory</code> (caught live
+  on a navi-update when setup_chromium grew deploy_config calls).
+  <code>setup_*</code> may do direct <code>$DOAS install</code> writes, but never
+  <code>deploy_config</code>.</li>
 <li>Sets <code>install -m 0755</code> on <code>/usr/bin</code> copies and <code>chmod 0755</code> on every
   <code>*.sh</code> under <code>/usr/share/navi</code> — scripts run no matter how the repo was
   fetched (clone, zip, tarball).</li>
