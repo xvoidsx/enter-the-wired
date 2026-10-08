@@ -469,7 +469,7 @@
     .apps-philosophy h2 span { color: var(--cyan); }
     .first-party-strip {
       display: grid;
-      grid-template-columns: minmax(250px, 1.15fr) repeat(3, minmax(0, 1fr));
+      grid-template-columns: minmax(250px, 1.15fr) repeat(4, minmax(0, 1fr));
       margin-bottom: 22px;
       border-block: 1px solid rgba(57,255,20,.36);
       background: rgba(4,8,5,.54);
@@ -524,6 +524,7 @@
     .apps-shot { margin: 0; min-width: 0; border: 1px solid var(--cyan); box-shadow: 11px 11px 0 rgba(0,255,255,.08); }
     .apps-shot img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
     .apps-shot figcaption { display: flex; justify-content: space-between; gap: 14px; padding: 9px 12px; color: var(--cyan); border-top: 1px solid rgba(0,255,255,.45); background: #040506; font-size: 10px; }
+    .cyberia-shot { margin: 0 0 22px; }
 
     .install-grid {
       display: grid;
@@ -1547,11 +1548,17 @@
       </header>
 
       <div class="first-party-strip" aria-label="First-party xvoidsx applications">
-        <div class="first-party-intro"><span>FROM XVOIDSX</span><strong>three windows into a more personal network.</strong></div>
+        <div class="first-party-intro"><span>FROM XVOIDSX</span><strong>four windows into a more personal network.</strong></div>
         <article><span class="app-index">01</span><div><h3>navi radio</h3><p>live radio and local listening, tuned for the wired.</p></div></article>
         <article><span class="app-index">02</span><div><h3>neighborli</h3><p>a community-owned fediverse home, shipped as navi's social front door.</p></div></article>
         <article><span class="app-index">03</span><div><h3>glyyph</h3><p>a first-party Nostr client built for open, portable identity.</p></div></article>
+        <article><span class="app-index">04</span><div><h3>cyberia</h3><p>a terminal Matrix client with inline images and a katakana soul.</p></div></article>
       </div>
+
+      <figure class="apps-shot cyberia-shot">
+        <img src="assets/cyberia-splash.png" alt="cyberia's animated startup splash — katakana rain with C Y B E R I A revealed in neon pink">
+        <figcaption><span>cyberia // enter the wired</span><span>v1.1.1 // ships with navi</span></figcaption>
+      </figure>
 
       <div class="apps-band">
         <div class="apps-copy">
