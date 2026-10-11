@@ -174,6 +174,7 @@
     <h2 style="font-size: 24px; margin-top: 28px;">electron carries the <span>desktop app story</span></h2>
     <p>Chromium isn't just the webapp runtime — it's the desktop app platform. When navi-radio's local music folder picker hit a wall (Brave disables the File System Access API by default, and a per-machine flag flip is not a shippable answer for a default app), the app didn't get a workaround — it became a native Electron app with real file dialogs. sumi followed for the same reason; FOSSfit came along too. The pattern is now the rule: web technology, trivially buildable, no browser API roulette.</p>
     <p><strong>The stack, stated plainly:</strong> TUI for terminal-native tools, <code>--app</code> windows for webapps, Electron for desktop apps. All three are Chromium under the hood — which is why the browser engine gets a page like this one. It's load-bearing infrastructure, not a product preference.</p>
+    <p><strong>Why Chromium for the app layer, honestly:</strong> Firefox is loved and shipped on navi — but the app platform is Chromium, for practical reasons, not tribal ones. <code>--app</code> mode gives real application windows. The extension and configuration surfaces are the ones we can support consistently. And Electron means our desktop apps share the same engine as our webapps. One runtime contract, tested once, working everywhere. Choice of browser stays with the user; the app contract stays with the engine.</p>
     <h2 style="font-size: 24px; margin-top: 28px;">local-first engineering <span>keeps the app layer dependable</span></h2>
     <p>navi's web stack includes pages that never need to become public internet services. A local page should work as a local page — including when Chromium is already running.</p>
     <p><strong>The failure that shaped the design:</strong> the naviApps storefront originally read its catalog with <code>fetch()</code>. Under <code>file://</code>, that required a file-access flag — and Chromium can ignore new command-line flags when an existing browser process handles the request. So the store could fail in the most ordinary case: the browser was already open.</p>
@@ -320,12 +321,12 @@
   <section class="stop">
     <p class="state">CLOSING / REFERENCE</p>
     <h2>the browser is the user's <span>agent on the web</span></h2>
-    <p>navi treats that role as infrastructure worth understanding and, piece by piece, worth owning. Today's stack is deliberately practical: Debian Chromium, app-mode windows, local pages, Rofi launchers, managed extensions, and optional alternatives. Tomorrow's stack is more ambitious: a user-selectable Chromium runtime, blackice as an owned privacy layer, and accela as the browser where navi's visual, smallweb, search, casting, and agent ideas meet.</p>
+    <p>navi treats that role as infrastructure worth understanding and, piece by piece, worth owning. Today's stack is deliberately practical: Debian Chromium, app-mode windows, local pages, Rofi launchers, per-user defaults, and optional alternatives. Tomorrow's stack is more ambitious: a user-selectable Chromium runtime, blackice as an owned privacy layer, and accela as the browser where navi's visual, smallweb, search, casting, and agent ideas meet.</p>
     <p>The continuity matters more than the brand name. navi is not waiting for accela to begin integrating the browser well, and it is not using today's Chromium dependence as an excuse to avoid owning tomorrow's design.</p>
     <ul>
       <li><code>wired/scripts/naviwebapp.sh</code> — public webapp CLI</li>
       <li><code>wired/naviApps/</code> — catalog, launchers, icons, local store</li>
-      <li><code>wired/chromium/</code> — policy and dark-mode wrapper</li>
+      <li><code>wired/chromium/</code> — external extensions, theme, and dark-mode wrapper</li>
       <li><code>scripts/installers/</code> — optional browser installers</li>
       <li><code>docs/edge-linux-feedback.md</code> — public Edge issue tracker</li>
     </ul>
@@ -340,7 +341,7 @@
       <li>navi Edge-on-Linux feedback tracker — issue details and submission log.</li>
       <li>xvoidsx/blackice — scope, attribution, license, and supported target.</li>
     </ol>
-    <p style="font-size: 13px;">Status note: "shipped", "dogfooding", and "planned" describe project state as of 23 September 2026. Planned items are not presented as shipped features. — <em>open models, open web</em></p>
+    <p style="font-size: 13px;">Status note: "shipped", "experimental", and "planned" describe project state as of 11 October 2026. Planned items are not presented as shipped features. — <em>open models, open web</em></p>
   </section>
 
   <footer>
