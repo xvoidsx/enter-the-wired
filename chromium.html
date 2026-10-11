@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<meta name="description" content="How a browser engine became part of the operating system — navi's webapp runtime, managed policy, browser lineup, upstream work, blackice, and accela.">
+<meta name="description" content="How a browser engine became part of the operating system — navi's webapp runtime, first-launch defaults, browser lineup, upstream work, blackice, and accela.">
 <meta property="og:title" content="chromium — navi">
 <meta property="og:description" content="On navi, the browser is not just an app. It is an application runtime, a policy surface, a visual layer, and eventually a platform xvoidsx intends to shape.">
 <meta property="og:type" content="article">
@@ -135,7 +135,7 @@
   <p class="kicker">NAVI // CHROMIUM</p>
   <h1>the browser is <span>part of the OS.</span></h1>
   <p class="lede">On navi, the browser is not just an app. It is an <strong>application runtime</strong>, a <strong>policy surface</strong>, a <strong>visual layer</strong>, and eventually a platform we intend to shape ourselves. The web is navi's ideal app layer — portable, inspectable, offline-capable when we build it that way, and already understood by the tools people use every day.</p>
-  <p class="lede">The stack is already real: <strong>72 shipped webapp launchers</strong>, a webapp CLI, managed policy, and optional browser installers. Ownership is the next step — and the point was never Chromium for its own sake. It's a stable web runtime navi can integrate deeply <em>without taking choice away</em>.</p>
+  <p class="lede">The stack is already real: <strong>72 shipped webapp launchers</strong>, a webapp CLI, first-launch defaults, and optional browser installers. Ownership is the next step — and the point was never Chromium for its own sake. It's a stable web runtime navi can integrate deeply <em>without taking choice away</em>.</p>
   <p class="lede">One thing should be said plainly before any of the engineering below: <strong>we love Chromium as a technology.</strong> Not as a brand, not as any company's product — as an engine. It's the most capable open web runtime ever built: a fast renderer, a genuine app platform, portable across everything we care about. Every criticism on this page is aimed at a specific integration, never at the project itself. You don't write a page like this about something you don't respect — and Chromium is an excellent surfboard for the open web. We're riding it.</p>
   <figure class="shot logo" id="chromium-logo">
     <img src="assets/chromium-logo.svg" alt="The Chromium logo — the open-source project navi's web stack is built on" title="click me">
@@ -144,7 +144,7 @@
 
   <nav class="chapters" aria-label="Chapters">
     <a href="#runtime"><span class="n">01</span> the webapp runtime</a>
-    <a href="#policy"><span class="n">02</span> managed policy</a>
+    <a href="#defaults"><span class="n">02</span> first-launch defaults</a>
     <a href="#lineup"><span class="n">03</span> the browser lineup</a>
     <a href="#edge"><span class="n">04</span> edge on navi</a>
     <a href="#upstream"><span class="n">05</span> upstream citizenship</a>
@@ -188,15 +188,15 @@
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
-  <section class="stop now" id="policy">
-    <p class="state">SHIPPED · POLICY MANAGEMENT</p>
-    <h2>policy makes the baseline <span>coherent across profiles</span></h2>
-    <p>navi uses Chromium's managed policy layer to install a small, explicit set of browser components. The result is reproducible: a new profile still looks and behaves like navi.</p>
+  <section class="stop now" id="defaults">
+    <p class="state">SHIPPED · FIRST-LAUNCH DEFAULTS</p>
+    <h2>defaults arrive <span>on first launch</span></h2>
+    <p>navi ships a small, explicit set of browser defaults — not as managed enterprise policy, but per-user, through Chromium's <code>External Extensions</code> mechanism scoped to <code>~/.config/chromium</code>. The result is reproducible: a new profile still looks and behaves like navi.</p>
     <ul>
       <li><strong>nightshadeNeon</strong> — the browser theme arrives on first launch. <em>Deployed.</em></li>
       <li><strong>blackice</strong> — xvoidsx's Manifest V3 ad and tracker blocker (our uBlock Origin Lite fork), installed by default. It replaced uBlock Origin Lite after the dogfood gate passed. <em>Deployed.</em></li>
     </ul>
-    <p>The baseline ships through Chromium's <code>External Extensions</code> mechanism, scoped to <code>~/.config/chromium</code> — present on every new profile, and the user can remove any of it. (The old <code>ExtensionInstallForcelist</code> managed policy was retired after it leaked into Helium, which shares Chromium's policy directory.)</p>
+    <p>The old <code>ExtensionInstallForcelist</code> managed policy was deliberately retired: <code>/etc/chromium/policies/managed</code> is shared with Chromium forks, so the force-install leaked into Helium with its "managed by your organization" banner. Per-user install keeps forks clean — and unlike force-install, the user can remove any of it. (The browser picker can still deploy policy to <em>other</em> Chromium-family browsers you choose, like Edge or Chrome; Brave, Chromium, and Helium are exempt.)</p>
     <p><strong>What this buys:</strong> coherence — theme and security defaults don't depend on profile sync. Privacy by default — blocking is present before anyone shops for an extension. Supportability — bug reports begin from a known baseline. Recovery — the baseline is reconstructed by redeployment, not by profile surgery.</p>
     <p><strong>What this obligates:</strong> keep the list small — a default carries responsibility even when it's removable. Pin stable channels only; no beta surprises. State ownership honestly: blackice is xvoidsx's fork of upstream's uBlock Origin Lite. Test browser coverage, because extension paths differ across Chromium-family packages. Coherence is useful only when the user can understand what's installed and why. And know when not to install at all: Brave gets nothing — Shields already covers blocking, and a password manager is never imposed (users bring their own).</p>
     <a class="top-link" href="#top">↑ back to top</a>
