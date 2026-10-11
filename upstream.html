@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="The work xvoidsx sends back upstream — Edge Linux bugs, wordcraft, matui, honest forks, and the agent-audited future.">
+<meta property="og:title" content="upstream — xvoidsx">
+<meta property="og:description" content="Bug reports, fixes, and honest forks — the work we send back to the projects we stand on.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://navi.xvoidsx.org/upstream.html">
+<meta name="twitter:card" content="summary">
+<title>upstream — xvoidsx</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  code { color: var(--cyan); font-size: .92em; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 640px; margin: 0 0 40px; font-size: 17px; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  .st { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; border-radius: 999px; padding: 3px 12px; border: 1px solid; white-space: nowrap; }
+  .st-active { color: var(--pink); border-color: rgba(255,16,240,.5); background: rgba(255,16,240,.08); }
+  .st-review { color: var(--cyan); border-color: rgba(0,229,255,.5); background: rgba(0,229,255,.07); }
+  .st-planned { color: var(--muted); border-color: rgba(154,143,160,.4); }
+  .st-fork { color: var(--green); border-color: rgba(57,255,20,.5); background: rgba(57,255,20,.07); }
+  .st-dream { color: var(--pink); border-color: rgba(255,16,240,.5); border-style: dashed; }
+  section.group { margin: 0 0 56px; }
+  section.group > h2 { font-size: clamp(28px, 5vw, 44px); letter-spacing: -.02em; margin: 0 0 8px; line-height: 1.05; }
+  section.group > h2 span { color: var(--pink); }
+  section.group > p.intro { color: var(--muted); max-width: 640px; margin: 0 0 24px; }
+  article.work { border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin: 0 0 18px; background: var(--panel); }
+  article.work header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin: 0 0 6px; }
+  article.work h3 { margin: 0; font-size: 21px; letter-spacing: -.01em; }
+  article.work p { color: var(--muted); font-size: 15px; margin: 0 0 12px; }
+  article.work p strong { color: var(--paper); font-weight: 600; }
+  article.work p:last-child { margin-bottom: 0; }
+  article.work ul { color: var(--muted); font-size: 15px; padding-left: 20px; margin: 0 0 12px; }
+  article.work li { margin: 6px 0; }
+  article.work li strong { color: var(--paper); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } article.work { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <a href="chromium.html">chromium</a>
+    <a href="issues.html">issues</a>
+    <span class="active" aria-current="page">upstream</span>
+  </nav>
+
+  <p class="kicker">XVOIDSX // UPSTREAM</p>
+  <h1>the work we <span>send back.</span></h1>
+  <p class="lede">navi stands on other people's work — Chromium, uBlock Origin Lite, matui, and more. This page is the record of what we've sent back the other way: bug reports, fixes, and honest forks. Building in the open means contributing in the open.</p>
+
+  <section class="group">
+    <h2>how we do <span>upstream work</span></h2>
+    <p class="intro">Reproducible reports, visual evidence, one public status page, no inflated claims. A private patch shifts maintenance onto navi and hides the problem from everyone else; an upstream repair improves things for every distribution. And when a fix lands, we verify it on navi hardware — a vendor response is not the same as a verified fix.</p>
+  </section>
+
+  <section class="group">
+    <h2>microsoft <span>edge</span></h2>
+    <p class="intro">A distro maintainer lobbying Microsoft for better Linux support is unusual leverage. We spend it deliberately.</p>
+    <article class="work">
+      <header><h3>Edge on Linux — bug reports</h3><span class="st st-active">active</span></header>
+      <p><strong>EDGE-LINUX-001:</strong> the Copilot toolbar button did nothing on Linux builds. Reported 23 September 2026 with a screenshot, a screen recording, and a write-up. <strong>Fixed in the Dev channel</strong> — verified 11 October 2026, about three weeks after the report. Whether our report caused the fix is unknowable; the timeline is what it is.</p>
+      <p><strong>EDGE-LINUX-002:</strong> "Use system title bar and borders" has no effect. Still open, awaiting response.</p>
+      <p>Public tracker: <a href="https://github.com/xvoidsx/navi/blob/eiri/docs/edge-linux-feedback.md">docs/edge-linux-feedback.md</a> · the story: <a href="chromium.html#upstream">chromium → upstream citizenship</a></p>
+    </article>
+    <article class="work">
+      <header><h3>blackice on the Edge Add-ons store</h3><span class="st st-planned">planned</span></header>
+      <p>blackice and the nightshadeNeon theme are headed for the Microsoft Edge Add-ons store — desktop first, then Edge for Android, which has no sideloading, so the store listing is the only road to phones. File their bugs, ship their users our work.</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>word<span>craft</span></h2>
+    <p class="intro">Storyteller's open-source writing app. Raven loves what it's doing, so he's helping fix it.</p>
+    <article class="work">
+      <header><h3>font picker hang</h3><span class="st st-review">in review</span></header>
+      <p>Opening the font tool hung the app while it synchronously scanned system fonts. The fix: scan in the background at startup via <code>wordcraft_fonts::FontDb::global().scan_in_background()</code>. Forked at <a href="https://github.com/xvoidsx/wordcraft">xvoidsx/wordcraft</a>; the upstream PR to <a href="https://github.com/storytold/wordcraft">storytold/wordcraft</a> ships after hardware testing.</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>matui → <span>cyberia</span></h2>
+    <p class="intro">cyberia is xvoidsx's fork of pkulak's matui, the Rust TUI Matrix client. The fork outgrew its origins — but the improvements go back.</p>
+    <article class="work">
+      <header><h3>clipboard image paste</h3><span class="st st-planned">planned</span></header>
+      <p>Paste whatever image is on the clipboard straight into the upload popup — <code>wl-paste</code> on Wayland, <code>xclip</code> on X11, no file picker. Shipped in cyberia; a PR upstream to <a href="https://github.com/pkulak/matui">pkulak/matui</a> is planned.</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>honest <span>forks</span></h2>
+    <p class="intro">Not every relationship is a contribution. Some are just standing on shoulders without pretending otherwise.</p>
+    <article class="work">
+      <header><h3>uBlock Origin Lite → blackice</h3><span class="st st-fork">honest fork</span></header>
+      <p>blackice is xvoidsx's Manifest V3 ad and tracker blocker, forked from Raymond Hill's uBlock Origin Lite. His copyright stays intact; xvoidsx's is added only to its own interface, branding, and defaults. It is never presented as an official uBlock project — because it isn't, and pretending would cost the credibility the real work earns.</p>
+      <p><a href="https://github.com/xvoidsx/blackice">xvoidsx/blackice</a></p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>the <span>horizon</span></h2>
+    <p class="intro">Dreaming on purpose.</p>
+    <article class="work">
+      <header><h3>agent-driven Chromium auditing</h3><span class="st st-dream">dreaming</span></header>
+      <p>Today the <a href="chromium.html#security">chromium page</a> says we don't audit Chromium ourselves — we ride the update cadence. The dream is a sibling-Lain fleet doing targeted auditing: triaging fuzzer crashes, reviewing patches for the bug classes the hardened allocators haven't killed yet, watching the security feed. Nobody audits all of Chromium. But a small team in the woods with agents can punch above its weight — that's the whole xvoidsx story.</p>
+    </article>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="eiri.html">eiri</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <a href="chromium.html">chromium</a>
+    <a href="issues.html">issues</a>
+    <span class="active" aria-current="page">upstream</span>
+    <span>built with care by <a href="https://xvoidsx.org">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
