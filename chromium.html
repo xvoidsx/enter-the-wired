@@ -149,9 +149,10 @@
     <a href="#edge"><span class="n">04</span> edge on navi</a>
     <a href="#upstream"><span class="n">05</span> upstream citizenship</a>
     <a href="#blackice"><span class="n">06</span> blackice</a>
-    <a href="#accela"><span class="n">07</span> the horizon: accela</a>
-    <a href="#roadmap"><span class="n">08</span> roadmap &amp; guardrails</a>
-    <a href="#navicast"><span class="n">09</span> navicast</a>
+    <a href="#security"><span class="n">07</span> security architecture</a>
+    <a href="#accela"><span class="n">08</span> the horizon: accela</a>
+    <a href="#roadmap"><span class="n">09</span> roadmap &amp; guardrails</a>
+    <a href="#navicast"><span class="n">10</span> navicast</a>
   </nav>
 
   <section class="stop now" id="runtime">
@@ -260,6 +261,16 @@
     <p><strong>What blackice is:</strong> xvoidsx's GPLv3 fork of uBlock Origin Lite — a Manifest V3 ad and tracker blocker with a nightshadeNeon interface. The blocking engine, filter-list machinery, and Declarative Net Request conversion remain upstream work. Raymond Hill's copyright and the uBlock Origin contributors' notices stay intact; xvoidsx adds its copyright only to its own interface, branding, defaults, and genuine curated-list work.</p>
     <p><strong>Boundaries that protect credibility:</strong> never present blackice as an official uBlock project. Never run it beside uBO or uBOL — overlapping blockers fight over the same requests. Never show fake statistics, controls, or placeholder lists. Keep the Chromium build as the supported target — no other target gets claimed until it's packaged and tested.</p>
     <p><strong>One brand, two engines:</strong> the extension is the portable phase — it can run in Chromium-family browsers now and build recognition around one privacy surface. The native accela phase is different work: an adblock-rust component sits closer to the browser and avoids making the extension the permanent architectural ceiling. The name and user experience stay continuous even as the engine changes.</p>
+    <a class="top-link" href="#top">↑ back to top</a>
+  </section>
+
+  <section class="stop" id="security">
+    <p class="state">CASE STUDY · SECURITY ARCHITECTURE</p>
+    <h2>security is <span>why this engine carries weight</span></h2>
+    <p>navi bets its app layer on Chromium for a reason that has nothing to do with features: the security architecture. Every webapp window and every Electron app on navi runs inside one of the most battle-tested sandboxes in consumer software.</p>
+    <p><strong>Site Isolation:</strong> every site renders in its own OS process, so a compromised renderer can't reach across into your bank tab — the mitigation that blunted Spectre-class attacks for the web. <strong>The sandbox:</strong> renderers run with stripped privileges, so exploiting the parser isn't the same as owning the machine. Billions of users and one of the industry's largest bug bounties keep both honest, and the memory-safety push — Rust in new components, hardened allocators — keeps shrinking the classic bug classes.</p>
+    <p><strong>What navi inherits, plainly:</strong> webapp windows get the full multi-process sandbox for free. Electron apps get Chromium's sandbox too, though Electron's defaults are looser than the browser's — a tradeoff we watch in every app we package. We don't audit Chromium ourselves; we ride the update cadence, with Debian's security-tracked Chromium underneath and upstream fixes flowing the way Debian ships them.</p>
+    <p><strong>The honest boundary:</strong> no sandbox is a promise, only a cost multiplier. Chromium's is the most expensive target on the desktop web to exploit at scale — and that's the whole argument. navi's app layer stands on the engine attackers find least worth the effort.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
