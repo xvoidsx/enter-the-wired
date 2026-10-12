@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<meta name="description" content="The work xvoidsx sends back upstream — Edge Linux bugs, wordcraft, matui, honest forks, and the agent-audited future.">
+<meta name="description" content="The work xvoidsx sends back upstream — Edge Linux bugs, matui, honest forks, and the agent-audited future.">
 <meta property="og:title" content="upstream — xvoidsx">
 <meta property="og:description" content="Bug reports, fixes, and honest forks — the work we send back to the projects we stand on.">
 <meta property="og:type" content="article">
@@ -123,15 +123,6 @@
     <article class="work">
       <header><h3>blackice on the Edge Add-ons store</h3><span class="st st-planned">planned</span></header>
       <p>blackice and the nightshadeNeon theme are headed for the Microsoft Edge Add-ons store — desktop first, then Edge for Android, which has no sideloading, so the store listing is the only road to phones. File their bugs, ship their users our work.</p>
-    </article>
-  </section>
-
-  <section class="group">
-    <h2>word<span>craft</span></h2>
-    <p class="intro">Storyteller's open-source writing app. Raven loves what it's doing, so he's helping fix it.</p>
-    <article class="work">
-      <header><h3>font picker hang</h3><span class="st st-review">in review</span></header>
-      <p>Opening the font tool hung the app while it synchronously scanned system fonts. The fix: scan in the background at startup via <code>wordcraft_fonts::FontDb::global().scan_in_background()</code>. Forked at <a href="https://github.com/xvoidsx/wordcraft">xvoidsx/wordcraft</a>; the upstream PR to <a href="https://github.com/storytold/wordcraft">storytold/wordcraft</a> ships after hardware testing.</p>
     </article>
   </section>
 
