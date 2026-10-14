@@ -208,7 +208,7 @@
       <li><strong>Yandex Browser — the new arrival.</strong> The newest addition to navi-extras, with its own take on the Chromium experience. Early days: the installer just landed, so this bullet grows up as we learn how it behaves on navi. Choice means choice — good tech is good tech, wherever it's from.</li>
       <li><strong>One menu, no surprises.</strong> Chromium ships with the system; every browser above it installs through navi-extras. Installer scripts live under <code>scripts/installers/</code>, deploy to <code>/usr/share/navi/installers/</code>, and are never run by the main installer. One optional browser failure must not endanger the operating-system install.</li>
     </ul>
-    <p><strong>Shipped: the browser picker.</strong> <code>navi-browser</code> detects installed Chromium-family browsers, runs a headless launch smoke test, and sets one canonical default in <code>~/.config/navi/default-browser</code>. Webapp launchers resolve that setting at launch time instead of hardcoding <code>chromium</code> — choose Brave and every webapp runs under <code>brave-browser --app</code>. Switching browsers also offers to deploy navi's managed policy (theme, uBlock Origin Lite, Proton Pass) to the new browser's policy directory, which the picker locates by probing each browser binary for its compiled-in policy path. The scope stays Chromium-based because app mode and managed-policy behavior are the contract navi can support consistently. Choice preserved, integration tested.</p>
+    <p><strong>Shipped: the browser picker.</strong> <code>navi-browser</code> detects installed Chromium-family browsers, runs a headless launch smoke test, and sets one canonical default in <code>~/.config/navi/default-browser</code>. Webapp launchers resolve that setting at launch time instead of hardcoding <code>chromium</code> — choose Brave and every webapp runs under <code>brave-browser --app</code>. Switching browsers also offers to deploy navi's managed policy (theme, blackice, Proton Pass) to the new browser's policy directory, which the picker locates by probing each browser binary for its compiled-in policy path. The scope stays Chromium-based because app mode and managed-policy behavior are the contract navi can support consistently. Choice preserved, integration tested.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
@@ -245,7 +245,7 @@
     <p class="state">DOGFOODING · PRIVACY LAYER</p>
     <h2>blackice: <span>prettier privacy</span>, owned infrastructure</h2>
     <div class="flow" aria-label="blackice transition">
-      <span class="node">today<small>uBlock Origin Lite in policy</small></span>
+      <span class="node">today<small>blackice in policy</small></span>
       <span class="arrow">→</span>
       <span class="node">dogfood<small>blackice as MV3 extension</small></span>
       <span class="arrow">→</span>
@@ -256,7 +256,7 @@
     <p>The transition is staged on purpose. blackice earned the job through dogfooding and is now the default policy blocker across navi's Chromium browsers.</p>
     <p><strong>What blackice is:</strong> xvoidsx's GPLv3 fork of uBlock Origin Lite — a Manifest V3 ad and tracker blocker with a nightshadeNeon interface. The blocking engine, filter-list machinery, and Declarative Net Request conversion remain upstream work. Raymond Hill's copyright and the uBlock Origin contributors' notices stay intact; xvoidsx adds its copyright only to its own interface, branding, defaults, and genuine curated-list work.</p>
     <p><strong>Boundaries that protect credibility:</strong> never present blackice as an official uBlock project. Never dogfood it beside uBO or uBOL — overlapping blockers fight over the same requests. Never show fake statistics, controls, or placeholder lists. Keep the Chromium build as the supported target — no other target gets claimed until it’s packaged and tested. Change the navi policy only after the dogfood gate passes.</p>
-    <p><strong>One brand, one engine:</strong> blackice is the extension, full stop — running in Chromium browsers today, baked into accela tomorrow. No native rewrite planned. The extension <em>is</em> the architecture.</p>
+    <p><strong>One brand, one engine:</strong> blackice is the extension, full stop — running in Chromium browsers today, baked into accela tomorrow. The extension <em>is</em> the architecture.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
