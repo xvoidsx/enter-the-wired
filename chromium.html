@@ -200,7 +200,8 @@
     <p>navi can be opinionated about the integration layer without pretending there is one correct browser for everyone.</p>
     <ul>
       <li><strong>Chromium — the default today.</strong> Debian's Chromium is the known baseline. navi's wrapper, launcher overrides, app windows, and policy are designed around it and exercised by the default install.</li>
-      <li><strong>Helium — dogfooding.</strong> An open-source Chromium browser maintained by imput, based on ungoogled-chromium, shipped with its own Linux packaging. Raven has been evaluating it hands-on. It remains available in navi-extras as a user choice. The questions are practical: security-update lag across releases, package behavior on navi, and whether the divergence list stays short.</li>
+      <li><strong>Helium</strong> — an open-source Chromium browser by imput, available in navi-extras as a user choice.</li>
+      <li><strong>kirie</strong> — xvoidsx's qutebrowser-based minimal browser. Keyboard-driven, lightweight, shipping now as navi's minimal tier.</li>
       <li><strong>Microsoft Edge — a candidate option.</strong> Being evaluated as a user choice, not a default. Its Linux build looks at home under nightshadeNeon and its performance controls are unusually granular. Its telemetry model doesn't match navi's zero-telemetry direction, so that tradeoff belongs in the recommendation rather than in fine print.</li>
       <li><strong>Brave — loved, not just listed.</strong> Brave is the rare Chromium browser that treats privacy as the product: built-in ad and tracker blocking, fingerprinting resistance, no account required. It arrives already aligned with navi's direction instead of needing navi's policy layer to fix it first. Brave Nightly is in navi-extras for anyone who wants it as a daily driver.</li>
       <li><strong>Google Chrome — the reference build.</strong> When something renders oddly in a fork, Chrome is the control experiment: stock Chromium plus Google's services, straight from Google's own repository. Its telemetry model is Google's, which is exactly why it's a choice here and never the default. In navi-extras for anyone who needs the real thing.</li>
@@ -236,7 +237,7 @@
     <p><strong>23 September 2026 — evidence sent upstream.</strong> Raven submitted both issues through Edge's built-in feedback system with a screenshot, a screen recording, and a detailed write-up, identifying himself as a navi maintainer who wants Edge to be a reliable distro option.</p>
     <p><strong>Now:</strong> a public record is maintained — <code>docs/edge-linux-feedback.md</code> keeps the issue IDs, exact behavior, submission history, and current status in one place. Both issues are also tracked with their status on our <a href="issues.html">issues page</a>, alongside every other bug we know about — ours and upstream's.</p>
     <p><strong>When fixed:</strong> verify on navi. The tracker calls for testing on eiri's Debian trixie base, against Edge Dev and Stable, on real navi hardware. A vendor response is not the same as a verified fix.</p>
-    <p>A distro maintainer lobbying Microsoft for better Linux support is unusual leverage. It should be spent deliberately: reproducible behavior, visual evidence, one public status page, no inflated claims. A private patch shifts maintenance onto navi and hides the Linux problem from everyone else; an upstream repair improves Edge for other distributions too. The same principle applies to Helium — dogfood is due diligence. Daily use is how update lag, policy gaps, regressions, and browser-specific assumptions become visible through hands-on testing.</p>
+    <p>A distro maintainer lobbying Microsoft for better Linux support is unusual leverage. It should be spent deliberately: reproducible behavior, visual evidence, one public status page, no inflated claims. A private patch shifts maintenance onto navi and hides the Linux problem from everyone else; an upstream repair improves Edge for other distributions too.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
@@ -269,11 +270,11 @@
       <span class="arrow">→</span>
       <span class="node">ungoogled-chromium<small>the de-Googled patch foundation</small></span>
       <span class="arrow">→</span>
-      <span class="node">helium<small>productized browser &amp; release layer</small></span>
+      <span class="node">kirie<small>minimal tier, shipping now</small></span>
       <span class="arrow">→</span>
       <span class="node">accela<small>the xvoidsx experience &amp; policy layer</small></span>
     </div>
-    <p><strong>The escape hatch is part of the design.</strong> If Helium's direction or cadence stops fitting, a clean accela patch stack should be portable back toward plain ungoogled-chromium. A base is useful when it reduces work without becoming a trap. Helium's own README describes it as beta — that makes Raven's daily-driver period a precondition, not a ceremonial trial: normal browsing, updates, extensions, app windows, and navi policy all need time to fail honestly.</p>
+    <p><strong>Clean base, xvoidsx vision.</strong> accela starts from ungoogled-chromium — de-googled, unopinionated, no one else's product decisions baked in. xvoidsx owns the patch stack: blackice built in, nightshadeNeon native, agentic and smallweb features in sequence. kirie covers the minimal tier today; accela is the flagship when build infrastructure lands.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
@@ -305,12 +306,12 @@
     <ul>
       <li><strong>Now</strong> — harden the shipped contract. Keep Chromium, the 72 app launchers, local catalog behavior, deterministic dark mode, and current policy supportable on real navi hardware.</li>
       <li><strong>Next</strong> — make browser choice explicit. Build the settings TUI, a canonical browser setting, detection, app-mode tests, and clear fallback behavior.</li>
-      <li><strong>In parallel</strong> — dogfood and push upstream. Measure Helium's update cadence; track Edge Linux issues; verify vendor fixes instead of closing them on response alone.</li>
+      <li><strong>In parallel</strong> — push upstream. Track Edge Linux issues; verify vendor fixes instead of closing them on response alone.</li>
       <li><strong>After proof</strong> — graduate blackice. Replace the uBOL policy entry only after the extension survives normal use and the packaging path is ready.</li>
       <li><strong>Later</strong> — begin accela in sequence. The roadmap places it after the desktop navi launch, navidroid, and eiri work: a strategic horizon, not the next checkbox.</li>
     </ul>
     <p><strong>Non-negotiable principles:</strong> additive, not purist — a strong default doesn't require purging alternatives. Choice preserved — users choose the browser while navi owns the compatibility contract. Zero telemetry — xvoidsx-owned layers collect nothing by default. Open models, open web — agent features should widen the web rather than trap it inside one provider.</p>
-    <p><strong>Scope boundaries:</strong> Safari is explicitly out of scope. Edge remains optional even if its Linux bugs are fixed. Helium remains a candidate base until dogfood evidence is strong enough. accela should not claim integrations before they exist.</p>
+    <p><strong>Scope boundaries:</strong> Safari is explicitly out of scope. Edge remains optional even if its Linux bugs are fixed. accela should not claim integrations before they exist.</p>
     <p>Choice does not come from refusing to make decisions. It comes from making the integration legible, keeping alternatives available, and separating what ships from what is merely planned.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
