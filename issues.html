@@ -169,6 +169,13 @@
       <p><strong>What was new:</strong> waybar text and pill borders animate through the nightshadeNeon cycle — cyan to pink to green — with state cues (battery warnings, mute, idle inhibitor) keeping their solid colors via <code>animation: none</code>.</p>
       <p><strong>Confirmed fixed</strong> on real hardware, 23 September 2026 — working as expected and looking beautiful.</p>
     </article>
+
+    <article class="issue" id="ideapad-nvram">
+      <header><span class="id">NAVI-BOOT-001</span><h3>Lenovo Ideapad L340 drops the navi NVRAM boot entry</h3><span class="st st-fixed">fixed</span></header>
+      <p><strong>What was happening:</strong> on the Lenovo Ideapad L340, the firmware silently discarded the EFI NVRAM boot entry the installer wrote — the machine couldn't find navi at boot. Reported by community member <strong>programmervsworld</strong> (<a href="https://github.com/xvoidsx/navi/issues/5">issue #5</a>), whose diagnosis the team adopted.</p>
+      <p><strong>What we did:</strong> the installer now also writes the <code>--removable</code> fallback (<code>EFI/BOOT/BOOTX64.EFI</code>), so machines whose firmware drops NVRAM entries still boot. Harmless on machines that keep their entries.</p>
+      <p><strong>Confirmed fixed</strong> — issue closed 12 October 2026. This one also gave us our firmware quirk taxonomy: class-1 (NVRAM writes fine, BIOS picker needed — Cloudbook) vs. class-2 (firmware drops the entry — Ideapad).</p>
+    </article>
   </section>
 
   <section class="file">
