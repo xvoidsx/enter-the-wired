@@ -185,12 +185,12 @@
     <p>navi uses Chromium's managed policy layer to install a small, explicit set of browser components. The result is reproducible: a new profile still looks and behaves like navi.</p>
     <ul>
       <li><strong>nightshadeNeon</strong> — the browser theme arrives on first launch and stays present while policy applies. <em>Deployed.</em></li>
-      <li><strong>uBlock Origin Lite</strong> — the current policy-level blocker. blackice has not replaced it yet. <em>Deployed.</em></li>
+      <li><strong>blackice</strong> — xvoidsx's MV3 ad and tracker blocker, now the default policy-level blocker across navi's Chromium browsers. <em>Deployed.</em></li>
       <li><strong>Proton Pass</strong> — the stable extension is pinned as part of the baseline. <em>Deployed.</em></li>
     </ul>
     <p>The policy is stored as JSON under <code>/etc/chromium/policies/managed/</code> and uses Chromium's <code>ExtensionInstallForcelist</code>. Force-installed items are installed silently and cannot be disabled or removed by the user while the policy remains in effect.</p>
     <p><strong>What this buys:</strong> coherence — theme and security defaults don't depend on profile sync. Privacy by default — blocking is present before anyone shops for an extension. Supportability — bug reports begin from a known baseline. Recovery — the baseline is reconstructed by redeployment, not by profile surgery.</p>
-    <p><strong>What this obligates:</strong> keep the list small — a non-removable default carries more responsibility than a recommendation. Pin stable channels only; no beta surprises. State ownership honestly: uBOL is upstream's, blackice is a fork, Proton Pass is Proton's. Test browser coverage, because policy directories differ across Chromium-family packages. Coherence is useful only when the user can understand what's being enforced and why.</p>
+    <p><strong>What this obligates:</strong> keep the list small — a non-removable default carries more responsibility than a recommendation. Pin stable channels only; no beta surprises. State ownership honestly: blackice is xvoidsx's fork of uBlock Origin Lite (engine © Raymond Hill), Proton Pass is Proton's. Test browser coverage, because policy directories differ across Chromium-family packages. Coherence is useful only when the user can understand what's being enforced and why.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
@@ -242,7 +242,7 @@
 
   <section class="stop next" id="blackice">
     <p class="state">DOGFOODING · PRIVACY LAYER</p>
-    <h2>blackice moves blocking from <span>a chosen extension toward owned infrastructure</span></h2>
+    <h2>blackice: <span>prettier privacy</span>, owned infrastructure</h2>
     <div class="flow" aria-label="blackice transition">
       <span class="node">today<small>uBlock Origin Lite in policy</small></span>
       <span class="arrow">→</span>
@@ -252,7 +252,7 @@
       <span class="arrow">→</span>
       <span class="node">accela<small>blackice baked in as the extension</small></span>
     </div>
-    <p>The transition is staged on purpose. navi should replace a proven blocker only when its own fork has earned the job. uBlock Origin Lite is still the force-installed policy blocker today; blackice is dogfooding now; only after testing does the policy ID change.</p>
+    <p>The transition is staged on purpose. blackice earned the job through dogfooding and is now the default policy blocker across navi's Chromium browsers.</p>
     <p><strong>What blackice is:</strong> xvoidsx's GPLv3 fork of uBlock Origin Lite — a Manifest V3 ad and tracker blocker with a nightshadeNeon interface. The blocking engine, filter-list machinery, and Declarative Net Request conversion remain upstream work. Raymond Hill's copyright and the uBlock Origin contributors' notices stay intact; xvoidsx adds its copyright only to its own interface, branding, defaults, and genuine curated-list work.</p>
     <p><strong>Boundaries that protect credibility:</strong> never present blackice as an official uBlock project. Never dogfood it beside uBO or uBOL — overlapping blockers fight over the same requests. Never show fake statistics, controls, or placeholder lists. Keep the Chromium build as the supported target — no other target gets claimed until it’s packaged and tested. Change the navi policy only after the dogfood gate passes.</p>
     <p><strong>One brand, one engine:</strong> blackice is the extension, full stop — running in Chromium browsers today, baked into accela tomorrow. No native rewrite planned. The extension <em>is</em> the architecture.</p>
