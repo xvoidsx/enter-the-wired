@@ -241,23 +241,12 @@ Firefox ESR ships too. The OS suggests, the user decides.</p>
 <li>This arrangement is <strong>experimental</strong>: Raven is bench-testing it on new
   installs first, and it reverts in one commit if they don't like it.</li>
 </ul>
-<h2>Out-of-the-box apps: balenaEtcher (Raven's call, 2026-09-30)</h2>
-<p><strong>balenaEtcher</strong> ships by default — flash OS images to SD cards/USB drives,
-safely and easily, no terminal required. This removes the need to reach for
-GNOME Disks for flashing. Long-term, Raven wants a native nightshadeNeon
-<strong>navi-disks</strong> for this; Etcher holds the fort until then.</p>
-<ul>
-<li><code>install.sh</code>'s <code>setup_etcher</code> adds balena's official Cloudsmith apt repo
-  (keyring + sources file, replicated manually — never piped-to-bash) and
-  installs <code>balena-etcher-electron</code>. The old Bintray <code>deb.etcher.io</code> repo
-  is long dead; Cloudsmith is the current official channel.</li>
-<li><strong>DISABLED 2026-10-01:</strong> balena-etcher-electron hard-depends on gconf2,
-  which Debian removed from trixie entirely — apt refuses the install.
-  Both <code>setup_etcher</code> call sites in install.sh are commented out. Re-enable
-  if balena fixes their packaging, or retire when navi-imprint lands.</li>
-<li>Listed in the manual (disks &amp; images) and naviApps (<code>native-etcher</code>).</li>
-<li>The .deb ships its own .desktop file, so it appears in rofi automatically.</li>
-</ul>
+<h2>Out-of-the-box apps: navi-imprint (replaces balenaEtcher, 2026-10-14)</h2>
+<p><strong>navi-imprint</strong> is xvoidsx's native nightshadeNeon ISO-flashing tool (Go/bubbletea) —
+flash OS images to SD cards/USB drives from the terminal. It replaced balenaEtcher,
+which was dropped 2026-10-01 when its <code>balena-etcher-electron</code> package hard-depended
+on gconf2 (removed from Debian trixie entirely — apt refuses the install). The old
+<code>setup_etcher</code> code paths in install.sh are retired, not just commented out.</p>
 <h2>install.sh — installer and deployer</h2>
 <p><code>install.sh</code> does double duty: fresh installs <em>and</em> redeploys onto a live
 system via <code>--deploy-only</code> (this is what <code>navi-update</code> runs after pulling).</p>
