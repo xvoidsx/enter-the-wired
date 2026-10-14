@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<meta name="description" content="How a browser engine became part of the operating system — navi's webapp runtime, first-launch defaults, browser lineup, upstream work, blackice, and accela.">
+<meta name="description" content="How a browser engine became part of the operating system — navi's webapp runtime, managed policy, browser lineup, upstream work, blackice, kirie, and accela.">
 <meta property="og:title" content="chromium — navi">
 <meta property="og:description" content="On navi, the browser is not just an app. It is an application runtime, a policy surface, a visual layer, and eventually a platform xvoidsx intends to shape.">
 <meta property="og:type" content="article">
@@ -83,9 +83,6 @@
   figure.shot figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; }
   figure.shot figcaption strong { color: var(--paper); }
   figure.shot.logo img { width: min(300px, 72%); margin: 0 auto; border-radius: 18px; background: #050507; box-shadow: 0 0 32px rgba(255,16,240,.22), 0 0 32px rgba(57,255,90,.14); }
-  #chromium-logo img { cursor: pointer; }
-  #chromium-logo img.spin { animation: logo-spin 1.1s ease-in-out; }
-  @keyframes logo-spin { to { transform: rotate(360deg); } }
   nav.top { margin: 0 0 48px; font-size: 14px; }
   nav.top a { margin-right: 18px; text-decoration: none; }
   nav.top a:hover { text-decoration: underline; }
@@ -130,28 +127,23 @@
     <a href="navivim.html">navivim</a>
     <span class="active" aria-current="page">chromium</span>
     <a href="issues.html">issues</a>
-    <a href="upstream.html">upstream</a>
   </nav>
 
   <p class="kicker">NAVI // CHROMIUM</p>
   <h1>the browser is <span>part of the OS.</span></h1>
   <p class="lede">On navi, the browser is not just an app. It is an <strong>application runtime</strong>, a <strong>policy surface</strong>, a <strong>visual layer</strong>, and eventually a platform we intend to shape ourselves. The web is navi's ideal app layer — portable, inspectable, offline-capable when we build it that way, and already understood by the tools people use every day.</p>
-  <p class="lede">The stack is already real: <strong>72 shipped webapp launchers</strong>, a webapp CLI, first-launch defaults, and optional browser installers. Ownership is the next step — and the point was never Chromium for its own sake. It's a stable web runtime navi can integrate deeply <em>without taking choice away</em>.</p>
-  <p class="lede">One thing should be said plainly before any of the engineering below: <strong>we love Chromium as a technology.</strong> Not as a brand, not as any company's product — as an engine. It's the most capable open web runtime ever built: a fast renderer, a genuine app platform, portable across everything we care about. Every criticism on this page is aimed at a specific integration, never at the project itself. You don't write a page like this about something you don't respect — and Chromium is an excellent surfboard for the open web. We're riding it.</p>
-  <figure class="shot logo" id="chromium-logo">
-    <img src="assets/chromium-logo.svg" alt="The Chromium logo — the open-source project navi's web stack is built on" title="click me">
-  </figure>
+  <p class="lede">The stack is already real: <strong>72 shipped webapp launchers</strong>, a webapp CLI, managed policy, and optional browser installers. Ownership is the next step — and the point was never Chromium for its own sake. It's a stable web runtime navi can integrate deeply <em>without taking choice away</em>.</p>
   <a class="pdflink" href="assets/chromium-on-navi.pdf">↓ take this page offline — the full report as a PDF</a>
 
   <nav class="chapters" aria-label="Chapters">
     <a href="#runtime"><span class="n">01</span> the webapp runtime</a>
-    <a href="#defaults"><span class="n">02</span> first-launch defaults</a>
+    <a href="#policy"><span class="n">02</span> managed policy</a>
     <a href="#lineup"><span class="n">03</span> the browser lineup</a>
     <a href="#edge"><span class="n">04</span> edge on navi</a>
     <a href="#upstream"><span class="n">05</span> upstream citizenship</a>
     <a href="#blackice"><span class="n">06</span> blackice</a>
-    <a href="#security"><span class="n">07</span> security architecture</a>
-    <a href="#accela"><span class="n">08</span> the horizon: accela</a>
+    <a href="#accela-foundation"><span class="n">07</span> accela's foundation</a>
+    <a href="#accela"><span class="n">08</span> accela's product layer</a>
     <a href="#roadmap"><span class="n">09</span> roadmap &amp; guardrails</a>
     <a href="#navicast"><span class="n">10</span> navicast</a>
   </nav>
@@ -172,10 +164,6 @@
     <p>The public CLI is <code>navi-webapp</code> — <code>install</code>, <code>uninstall</code>, <code>list</code>, <code>doctor</code>. The wrapper translates a stable user-facing command into the catalog backend; <code>doctor</code> checks launchers, icons, caches, and common install mistakes.</p>
     <p><strong>Why app mode matters:</strong> the service gets an independent window in the compositor. Rofi launches it by name and icon, not by URL. Task switching treats it as an application surface. And the underlying engine still receives Chromium policy, extensions, and security updates.</p>
     <p><strong>First-party front doors:</strong> navi radio, neighborli, glyyph, and the naviApps storefront make the strategy visible — the distro's own services arrive as web technology without feeling bolted on. Users add more from the 72-launcher catalog. The default install is curated rather than exhaustive; the wider catalog stays available on demand. Telegram and Element have moved toward native-app paths, which shows navi treats the web layer as a strong default mechanism rather than a dogma.</p>
-    <h2 style="font-size: 24px; margin-top: 28px;">electron carries the <span>desktop app story</span></h2>
-    <p>Chromium isn't just the webapp runtime — it's the desktop app platform. When navi-radio's local music folder picker hit a wall (Brave disables the File System Access API by default, and a per-machine flag flip is not a shippable answer for a default app), the app didn't get a workaround — it became a native Electron app with real file dialogs. sumi followed for the same reason; FOSSfit came along too. The pattern is now the rule: web technology, trivially buildable, no browser API roulette.</p>
-    <p><strong>The stack, stated plainly:</strong> TUI for terminal-native tools, <code>--app</code> windows for webapps, Electron for desktop apps. All three are Chromium under the hood — which is why the browser engine gets a page like this one. It's load-bearing infrastructure, not a product preference.</p>
-    <p><strong>Why Chromium for the app layer:</strong> <code>--app</code> mode gives real application windows. The extension and configuration surfaces are the ones we can support consistently. And Electron means our desktop apps share the same engine as our webapps. One runtime contract, tested once, working everywhere. Choice of browser stays with the user; the app contract stays with the engine.</p>
     <h2 style="font-size: 24px; margin-top: 28px;">local-first engineering <span>keeps the app layer dependable</span></h2>
     <p>navi's web stack includes pages that never need to become public internet services. A local page should work as a local page — including when Chromium is already running.</p>
     <p><strong>The failure that shaped the design:</strong> the naviApps storefront originally read its catalog with <code>fetch()</code>. Under <code>file://</code>, that required a file-access flag — and Chromium can ignore new command-line flags when an existing browser process handles the request. So the store could fail in the most ordinary case: the browser was already open.</p>
@@ -191,17 +179,18 @@
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
-  <section class="stop now" id="defaults">
-    <p class="state">SHIPPED · FIRST-LAUNCH DEFAULTS</p>
-    <h2>defaults arrive <span>on first launch</span></h2>
-    <p>navi ships a small, explicit set of browser defaults — not as managed enterprise policy, but per-user, through Chromium's <code>External Extensions</code> mechanism scoped to <code>~/.config/chromium</code>. The result is reproducible: a new profile still looks and behaves like navi.</p>
+  <section class="stop now" id="policy">
+    <p class="state">SHIPPED · POLICY MANAGEMENT</p>
+    <h2>policy makes the baseline <span>coherent across profiles</span></h2>
+    <p>navi uses Chromium's managed policy layer to install a small, explicit set of browser components. The result is reproducible: a new profile still looks and behaves like navi.</p>
     <ul>
-      <li><strong>nightshadeNeon</strong> — the browser theme arrives on first launch. <em>Deployed.</em></li>
-      <li><strong>blackice</strong> — xvoidsx's Manifest V3 ad and tracker blocker (our uBlock Origin Lite fork), installed by default. It replaced uBlock Origin Lite after the dogfood gate passed. <em>Deployed.</em></li>
+      <li><strong>nightshadeNeon</strong> — the browser theme arrives on first launch and stays present while policy applies. <em>Deployed.</em></li>
+      <li><strong>uBlock Origin Lite</strong> — the current policy-level blocker. blackice has not replaced it yet. <em>Deployed.</em></li>
+      <li><strong>Proton Pass</strong> — the stable extension is pinned as part of the baseline. <em>Deployed.</em></li>
     </ul>
-    <p>The old <code>ExtensionInstallForcelist</code> managed policy was deliberately retired: <code>/etc/chromium/policies/managed</code> is shared with Chromium forks, so the force-install leaked into Helium with its "managed by your organization" banner. Per-user install keeps forks clean — and unlike force-install, the user can remove any of it. (The browser picker can still deploy policy to <em>other</em> Chromium-family browsers you choose, like Edge or Chrome; Brave, Chromium, and Helium are exempt.)</p>
+    <p>The policy is stored as JSON under <code>/etc/chromium/policies/managed/</code> and uses Chromium's <code>ExtensionInstallForcelist</code>. Force-installed items are installed silently and cannot be disabled or removed by the user while the policy remains in effect.</p>
     <p><strong>What this buys:</strong> coherence — theme and security defaults don't depend on profile sync. Privacy by default — blocking is present before anyone shops for an extension. Supportability — bug reports begin from a known baseline. Recovery — the baseline is reconstructed by redeployment, not by profile surgery.</p>
-    <p><strong>What this obligates:</strong> keep the list small — a default carries responsibility even when it's removable. Pin stable channels only; no beta surprises. State ownership honestly: blackice is xvoidsx's fork of upstream's uBlock Origin Lite. Test browser coverage, because extension paths differ across Chromium-family packages. Coherence is useful only when the user can understand what's installed and why. And know when not to install at all: Brave gets nothing — Shields already covers blocking, and a password manager is never imposed (users bring their own).</p>
+    <p><strong>What this obligates:</strong> keep the list small — a non-removable default carries more responsibility than a recommendation. Pin stable channels only; no beta surprises. State ownership honestly: uBOL is upstream's, blackice is a fork, Proton Pass is Proton's. Test browser coverage, because policy directories differ across Chromium-family packages. Coherence is useful only when the user can understand what's being enforced and why.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
@@ -210,24 +199,24 @@
     <h2>one runtime contract, <span>several browser choices</span></h2>
     <p>navi can be opinionated about the integration layer without pretending there is one correct browser for everyone.</p>
     <ul>
-      <li><strong>Brave — the default.</strong> Brave is the rare Chromium browser that treats privacy as the product: built-in ad and tracker blocking, fingerprinting resistance, no account required. It ships as navi's default browser and runs navi's webapps, with navi's touch kept light — an ultradark theme, wide address bar, and compact tabs as user-overridable defaults, no managed policy, no force-installed extensions. It arrives already aligned with navi's direction instead of needing navi's policy layer to fix it first.</li>
-      <li><strong>Chromium — the vanilla alternative.</strong> Debian's Chromium ships alongside Brave. navi's wrapper, launcher overrides, app windows, and policy (nightshadeNeon theme + blackice) are designed around it and exercised by the default install.</li>
-      <li><strong>Helium — also in navi-extras.</strong> An open-source Chromium browser maintained by imput, based on ungoogled-chromium, with its own Linux packaging. Raven runs it as a daily driver. A choice, like the rest.</li>
-      <li><strong>Microsoft Edge — a supported option.</strong> Always available in navi-extras and usable as the Chromium runtime through the navi-browser picker. Its Linux build looks at home under nightshadeNeon and its performance controls are unusually granular. Its telemetry model doesn't match navi's zero-telemetry direction, so that tradeoff belongs in the recommendation rather than in fine print — a choice, never the default.</li>
+      <li><strong>Chromium — the default today.</strong> Debian's Chromium is the known baseline. navi's wrapper, launcher overrides, app windows, and policy are designed around it and exercised by the default install.</li>
+      <li><strong>Helium — dogfooding.</strong> An open-source Chromium browser maintained by imput, based on ungoogled-chromium, shipped with its own Linux packaging. Raven has been evaluating it hands-on. It remains available in navi-extras as a user choice. The questions are practical: security-update lag across releases, package behavior on navi, and whether the divergence list stays short.</li>
+      <li><strong>Microsoft Edge — a candidate option.</strong> Being evaluated as a user choice, not a default. Its Linux build looks at home under nightshadeNeon and its performance controls are unusually granular. Its telemetry model doesn't match navi's zero-telemetry direction, so that tradeoff belongs in the recommendation rather than in fine print.</li>
+      <li><strong>Brave — loved, not just listed.</strong> Brave is the rare Chromium browser that treats privacy as the product: built-in ad and tracker blocking, fingerprinting resistance, no account required. It arrives already aligned with navi's direction instead of needing navi's policy layer to fix it first. Brave Nightly is in navi-extras for anyone who wants it as a daily driver.</li>
       <li><strong>Google Chrome — the reference build.</strong> When something renders oddly in a fork, Chrome is the control experiment: stock Chromium plus Google's services, straight from Google's own repository. Its telemetry model is Google's, which is exactly why it's a choice here and never the default. In navi-extras for anyone who needs the real thing.</li>
       <li><strong>Yandex Browser — the new arrival.</strong> The newest addition to navi-extras, with its own take on the Chromium experience. Early days: the installer just landed, so this bullet grows up as we learn how it behaves on navi. Choice means choice — good tech is good tech, wherever it's from.</li>
       <li><strong>One menu, no surprises.</strong> Chromium ships with the system; every browser above it installs through navi-extras. Installer scripts live under <code>scripts/installers/</code>, deploy to <code>/usr/share/navi/installers/</code>, and are never run by the main installer. One optional browser failure must not endanger the operating-system install.</li>
     </ul>
-    <p><strong>Shipped: the browser picker.</strong> <code>navi-browser</code> detects installed Chromium-family browsers, runs a headless launch smoke test, and sets one canonical default in <code>~/.config/navi/default-browser</code> — Brave out of the box, changeable anytime. Webapp launchers resolve that setting at launch time instead of hardcoding <code>chromium</code> — every webapp runs under the chosen browser's <code>--app</code> mode. Switching browsers also offers to deploy navi's managed policy (theme, blackice) to the new browser's policy directory, which the picker locates by probing each browser binary for its compiled-in policy path — except Brave, which is deliberately skipped: no managed policy, no force-installed extensions. The scope stays Chromium-based because app mode and managed-policy behavior are the contract navi can support consistently. Choice preserved, integration tested.</p>
+    <p><strong>Shipped: the browser picker.</strong> <code>navi-browser</code> detects installed Chromium-family browsers, runs a headless launch smoke test, and sets one canonical default in <code>~/.config/navi/default-browser</code>. Webapp launchers resolve that setting at launch time instead of hardcoding <code>chromium</code> — choose Brave and every webapp runs under <code>brave-browser --app</code>. Switching browsers also offers to deploy navi's managed policy (theme, uBlock Origin Lite, Proton Pass) to the new browser's policy directory, which the picker locates by probing each browser binary for its compiled-in policy path. The scope stays Chromium-based because app mode and managed-policy behavior are the contract navi can support consistently. Choice preserved, integration tested.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
   <section class="stop" id="edge">
     <p class="state">MICROSOFT EDGE ON NAVI</p>
-    <h2>edge is a supported option now — <span>on linux, and on navi</span></h2>
+    <h2>edge has a real efficiency case — <span>and visible linux debt</span></h2>
     <figure class="shot">
-      <img src="assets/edge-copilot-working.png" alt="Microsoft Edge on navi with the Copilot sidebar open and working">
-      <figcaption><strong>Figure 1.</strong> Edge's Copilot sidebar open and working on navi — EDGE-LINUX-001, the toolbar button that did nothing on Linux for years, fixed in the Dev channel (October 2026). nightshadeNeon applied throughout.</figcaption>
+      <img src="assets/edge-nightshade-neon.png" alt="Microsoft Edge Dev running on navi with the nightshadeNeon theme applied">
+      <figcaption><strong>Figure 1.</strong> Microsoft Edge Dev on navi with nightshadeNeon applied. The fit is not hypothetical: Edge already participates in the distro's visual language.</figcaption>
     </figure>
     <p><strong>Why it's worth supporting:</strong> Edge exposes sleeping-tab controls that put inactive tabs to sleep, let users choose the inactivity interval, and allow exceptions. Microsoft describes the feature as a way to reduce memory and CPU use. That is not a benchmark claim for navi hardware — it is a product capability with obvious relevance to low-power systems and machines with limited memory.</p>
     <p><strong>Why it's not the default:</strong> navi's direction is zero telemetry. Edge's product and account stack makes it a tradeoff rather than a clean philosophical fit. The honest position is stronger: users who value Edge's workflow or efficiency controls should be able to choose it, while navi states clearly why it remains optional.</p>
@@ -241,54 +230,71 @@
     <p>navi's first response to a browser bug should not always be a distro-only patch. When the failure belongs upstream, the useful work is evidence, a clear report, and verification when a fix lands.</p>
     <table class="tracker">
       <tr><th>tracker id</th><th>observed behavior</th><th>state</th></tr>
-      <tr><td>EDGE-LINUX-001</td><td>The Copilot toolbar button does not function on the tested Linux build.</td><td>Fixed in Dev channel (verified 11 Oct 2026); Stable pending</td></tr>
+      <tr><td>EDGE-LINUX-001</td><td>The Copilot toolbar button does not function on the tested Linux build.</td><td>Open; awaiting response</td></tr>
       <tr><td>EDGE-LINUX-002</td><td>Enabling "Use system title bar and borders" produces no change; Edge's custom chrome remains in place.</td><td>Open; awaiting response</td></tr>
     </table>
     <p><strong>23 September 2026 — evidence sent upstream.</strong> Raven submitted both issues through Edge's built-in feedback system with a screenshot, a screen recording, and a detailed write-up, identifying himself as a navi maintainer who wants Edge to be a reliable distro option.</p>
-    <p><strong>11 October 2026 — the first fix lands.</strong> About three weeks after the report, the Copilot button works in the Dev channel, verified on navi hardware. Whether our report caused the fix is unknowable — Microsoft's internal notes aren't public. But a documented report from a distro maintainer went in on September 23rd, and a years-broken button started working about three weeks later. That's the whole story, and it's enough.</p>
-    <p><strong>What's next:</strong> EDGE-LINUX-002 (the system title bar) is still open, and the Dev fix still needs verifying on Stable. The relationship is also growing in a second direction — blackice is headed for the Edge Add-ons store, desktop and (we hope) Android, so Edge users get our blocker without sideloading from Google's store. File their bugs, ship their users our work: that's the whole posture.</p>
     <p><strong>Now:</strong> a public record is maintained — <code>docs/edge-linux-feedback.md</code> keeps the issue IDs, exact behavior, submission history, and current status in one place. Both issues are also tracked with their status on our <a href="issues.html">issues page</a>, alongside every other bug we know about — ours and upstream's.</p>
     <p><strong>When fixed:</strong> verify on navi. The tracker calls for testing on eiri's Debian trixie base, against Edge Dev and Stable, on real navi hardware. A vendor response is not the same as a verified fix.</p>
-    <p>A distro maintainer lobbying Microsoft for better Linux support is unusual leverage. It should be spent deliberately: reproducible behavior, visual evidence, one public status page, no inflated claims. A private patch shifts maintenance onto navi and hides the Linux problem from everyone else; an upstream repair improves Edge for other distributions too. The same principle applies to anything navi might one day own — dogfood is due diligence. Daily use is how update lag, policy gaps, regressions, and browser-specific assumptions become visible before they're inherited.</p>
-    <p>The Edge work is part of a larger record: <a href="upstream.html">upstream</a> — every bug report, fix, and honest fork xvoidsx has sent back to the projects it stands on.</p>
+    <p>A distro maintainer lobbying Microsoft for better Linux support is unusual leverage. It should be spent deliberately: reproducible behavior, visual evidence, one public status page, no inflated claims. A private patch shifts maintenance onto navi and hides the Linux problem from everyone else; an upstream repair improves Edge for other distributions too. The same principle applies to Helium — dogfood is due diligence. Daily use is how update lag, policy gaps, regressions, and browser-specific assumptions become visible through hands-on testing.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
   <section class="stop next" id="blackice">
-    <p class="state">SHIPPED · PRIVACY LAYER</p>
+    <p class="state">DOGFOODING · PRIVACY LAYER</p>
     <h2>blackice moves blocking from <span>a chosen extension toward owned infrastructure</span></h2>
     <div class="flow" aria-label="blackice transition">
-      <span class="node">shipped<small>blackice default in Chromium</small></span>
+      <span class="node">today<small>uBlock Origin Lite in policy</small></span>
       <span class="arrow">→</span>
-      <span class="node">accela<small>native adblock-rust component</small></span>
+      <span class="node">dogfood<small>blackice as MV3 extension</small></span>
+      <span class="arrow">→</span>
+      <span class="node">graduate<small>policy ID changes after proof</small></span>
+      <span class="arrow">→</span>
+      <span class="node">accela<small>blackice baked in as the extension</small></span>
     </div>
-    <p>The transition was staged on purpose — navi replaced a proven blocker only after its own fork earned the job. blackice graduated: it replaced uBlock Origin Lite as Chromium's default blocker and is live on the Chrome Web Store.</p>
+    <p>The transition is staged on purpose. navi should replace a proven blocker only when its own fork has earned the job. uBlock Origin Lite is still the force-installed policy blocker today; blackice is dogfooding now; only after testing does the policy ID change.</p>
     <p><strong>What blackice is:</strong> xvoidsx's GPLv3 fork of uBlock Origin Lite — a Manifest V3 ad and tracker blocker with a nightshadeNeon interface. The blocking engine, filter-list machinery, and Declarative Net Request conversion remain upstream work. Raymond Hill's copyright and the uBlock Origin contributors' notices stay intact; xvoidsx adds its copyright only to its own interface, branding, defaults, and genuine curated-list work.</p>
-    <p><strong>Boundaries that protect credibility:</strong> never present blackice as an official uBlock project. Never run it beside uBO or uBOL — overlapping blockers fight over the same requests. Never show fake statistics, controls, or placeholder lists. Keep the Chromium build as the supported target — no other target gets claimed until it's packaged and tested.</p>
-    <p><strong>One brand, two engines:</strong> the extension is the portable phase — it can run in Chromium-family browsers now and build recognition around one privacy surface. The native accela phase is different work: an adblock-rust component sits closer to the browser and avoids making the extension the permanent architectural ceiling. The name and user experience stay continuous even as the engine changes.</p>
+    <p><strong>Boundaries that protect credibility:</strong> never present blackice as an official uBlock project. Never dogfood it beside uBO or uBOL — overlapping blockers fight over the same requests. Never show fake statistics, controls, or placeholder lists. Keep the Chromium build as the supported target — no other target gets claimed until it’s packaged and tested. Change the navi policy only after the dogfood gate passes.</p>
+    <p><strong>One brand, one engine:</strong> blackice is the extension, full stop — running in Chromium browsers today, baked into accela tomorrow. No native rewrite planned. The extension <em>is</em> the architecture.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
-  <section class="stop" id="security">
-    <p class="state">CASE STUDY · SECURITY ARCHITECTURE</p>
-    <h2>security is <span>why this engine carries weight</span></h2>
-    <p>navi bets its app layer on Chromium for a reason that has nothing to do with features: the security architecture. Every webapp window and every Electron app on navi runs inside one of the most battle-tested sandboxes in consumer software.</p>
-    <p><strong>Site Isolation:</strong> every site renders in its own OS process, so a compromised renderer can't reach across into your bank tab — the mitigation that blunted Spectre-class attacks for the web. <strong>The sandbox:</strong> renderers run with stripped privileges, so exploiting the parser isn't the same as owning the machine. Billions of users and one of the industry's largest bug bounties keep both honest, and the memory-safety push — Rust in new components, hardened allocators — keeps shrinking the classic bug classes.</p>
-    <p><strong>What navi inherits, plainly:</strong> webapp windows get the full multi-process sandbox for free. Electron apps get Chromium's sandbox too, though Electron's defaults are looser than the browser's — a tradeoff we watch in every app we package. We don't audit Chromium ourselves; we ride the update cadence, with Debian's security-tracked Chromium underneath and upstream fixes flowing the way Debian ships them.</p>
-    <p><strong>The honest boundary:</strong> no sandbox is a promise, only a cost multiplier. Chromium's is the most expensive target on the desktop web to exploit at scale — and that's the whole argument. navi's app layer stands on the engine attackers find least worth the effort.</p>
-    <h2 style="font-size: 24px; margin-top: 28px;">and then there's <span>the speed</span></h2>
-    <p>Security is why the engine is trustworthy; speed is why it's pleasant. <strong>Blink</strong> is one of the fastest renderers ever shipped, and <strong>V8</strong> turned JavaScript from a scripting toy into a compiled language — hidden classes, inline caching, tiered JIT. That's the quiet reason navi's entire app layer can be web tech: the runtime isn't a compromise, it's the fastest horse. On the low-spec hardware navi loves, that matters more, not less.</p>
+  <section class="stop next" id="accela-foundation">
+    <p class="state">ACCELA FOUNDATION</p>
+    <h2>ungoogled-chromium is the base, <span>xvoidsx owns the vision</span></h2>
+    <p>accela forks ungoogled-chromium directly — a clean de-googled base with no one else's vision baked in. blackice ships built in as the extension, nightshadeNeon is the native theme, and agentic/smallweb features layer on top in sequence. accela aims to remain a legible patch set instead of becoming an opaque Chromium tree.</p>
+    <p><strong>What navi must watch:</strong> build infrastructure — Chromium builds take hours and ~100GB disk. Rebase cadence — every Chromium release (4 weeks) means rebasing the patch set. The work begins when build infrastructure lands.</p>
+    <div class="flow" aria-label="accela base pipeline">
+      <span class="node">chromium<small>the engine &amp; web platform</small></span>
+      <span class="arrow">→</span>
+      <span class="node">ungoogled-chromium<small>the de-Googled patch foundation</small></span>
+      <span class="arrow">→</span>
+      <span class="node">helium<small>productized browser &amp; release layer</small></span>
+      <span class="arrow">→</span>
+      <span class="node">accela<small>the xvoidsx experience &amp; policy layer</small></span>
+    </div>
+    <p><strong>The escape hatch is part of the design.</strong> If Helium's direction or cadence stops fitting, a clean accela patch stack should be portable back toward plain ungoogled-chromium. A base is useful when it reduces work without becoming a trap. Helium's own README describes it as beta — that makes Raven's daily-driver period a precondition, not a ceremonial trial: normal browsing, updates, extensions, app windows, and navi policy all need time to fail honestly.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
   <section class="stop future" id="accela">
-    <p class="state">THE HORIZON · EXPERIMENTAL</p>
+    <p class="state">THE HORIZON · ACCELA PRODUCT LAYER</p>
     <h2>the goal is a navi-native browser, <span>not a logo swap</span></h2>
-    <p>accela is where the browser becomes an owned interface to the wired: visual identity, privacy, search, agents, and the smallweb designed as one system. We're experimenting with different ways to make our own browser happen — no timeline on the horizon yet — but the direction is set, and everything on this page is the groundwork for it.</p>
+    <p>accela is where the browser becomes an owned interface to the wired: visual identity, privacy, search, agents, and the smallweb designed as one system.</p>
     <figure class="shot logo">
       <img src="assets/accela-logo.png" alt="The accela logo: a dark eclipse ring, neon pink over neon green, cut by a chrome slash with a lit core">
       <figcaption><strong>The accela mark, locked September 2026.</strong> The pink-and-green eclipse with the chrome slash — simple color blocking a browser tab can carry, and a slash no other browser on earth uses.</figcaption>
     </figure>
+    <ul>
+      <li><strong>Smallweb built in</strong> — gemini and other smallweb paths become first-class navigation, not specialist afterthoughts.</li>
+      <li><strong>Zero telemetry</strong> — no analytics or product surveillance added by xvoidsx; privacy is an architecture constraint.</li>
+      <li><strong>Prettier privacy</strong> — blackice makes privacy beautiful: the same Manifest V3 engine, dressed in nightshadeNeon, baked into the browser.</li>
+      <li><strong>Hey Lain</strong> — local and cloud agent support replaces the generic "AI Mode" story with a navi-native assistant surface.</li>
+      <li><strong>Private search</strong> — a privacy-respecting search layer with a smallweb-scoped index as the long-term wedge.</li>
+      <li><strong>Native bangs</strong> — <code>!radio</code>, <code>!nl</code>, <code>!apps</code>, <code>!wired</code> turn the address bar into a map of navi's own front doors.</li>
+    </ul>
+    <p><strong>"Wallpaper is the theme":</strong> Chromium's native color extraction can use a new-tab-page wallpaper to tint the wider browser chrome. In Raven's navi tests, pulsegrid, katakana rain, and jellyfish each produced coherent palettes without the muddy mappings seen with an external theme. That suggests a stronger accela model: the selected navi gifpaper becomes the browser's visual source of truth. Leading default: <strong>pulsegrid</strong> — the boldest statement of the navi visual language, static frame on older hardware, animation as an explicit option. Showcase alternative: <strong>jellyfish</strong> — a softer pink-purple-plum palette proving the same system can change mood without losing coherence.</p>
+    <p>The default new-tab shortcuts should point to navi's front doors — neighborli, navi radio, glyyph, naviApps, and the navi site — rather than one maintainer's personal history. Personalization begins from a useful public baseline.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
 
@@ -299,12 +305,12 @@
     <ul>
       <li><strong>Now</strong> — harden the shipped contract. Keep Chromium, the 72 app launchers, local catalog behavior, deterministic dark mode, and current policy supportable on real navi hardware.</li>
       <li><strong>Next</strong> — make browser choice explicit. Build the settings TUI, a canonical browser setting, detection, app-mode tests, and clear fallback behavior.</li>
-      <li><strong>In parallel</strong> — push upstream. Track Edge Linux issues; verify vendor fixes instead of closing them on response alone.</li>
-      <li><strong>Done</strong> — blackice graduated. It replaced the uBOL entry and ships by default in Chromium.</li>
+      <li><strong>In parallel</strong> — dogfood and push upstream. Measure Helium's update cadence; track Edge Linux issues; verify vendor fixes instead of closing them on response alone.</li>
+      <li><strong>After proof</strong> — graduate blackice. Replace the uBOL policy entry only after the extension survives normal use and the packaging path is ready.</li>
       <li><strong>Later</strong> — begin accela in sequence. The roadmap places it after the desktop navi launch, navidroid, and eiri work: a strategic horizon, not the next checkbox.</li>
     </ul>
     <p><strong>Non-negotiable principles:</strong> additive, not purist — a strong default doesn't require purging alternatives. Choice preserved — users choose the browser while navi owns the compatibility contract. Zero telemetry — xvoidsx-owned layers collect nothing by default. Open models, open web — agent features should widen the web rather than trap it inside one provider.</p>
-    <p><strong>Scope boundaries:</strong> Edge remains optional even if its Linux bugs are fixed. accela should not claim integrations before they exist.</p>
+    <p><strong>Scope boundaries:</strong> Safari is explicitly out of scope. Edge remains optional even if its Linux bugs are fixed. Helium remains a candidate base until dogfood evidence is strong enough. accela should not claim integrations before they exist.</p>
     <p>Choice does not come from refusing to make decisions. It comes from making the integration legible, keeping alternatives available, and separating what ships from what is merely planned.</p>
     <a class="top-link" href="#top">↑ back to top</a>
   </section>
@@ -325,12 +331,12 @@
   <section class="stop">
     <p class="state">CLOSING / REFERENCE</p>
     <h2>the browser is the user's <span>agent on the web</span></h2>
-    <p>navi treats that role as infrastructure worth understanding and, piece by piece, worth owning. Today's stack is deliberately practical: Debian Chromium, app-mode windows, local pages, Rofi launchers, per-user defaults, and optional alternatives. Tomorrow's stack is more ambitious: a user-selectable Chromium runtime, blackice as an owned privacy layer, and accela as the browser where navi's visual, smallweb, search, casting, and agent ideas meet.</p>
+    <p>navi treats that role as infrastructure worth understanding and, piece by piece, worth owning. Today's stack is deliberately practical: Debian Chromium, app-mode windows, local pages, Rofi launchers, managed extensions, and optional alternatives. Tomorrow's stack is more ambitious: a user-selectable Chromium runtime, blackice as an owned privacy layer, and accela as the browser where navi's visual, smallweb, search, casting, and agent ideas meet.</p>
     <p>The continuity matters more than the brand name. navi is not waiting for accela to begin integrating the browser well, and it is not using today's Chromium dependence as an excuse to avoid owning tomorrow's design.</p>
     <ul>
       <li><code>wired/scripts/naviwebapp.sh</code> — public webapp CLI</li>
       <li><code>wired/naviApps/</code> — catalog, launchers, icons, local store</li>
-      <li><code>wired/chromium/</code> — external extensions, theme, and dark-mode wrapper</li>
+      <li><code>wired/chromium/</code> — policy and dark-mode wrapper</li>
       <li><code>scripts/installers/</code> — optional browser installers</li>
       <li><code>docs/edge-linux-feedback.md</code> — public Edge issue tracker</li>
     </ul>
@@ -345,7 +351,7 @@
       <li>navi Edge-on-Linux feedback tracker — issue details and submission log.</li>
       <li>xvoidsx/blackice — scope, attribution, license, and supported target.</li>
     </ol>
-    <p style="font-size: 13px;">Status note: "shipped", "experimental", and "planned" describe project state as of 11 October 2026. Planned items are not presented as shipped features. — <em>open models, open web</em></p>
+    <p style="font-size: 13px;">Status note: "shipped", "dogfooding", and "planned" describe project state as of 23 September 2026. Planned items are not presented as shipped features. — <em>open models, open web</em></p>
   </section>
 
   <footer>
@@ -362,20 +368,8 @@
     <a href="navivim.html">navivim</a>
     <span class="active" aria-current="page">chromium</span>
     <a href="issues.html">issues</a>
-    <a href="upstream.html">upstream</a>
-    <span>built with care by <a href="https://xvoidsx.org">xvoidsx</a></span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
-<script>
-(function () {
-  var img = document.querySelector('#chromium-logo img');
-  if (!img) return;
-  img.addEventListener('click', function () {
-    img.classList.remove('spin');
-    void img.offsetWidth;
-    img.classList.add('spin');
-  });
-})();
-</script>
 </body>
 </html>
