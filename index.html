@@ -1997,5 +1997,166 @@
       window.addEventListener('resize', sizeRain);
     }
   </script>
+  <!-- navi theme player: break the boundary, free the mind -->
+  <div id="navi-player" aria-label="navi theme song player">
+    <canvas id="navi-viz" aria-hidden="true"></canvas>
+    <div class="np-controls">
+      <button id="np-play" aria-label="play the navi theme song">
+        <svg id="np-icon-play" viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        <svg id="np-icon-pause" viewBox="0 0 24 24" width="20" height="20" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>
+      </button>
+      <div class="np-meta">
+        <div class="np-title">break the boundary, free the mind</div>
+        <div class="np-sub">the navi theme &middot; <span id="np-time">0:00</span></div>
+      </div>
+      <div class="np-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+  <style>
+    #navi-player {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+      height: 68px;
+      transform: translateY(110%);
+      transition: transform .5s cubic-bezier(.2,.8,.2,1);
+      border-top: 1px solid rgba(255,16,240,.35);
+      background: rgba(5,4,7,.82);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+    #navi-player.show { transform: translateY(0); }
+    #navi-viz { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .5; }
+    .np-controls {
+      position: relative; z-index: 2;
+      height: 100%; max-width: 720px; margin: 0 auto;
+      display: flex; align-items: center; gap: 14px; padding: 0 18px;
+    }
+    #np-play {
+      flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+      border: 1px solid rgba(255,16,240,.6); background: rgba(255,16,240,.08);
+      color: #ff10f0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 14px rgba(255,16,240,.35), inset 0 0 8px rgba(255,16,240,.15);
+      transition: box-shadow .25s, transform .15s;
+    }
+    #np-play:hover { box-shadow: 0 0 22px rgba(255,16,240,.6), inset 0 0 10px rgba(255,16,240,.25); transform: scale(1.06); }
+    #np-play.playing { color: #39ff14; border-color: rgba(57,255,20,.6); box-shadow: 0 0 14px rgba(57,255,20,.35), inset 0 0 8px rgba(57,255,20,.15); }
+    .np-meta { flex: 1 1 auto; min-width: 0; }
+    .np-title {
+      font-family: "Share Tech Mono", monospace; font-size: 14px; color: #f6f0f7;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      text-shadow: 0 0 8px rgba(255,16,240,.5);
+    }
+    .np-sub { font-size: 11px; color: #c9bdca; font-family: "IBM Plex Mono", monospace; }
+    .np-sub #np-time { color: #00ffff; }
+    .np-eq { flex: 0 0 auto; display: flex; align-items: flex-end; gap: 3px; height: 22px; }
+    .np-eq span { width: 3px; background: #39ff14; box-shadow: 0 0 6px rgba(57,255,20,.8); height: 30%; }
+    #navi-player.playing .np-eq span { animation: np-bounce 1s ease-in-out infinite; }
+    #navi-player.playing .np-eq span:nth-child(2) { animation-delay: .15s; background: #ff10f0; box-shadow: 0 0 6px rgba(255,16,240,.8); }
+    #navi-player.playing .np-eq span:nth-child(3) { animation-delay: .3s; background: #00ffff; box-shadow: 0 0 6px rgba(0,255,255,.8); }
+    #navi-player.playing .np-eq span:nth-child(4) { animation-delay: .45s; }
+    @keyframes np-bounce { 0%,100% { height: 25%; } 50% { height: 100%; } }
+    @media (prefers-reduced-motion: reduce) {
+      #navi-player.playing .np-eq span { animation: none; }
+    }
+  </style>
+  <script>
+  (function(){
+    var player = document.getElementById('navi-player');
+    var playBtn = document.getElementById('np-play');
+    var iconPlay = document.getElementById('np-icon-play');
+    var iconPause = document.getElementById('np-icon-pause');
+    var timeEl = document.getElementById('np-time');
+    var canvas = document.getElementById('navi-viz');
+    var ctx = canvas.getContext('2d');
+
+    var audio = new Audio('assets/audio/break%20the%20boundary%2C%20free%20the%20mind.mp3');
+    audio.preload = 'none';
+
+    var actx = null, analyser = null, srcNode = null, dataArray = null;
+    var rafId = null;
+    var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function sizeCanvas(){
+      var r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.floor(r.width));
+      canvas.height = Math.max(1, Math.floor(r.height));
+    }
+
+    function initAudio(){
+      if (actx) return;
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = actx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.82;
+      srcNode = actx.createMediaElementSource(audio);
+      srcNode.connect(analyser);
+      analyser.connect(actx.destination);
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+    }
+
+    function fmt(s){
+      s = Math.max(0, Math.floor(s || 0));
+      return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+    }
+
+    function draw(){
+      rafId = requestAnimationFrame(draw);
+      var w = canvas.width, h = canvas.height;
+      if (!w || !h) return;
+      ctx.clearRect(0,0,w,h);
+      if (!analyser || audio.paused) return;
+      analyser.getByteFrequencyData(dataArray);
+      var n = 64, bw = w / n;
+      for (var i=0;i<n;i++){
+        var v = dataArray[Math.floor(i * dataArray.length / n / 1.6)] / 255;
+        if (v < 0.03) continue;
+        var bh = v * h * 0.9;
+        var hue = i / n;
+        var col = hue < 0.4 ? '255,16,240' : (hue < 0.7 ? '0,255,255' : '57,255,20');
+        ctx.fillStyle = 'rgba(' + col + ',' + (0.16 + v*0.5).toFixed(2) + ')';
+        ctx.shadowColor = 'rgba(' + col + ',0.8)';
+        ctx.shadowBlur = 12;
+        ctx.fillRect(i*bw+1, h-bh, bw-2, bh);
+      }
+      ctx.shadowBlur = 0;
+    }
+
+    playBtn.addEventListener('click', function(){
+      initAudio();
+      if (actx.state === 'suspended') actx.resume();
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener('play', function(){
+      player.classList.add('playing');
+      playBtn.classList.add('playing');
+      iconPlay.style.display = 'none';
+      iconPause.style.display = '';
+      sizeCanvas();
+      if (!reduceMotion && rafId === null) draw();
+    });
+    audio.addEventListener('pause', function(){
+      player.classList.remove('playing');
+      playBtn.classList.remove('playing');
+      iconPlay.style.display = '';
+      iconPause.style.display = 'none';
+    });
+    audio.addEventListener('timeupdate', function(){ timeEl.textContent = fmt(audio.currentTime); });
+    audio.addEventListener('loadedmetadata', function(){ timeEl.textContent = fmt(audio.duration); });
+
+    // reveal after scrolling past the hero
+    var shown = false;
+    function onScroll(){
+      if (!shown && window.scrollY > 480) { shown = true; player.classList.add('show'); sizeCanvas(); }
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+    window.addEventListener('resize', sizeCanvas);
+  })();
+  </script>
 </body>
 </html>
