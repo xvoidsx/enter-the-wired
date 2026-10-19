@@ -1,0 +1,7 @@
+We will be doing some navi-related music.
+
+All types and genres of songs are welcome as long as it fits the theme of navi - either human-made or AI-made, the tunes can tell the story.
+
+Keep audio assets here in this 'audio' folder, as the site player will reference them. We might switch out the default track every now and then. 
+
+The selected track will be offered as a player a visitor can click on the site, with subtle visualiser action going behind it.
