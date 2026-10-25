@@ -92,7 +92,7 @@
       margin: 0;
       transform: translateX(-50%);
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto auto 1fr auto;
       align-items: center;
       gap: 18px;
       padding: 0 10px;
@@ -100,6 +100,43 @@
       background: rgba(5, 4, 7, .94);
       box-shadow: 0 0 24px rgba(255,16,240,.08);
     }
+    .site-menu { position: relative; }
+    .site-menu-button {
+      width: 34px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,16,240,.32);
+      background: #09050a;
+      color: var(--cyan);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .site-menu-button:hover, .site-menu-button:focus-visible, .site-menu-button[aria-expanded="true"] { color: var(--pink); border-color: var(--pink); outline: 0; }
+    .site-menu-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 40;
+      min-width: 200px;
+      padding: 8px 0;
+      border: 1px solid var(--line);
+      background: rgba(5, 4, 7, .97);
+      box-shadow: 0 0 24px rgba(255,16,240,.12);
+    }
+    .site-menu-panel[hidden] { display: none; }
+    .site-menu-panel a, .site-menu-panel .site-menu-current {
+      display: block;
+      padding: 8px 18px;
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 12px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .site-menu-panel a:hover, .site-menu-panel a:focus-visible { color: var(--pink); outline: 0; }
+    .site-menu-panel .site-menu-current { color: var(--pink); }
     .workspaces, .system { display: flex; align-items: center; gap: 7px; }
     .system { justify-content: flex-end; }
     .ws, .status-chip {
@@ -733,7 +770,7 @@
 
     @media (max-width: 980px) {
       .shell { width: min(100% - 28px, 820px); }
-      .status { grid-template-columns: 1fr auto; }
+      .status { grid-template-columns: auto 1fr auto; }
       .status-center { display: none; }
       .status-date { display: block; }
       .status-release { display: none; }
@@ -904,6 +941,24 @@
 
   <div class="shell">
     <nav class="status" aria-label="Section navigation">
+      <div class="site-menu">
+        <button class="site-menu-button" type="button" aria-label="Site menu" aria-expanded="false" aria-controls="site-menu-panel">☰</button>
+        <div class="site-menu-panel" id="site-menu-panel" hidden>
+          <span class="site-menu-current" aria-current="page">home</span>
+          <a href="news.html">news</a>
+          <a href="roadmap.html">roadmap</a>
+          <a href="eiri.html">eiri</a>
+          <a href="manual/manual.html">manual</a>
+          <a href="sponsors.html">sponsors</a>
+          <a href="labs.html">labs</a>
+          <a href="community.html">community</a>
+          <a href="agents.html">agents</a>
+          <a href="navivim.html">navivim</a>
+          <a href="chromium.html">chromium</a>
+          <a href="issues.html">issues</a>
+          <a href="upstream.html">upstream</a>
+        </div>
+      </div>
       <div class="workspaces">
         <a class="ws active" href="#top" aria-label="Release">∅</a>
         <a class="ws" href="#story" aria-label="The release">I</a>
@@ -1767,6 +1822,25 @@
   </div>
 
   <script>
+    const menuButton = document.querySelector('.site-menu-button');
+    const menuPanel = document.getElementById('site-menu-panel');
+    if (menuButton && menuPanel) {
+      const setMenu = open => {
+        menuPanel.hidden = !open;
+        menuButton.setAttribute('aria-expanded', String(open));
+      };
+      menuButton.addEventListener('click', event => {
+        event.stopPropagation();
+        setMenu(menuPanel.hidden);
+      });
+      document.addEventListener('click', event => {
+        if (!menuPanel.hidden && !menuPanel.contains(event.target) && event.target !== menuButton) setMenu(false);
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !menuPanel.hidden) { setMenu(false); menuButton.focus(); }
+      });
+    }
+
     const clock = document.getElementById('clock');
     const mobileDate = document.getElementById('mobile-date');
     const updateClock = () => {
