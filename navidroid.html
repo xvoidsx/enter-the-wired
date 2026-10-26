@@ -110,6 +110,20 @@
   footer a { text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } .stop { padding: 24px 18px; } }
+  .komi-note { display: none; color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+  .komi-note.show { display: block; animation: komi-in .7s ease both; }
+  .komi-note.show a {
+    background: linear-gradient(90deg, var(--pink), var(--green), var(--cyan), var(--pink));
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: komi-shimmer 3.5s linear infinite;
+  }
+  @keyframes komi-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes komi-shimmer { to { background-position: 200% 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .komi-note.show { animation: none; }
+    .komi-note.show a { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -135,10 +149,12 @@
 
   <div class="actions">
     <a class="primary" href="https://github.com/xvoidsx/navidroid/releases/download/v0.2.1/navidroid-0.2.1.apk">get navidroid 0.2.1 ↓</a>
-    <a href="githubstore://repo/xvoidsx/navidroid">grab it from the Komi Store ↗</a>
+    <a id="komi-btn" href="githubstore://repo/xvoidsx/navidroid">grab it from the Komi Store ↗</a>
     <a href="https://github.com/xvoidsx/navidroid/releases/tag/v0.2.1">release notes ↗</a>
     <a href="https://github.com/xvoidsx/navidroid">source ↗</a>
   </div>
+
+  <p class="komi-note" id="komi-note">Don't have <a href="https://komistore.app/">Komi Store</a> yet? Get it here — then this button opens navidroid right in it.</p>
 
   <p class="lede">Also on <a href="https://komistore.app/">Komi Store</a> — grab it there and updates find you automatically.</p>
 
@@ -221,5 +237,17 @@
     <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
+<script>
+  (function () {
+    var btn = document.getElementById('komi-btn');
+    var note = document.getElementById('komi-note');
+    if (!btn || !note) return;
+    btn.addEventListener('click', function () {
+      setTimeout(function () {
+        if (!document.hidden) note.classList.add('show');
+      }, 1500);
+    });
+  })();
+</script>
 </body>
 </html>
