@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="navi in your pocket — a minimal Android launcher that runs on any Android device, no custom ROM. A calendar line that counts down, a Default AI Agent one press away, and the nightshadeNeon skin.">
+<meta property="og:title" content="navidroid — navi">
+<meta property="og:description" content="The mobile story is as important as the desktop story. navidroid runs on any Android device — no custom ROM, no flashing, no new hardware.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://navi.xvoidsx.org/navidroid.html">
+<meta property="og:image" content="https://navi.xvoidsx.org/assets/navidroid-home.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<title>navidroid — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 620px; margin: 0 0 12px; }
+  .lede strong { color: var(--paper); font-weight: 600; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 40px; }
+  .actions a {
+    color: var(--pink); text-decoration: none; font-size: 14px;
+    border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px;
+    background: rgba(255,16,240,.05); white-space: nowrap;
+  }
+  .actions a:hover {
+    background: rgba(255,16,240,.12);
+    text-shadow: 0 0 10px rgba(255,16,240,.9);
+    box-shadow: 0 0 12px rgba(255,16,240,.3);
+  }
+  .actions a.primary { background: rgba(255,16,240,.14); color: var(--paper); }
+  .chapters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 56px; }
+  .chapters a {
+    color: var(--pink); text-decoration: none; font-size: 13px;
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px;
+    background: rgba(255,16,240,.05); white-space: nowrap;
+  }
+  .chapters a:hover {
+    background: rgba(255,16,240,.12);
+    text-shadow: 0 0 10px rgba(255,16,240,.9);
+    box-shadow: 0 0 12px rgba(255,16,240,.3);
+  }
+  .chapters a .n { color: var(--green); margin-right: 6px; font-size: 11px; letter-spacing: .08em; }
+  .stop { border: 1px solid var(--line); border-radius: 12px; padding: 32px; margin: 0 0 28px; background: var(--panel); scroll-margin-top: 24px; }
+  .stop.now { border-color: var(--green); }
+  .stop.next { border-color: var(--cyan); }
+  .stop .state { font-size: 11px; letter-spacing: .24em; margin: 0 0 10px; }
+  .stop.now .state { color: var(--green); }
+  .stop.next .state { color: var(--cyan); }
+  .stop h2 { margin: 0 0 14px; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; letter-spacing: -.02em; }
+  .stop h2 span { color: var(--pink); }
+  .stop p { color: var(--muted); margin: 0 0 14px; font-size: 15.5px; }
+  .stop p strong { color: var(--paper); font-weight: 600; }
+  .stop ul { margin: 0 0 14px; padding-left: 20px; color: var(--muted); font-size: 15.5px; }
+  .stop li { margin: 8px 0; }
+  .stop li strong { color: var(--paper); font-weight: 600; }
+  .stop code { color: var(--cyan); font-size: 13.5px; }
+  figure.shot { margin: 0 0 18px; }
+  figure.shot img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 0 24px rgba(255,16,240,.18); }
+  figure.shot figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  figure.shot figcaption strong { color: var(--paper); }
+  figure.shot.phone img { width: min(360px, 88%); margin: 0 auto; }
+  nav.top { margin: 0 0 48px; font-size: 14px; }
+  nav.top a { margin-right: 18px; text-decoration: none; }
+  nav.top a:hover { text-decoration: underline; }
+  nav.top .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-right: 18px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } .stop { padding: 24px 18px; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="top">
+  <nav class="top" aria-label="Site">
+    <a href="index.html">← navi</a>
+    <a href="news.html">news</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <a href="chromium.html">chromium</a>
+    <span class="active" aria-current="page">navidroid</span>
+    <a href="issues.html">issues</a>
+  </nav>
+
+  <p class="kicker">NAVI // NAVIDROID</p>
+  <h1>navi, <span>in your pocket.</span></h1>
+  <p class="lede">The mobile story is as important as the desktop story. navidroid is the phone companion to navi — a minimal, distractionless launcher that carries the same clean-first, character-second spirit: your wallpaper, your clock, your apps, and nothing else in the way.</p>
+  <p class="lede">It runs on <strong>any Android device</strong> — no custom ROM, no flashing, no new hardware. Two minutes to try the navi vision on the phone you already own. A hard fork of Slauncher (itself a fork of Olauncher), rebuilt for navi: the nightshadeNeon skin, a calendar line that counts down, and a Default AI Agent one press away on the home screen.</p>
+
+  <div class="actions">
+    <a class="primary" href="https://github.com/xvoidsx/navidroid/releases/download/v0.2.1/navidroid-0.2.1.apk">get navidroid 0.2.1 ↓</a>
+    <a href="https://github.com/xvoidsx/navidroid/releases/tag/v0.2.1">release notes ↗</a>
+    <a href="https://github.com/xvoidsx/navidroid">source ↗</a>
+  </div>
+
+  <figure class="shot phone">
+    <img src="assets/navidroid-home.jpg" alt="The navidroid home screen: the agent line glimmering in nightshadeNeon above the calendar line, Lain line art as wallpaper, media player and visualizer at the bottom">
+    <figcaption><strong>the home screen</strong><span> — ✨ Ask Perplexity glimmering above the calendar line · Lain art fitted as wallpaper · media player and visualizer at the bottom</span></figcaption>
+  </figure>
+
+  <nav class="chapters" aria-label="Chapters">
+    <a href="#home"><span class="n">01</span> the home screen</a>
+    <a href="#agent"><span class="n">02</span> the agent line</a>
+    <a href="#settings"><span class="n">03</span> one row in settings</a>
+    <a href="#next"><span class="n">04</span> what's next</a>
+  </nav>
+
+  <section class="stop now" id="home">
+    <p class="state">SHIPPED · 0.2.1</p>
+    <h2>what's on the <span>home screen</span></h2>
+    <p>No icon grid, no start-menu archaeology, no clutter. What's on screen earned its pixels.</p>
+    <ul>
+      <li><strong>Up to 8 pinned apps</strong> — the ones you actually open, in a plain list.</li>
+      <li><strong>A calendar line that counts down</strong> — the next event of the day, with “in 40m” for what's coming and “ends in…” for what's on.</li>
+      <li><strong>A wallpaper picker inside the launcher</strong> — your art shown fitted, never cropped. Portrait art as a vertical pillar in landscape is correct, not a bug.</li>
+      <li><strong>A landscape toggle, portrait-first by default</strong> — rotation is opt-in, not assumed.</li>
+      <li><strong>Media controls and a visualizer at the bottom</strong> — the trio (pink, green, cyan) moving with the music.</li>
+      <li><strong>Noto Sans + JetBrains Mono</strong> — the same typefaces as the desktop.</li>
+    </ul>
+  </section>
+
+  <section class="stop now" id="agent">
+    <p class="state">SHIPPED · 0.2.0 → 0.2.1</p>
+    <h2>the <span>agent line</span></h2>
+    <p>Pick a <strong>Default AI Agent</strong> from a curated list in Settings, and a line under the calendar reads “Ask &lt;name&gt;” and opens it. If the agent isn't installed, the line opens its Play listing instead. Long-press the line to switch agents without opening Settings.</p>
+    <p>The list holds <strong>19 live agents</strong> — Muse, ChatGPT, Grok, Claude, DeepSeek, Kimi, Qwen, Alice AI, Perplexity, Edge Gallery, Copilot, Gab AI, Lumo, Meta AI, Gemini, Pi, Le Chat, PocketPal AI, and Poe. HuggingChat stays hidden: its official app left the Play Store, so the honest route back is a web fallback, not a dead button.</p>
+    <p>And the line itself is the signature: a <strong>✨ prefix</strong> and a slow nightshadeNeon wave — pink → green → cyan — rolling across the words, so it never reads as just another white line.</p>
+    <figure class="shot phone">
+      <img src="assets/navidroid-picker.jpg" alt="The Default AI Agent picker: a curated list of AI apps with Perplexity selected">
+      <figcaption><strong>the menu</strong><span> — the curated list, Perplexity selected · one tap to pick, long-press the home line to switch</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="stop now" id="settings">
+    <p class="state">SHIPPED · 0.2.0</p>
+    <h2>one row in <span>settings</span></h2>
+    <p>The Default AI Agent lives as a single row in Settings, showing the current pick — no account, no separate app to manage. Settings stay translucent over the wallpaper, so the phone underneath never disappears behind chrome.</p>
+    <figure class="shot phone">
+      <img src="assets/navidroid-settings.jpg" alt="navidroid settings: the Home screen section with the Default AI Agent row showing Perplexity, over the Lain wallpaper">
+      <figcaption><strong>settings</strong><span> — the Default AI Agent row among the home options · the wallpaper shows through</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="stop next" id="next">
+    <p class="state">PLANNED · NOT SHIPPED</p>
+    <h2>what's <span>next</span></h2>
+    <ul>
+      <li><strong>A weather line</strong> — sequenced after the agent line and the calendar countdown.</li>
+      <li><strong>The Lain bar</strong> — gated on the agent-story decision (engine, tap action, local-first). The agent button does not lift that gate.</li>
+      <li><strong>Quick capture, voice, swipe-to-Lain, F-Droid</strong> — in that rough order.</li>
+    </ul>
+    <p style="font-size: 13px;">Status note: “shipped” and “planned” describe project state as of 26 October 2026. Planned items are not presented as shipped features. — <em>your phone, the way navi sees it</em></p>
+  </section>
+
+  <p class="lede">navidroid 0.2.1 is a public preview — preview builds update over each other. Feedback welcome: the project lives at <a href="https://github.com/xvoidsx/navidroid">github.com/xvoidsx/navidroid</a>.</p>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <a href="index.html">home</a>
+    <a href="news.html">news</a>
+    <a href="roadmap.html">roadmap</a>
+    <a href="eiri.html">eiri</a>
+    <a href="manual/manual.html">manual</a>
+    <a href="sponsors.html">sponsors</a>
+    <a href="labs.html">labs</a>
+    <a href="community.html">community</a>
+    <a href="agents.html">agents</a>
+    <a href="navivim.html">navivim</a>
+    <a href="chromium.html">chromium</a>
+    <span class="active" aria-current="page">navidroid</span>
+    <a href="issues.html">issues</a>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+</body>
+</html>
