@@ -414,6 +414,11 @@ it, and only for what's actually done.</p>
 <li><strong>Field failures get field-grade diagnostics.</strong> When a launcher misbehaves
   on hardware, it must leave logs (<code>mod-open.log</code>); diagnose the live
   output, not the mocks.</li>
+<li><strong>Sway tree node types include <code>floating_con</code>.</strong> Any walker that filters
+  <code>type == "con"</code> silently drops every floating window — <code>navi-switcher.py</code>
+  did exactly this (the <code>floating_nodes</code> walk was there, but the type gate
+  threw each entry away before collection or recursion). Accept both
+  <code>"con"</code> and <code>"floating_con"</code> when walking windows.</li>
 <li><strong><code>gaps</code> has two forms; runtime changes must use the 4-arg one.</strong> sway/i3's
   2-arg form (<code>gaps inner 0</code>) is the <em>config-directive</em> path — it only sets the
   default for future workspaces and never re-arranges the live ones. Anything
@@ -480,6 +485,18 @@ file limit so they can ship in the repo.)</p>
 <li>When Raven asks what you think, give a real opinion with tradeoffs named,
   not a poll.</li>
 </ul>
+<h2>Voice: Voxtype + Moonshine Base is the dictation default (2026-10-22)</h2>
+<p>navi's dictation stack is <strong>Voxtype with the Moonshine Base engine</strong> —
+chosen for the lowest memory footprint and memory-bandwidth cost of
+Voxtype's engines; Parakeet streaming was considered and deferred.
+Scroll_Lock push-to-talk lives in <code>wired/sway/config</code> (compositor owns
+the key; the daemon runs with <code>[hotkey] enabled = false</code> and
+<code>state_file = "auto"</code>; Moonshine needs the ONNX variant,
+<code>voxtype setup onnx --enable</code>). New installations should ship Voxtype
+installed and enabled with Moonshine Base preconfigured so dictation
+works out of the box. Open thread: Hey Lain's STT is faster-whisper
+today — Moonshine is a candidate replacement, but bench it on real
+hardware before switching her over.</p>
 <h2>The one-sentence version</h2>
 <p>Probe, don't guess; test the real shape on real hardware; preserve the
 user's customizations; log everything; and never claim what you haven't
