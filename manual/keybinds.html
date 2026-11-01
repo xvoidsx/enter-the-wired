@@ -28,23 +28,6 @@
 			height: 6px;
 			background: linear-gradient(to right, #FF10F0, #39ff14);
 	} */	
-
-  .warden{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-  .warden-avatar{width:64px;height:64px;padding:0;border:0;background:none;cursor:pointer;border-radius:50%;animation:wardenbreathe 4.4s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(255,16,240,.35))}
-  .warden-avatar svg{display:block;width:100%;height:100%}
-  @keyframes wardenbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
-  .warden-eyes{transform-box:fill-box;transform-origin:center;animation:wardenblink 5.2s infinite}
-  @keyframes wardenblink{0%,92%,100%{transform:scaleY(1)}94%,96%{transform:scaleY(.1)}}
-  .warden-avatar.bounce{animation:wardenbounce .45s ease}
-  @keyframes wardenbounce{0%{transform:scale(1)}30%{transform:scale(1.12)}60%{transform:scale(.96)}100%{transform:scale(1)}}
-  .warden-bubble{width:280px;max-width:calc(100vw - 48px);padding:14px 16px;background:rgba(5,4,7,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,16,240,.45);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.55);color:#f2e9f4;font-size:14px;line-height:1.5}
-  .warden-bubble[hidden]{display:none}
-  .warden-tip{margin:0 0 10px}
-  .warden-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}
-  .warden-next{background:transparent;border:1px solid rgba(255,16,240,.45);color:#ff10f0;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;font-size:13px}
-  .warden-close{background:transparent;border:0;color:#9a8fa0;font-size:18px;line-height:1;cursor:pointer;padding:2px 6px}
-  @media (prefers-reduced-motion: reduce){.warden-avatar,.warden-eyes{animation:none !important}}
-  @media (max-width:560px){.warden{right:14px;bottom:14px}.warden-avatar{width:54px;height:54px}}
 </style>
 <head>
 	<!--meta information-->
@@ -136,38 +119,7 @@
 	</ul>
 	<p>Note that if you wish to change any of these keybindings, or add your own, you can edit the configuration file location at <code>$HOME/.config/sway/config</code> and make any changes you wish!</p>
 	<p>Up next: <a href="navigation.html">navigation and getting around</a></p>
-	<div class="warden" role="complementary" aria-label="Warden of the Wired">
-  <div class="warden-bubble" id="warden-bubble" hidden>
-    <p class="warden-tip" id="warden-tip"></p>
-    <div class="warden-actions">
-      <button class="warden-next" type="button">another tip &rarr;</button>
-      <button class="warden-close" type="button" aria-label="Close">&times;</button>
-    </div>
-  </div>
-  <button class="warden-avatar" type="button" aria-label="Ask the Warden" aria-expanded="false" aria-controls="warden-bubble"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#0d0710" stroke="#ff10f0" stroke-opacity=".55" stroke-width="1.5"/><path d="M16 56 V30 Q16 10 32 10 Q48 10 48 30 V56 Z" fill="#3b2a1e"/><ellipse cx="32" cy="35" rx="13" ry="15" fill="#f2e9f4"/><rect x="41" y="15" width="11" height="4.5" rx="2.25" fill="#ff10f0" transform="rotate(18 46 17)"/><g class="warden-eyes"><circle cx="27" cy="34" r="2.3" fill="#1a1020"/><g stroke="#00e5ff" stroke-width="1.6" fill="none"><circle cx="38" cy="34" r="4.6"/><line x1="34.7" y1="37.3" x2="41.3" y2="30.7"/></g></g><path d="M28 45 Q32 48 36 45" stroke="#1a1020" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></button>
-</div>
-<script>
-(function(){
-  var btn = document.querySelector('.warden-avatar');
-  var bubble = document.getElementById('warden-bubble');
-  var tip = document.getElementById('warden-tip');
-  var next = document.querySelector('.warden-next');
-  var close = document.querySelector('.warden-close');
-  if (!btn || !bubble || !tip) return;
-  var tips = ["Learn five bindings and the whole system opens up."];
-  var i = 0;
-  if (tips.length < 2 && next) next.style.display = 'none';
-  function show(){ tip.textContent = tips[i % tips.length]; bubble.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
-  function hide(){ bubble.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
-  function bounce(){ btn.classList.remove('bounce'); void btn.offsetWidth; btn.classList.add('bounce'); setTimeout(function(){ btn.classList.remove('bounce'); }, 500); }
-  btn.addEventListener('click', function(e){ e.stopPropagation(); if (bubble.hidden) { show(); } else { hide(); } bounce(); });
-  if (next) next.addEventListener('click', function(e){ e.stopPropagation(); i++; show(); });
-  if (close) close.addEventListener('click', function(e){ e.stopPropagation(); hide(); });
-  document.addEventListener('click', function(e){ if (!bubble.hidden && !bubble.contains(e.target) && !btn.contains(e.target)) hide(); });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !bubble.hidden) { hide(); btn.focus(); } });
-})();
-</script>
-</body>
+	</body>
 <footer>
 	<h2 style="color:#39ff14;text-align:center">* * * * * * * * * * * * * * * * * * * * * * *</h2>
 	<h6 style="color:#ff10f0;text-align:center">built with ❤️ by <a href="">xvoidsx</a></h6>
