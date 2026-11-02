@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="naviCode is xvoidsx's VSCodium distribution — the familiar editor remade in nightshadeNeon, with Lain in the sidebar and agents in the terminal.">
+<meta property="og:title" content="navicode — navi">
+<meta property="og:description" content="navi's graphical editor from eiri: VSCodium with the nightshadeNeon theme and Rina Hermes ACP pre-installed, shipping with navi.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://navi.xvoidsx.org/navicode.html">
+<meta property="og:image" content="https://navi.xvoidsx.org/assets/navicode-shot.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>navicode — navi</title>
+<style>
+  :root {
+    --bg: #060309;
+    --panel: #0d0710;
+    --pink: #ff10f0;
+    --green: #39ff14;
+    --cyan: #00e5ff;
+    --paper: #f2e9f4;
+    --muted: #9a8fa0;
+    --line: rgba(255,16,240,.22);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--paper);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--pink); }
+  a:visited { color: var(--green); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .kicker { color: var(--green); font-size: 12px; letter-spacing: .28em; margin: 0 0 12px; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .95; margin: 0 0 8px; letter-spacing: -.02em; }
+  h1 span { color: var(--pink); }
+  .lede { color: var(--muted); max-width: 620px; margin: 0 0 12px; }
+  .lede strong { color: var(--paper); font-weight: 600; }
+  .chapters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 56px; }
+  .chapters a {
+    color: var(--pink); text-decoration: none; font-size: 13px;
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px;
+    background: rgba(255,16,240,.05); white-space: nowrap;
+  }
+  .chapters a:hover {
+    background: rgba(255,16,240,.12);
+    text-shadow: 0 0 10px rgba(255,16,240,.9);
+    box-shadow: 0 0 12px rgba(255,16,240,.3);
+  }
+  .chapters a .n { color: var(--green); margin-right: 6px; font-size: 11px; letter-spacing: .08em; }
+  .stop { border: 1px solid var(--line); border-radius: 12px; padding: 32px; margin: 0 0 28px; background: var(--panel); scroll-margin-top: 24px; }
+  .stop.now { border-color: var(--green); }
+  .stop .state { font-size: 11px; letter-spacing: .24em; margin: 0 0 10px; }
+  .stop.now .state { color: var(--green); }
+  .stop .state { color: var(--pink); }
+  .stop h2 { margin: 0 0 14px; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; letter-spacing: -.02em; }
+  .stop h2 span { color: var(--pink); }
+  .stop p { color: var(--muted); margin: 0 0 14px; font-size: 15.5px; }
+  .stop p strong { color: var(--paper); font-weight: 600; }
+  .stop ul { margin: 0 0 14px; padding-left: 20px; color: var(--muted); font-size: 15.5px; }
+  .stop li { margin: 8px 0; }
+  .stop li strong { color: var(--paper); font-weight: 600; }
+  .stop code { color: var(--cyan); font-size: 13.5px; }
+  .top-link { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  .top-link:hover { color: var(--pink); }
+  figure.shot { margin: 0 0 18px; }
+  figure.shot img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 0 24px rgba(255,16,240,.18); }
+  figure.shot figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  figure.shot figcaption strong { color: var(--paper); }
+  footer .active {
+    color: var(--pink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    background: rgba(255,16,240,.08);
+    text-shadow: 0 0 10px rgba(255,16,240,.9), 0 0 28px rgba(255,16,240,.45);
+    box-shadow: 0 0 12px rgba(255,16,240,.25), inset 0 0 8px rgba(255,16,240,.12);
+    white-space: nowrap;
+  }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: 13px; display: flex; gap: 18px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } .stop { padding: 24px 18px; } }
+  .glassnav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 2px;margin:0 0 40px;background:rgba(5,4,7,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .glassnav .brand{font-weight:700;font-size:18px;letter-spacing:.04em;text-decoration:none;color:var(--paper)}
+  .glassnav .brand .void{color:var(--pink);animation:voidpulse 3.2s ease-in-out infinite}
+  @keyframes voidpulse{0%,100%{text-shadow:0 0 8px rgba(255,16,240,.7),0 0 22px rgba(255,16,240,.3)}50%{text-shadow:0 0 14px rgba(0,229,255,.8),0 0 30px rgba(0,229,255,.35)}}
+  .navdrop{position:relative}
+  .navdrop-button{background:transparent;border:1px solid var(--line);color:var(--paper);border-radius:999px;padding:6px 14px;cursor:pointer;font:inherit;font-size:14px}
+  .navdrop-button:hover,.navdrop-button[aria-expanded="true"]{color:var(--pink);border-color:var(--pink);outline:0}
+  .navdrop-panel{position:absolute;right:0;top:calc(100% + 8px);min-width:190px;padding:10px 14px;background:rgba(5,4,7,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:6px}
+  .navdrop-panel[hidden]{display:none}
+  .navdrop-panel a{text-decoration:none;color:var(--muted)}
+  .navdrop-panel a:hover{color:var(--pink)}
+  .navdrop-panel .active{color:var(--pink)}
+  .navdrop-panel .navgroup{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:6px}
+  .navdrop-panel .navgroup:first-child{padding-top:0}
+</style>
+</head>
+<body>
+<div class="wrap" id="top">
+    <nav class="glassnav" aria-label="Site">
+    <a class="brand" href="index.html">navi <span class="void">∅</span></a>
+    <div class="navdrop">
+      <button class="navdrop-button" type="button" aria-label="Site menu" aria-expanded="false" aria-controls="navdrop-panel">sections ☰</button>
+      <div class="navdrop-panel" id="navdrop-panel" hidden>
+        <div class="navgroup">navi</div>
+        <a href="index.html">home</a>
+        <a href="news.html">news</a>
+        <a href="roadmap.html">roadmap</a>
+        <a href="eiri.html">eiri</a>
+        <a href="navidroid.html">navidroid</a>
+        <div class="navgroup">tools</div>
+        <a href="agents.html">agents</a>
+        <a href="navivim.html">navivim</a>
+        <a href="navivim-agents.html">navivim-agents</a>
+        <a href="navivim-handbook.html">navivim-handbook</a>
+        <a href="chromium.html">chromium</a>
+        <span class="active" aria-current="page">navicode</span>
+        <div class="navgroup">learn</div>
+        <a href="manual/manual.html">manual</a>
+        <a href="faq.html">faq</a>
+        <div class="navgroup">community</div>
+        <a href="community.html">community</a>
+        <a href="sponsors.html">sponsors</a>
+        <a href="labs.html">labs</a>
+        <a href="issues.html">issues</a>
+        <a href="upstream.html">upstream</a>
+      </div>
+    </div>
+  </nav>
+
+  <p class="kicker">NAVI // NAVICODE</p>
+  <h1>same soul, <span>new window.</span></h1>
+  <p class="lede">naviCode is xvoidsx's VSCodium distribution — <strong>the familiar editor remade in nightshadeNeon</strong>, with agentic extensions woven into the workspace. It is navi's graphical editor from eiri, and it ships with navi: <code>setup_navicode</code> in install.sh adds the official VSCodium apt repo and installs the <code>codium</code> package on amd64 and arm64 alike.</p>
+  <figure class="shot">
+    <img src="assets/navicode-shot.png" alt="naviCode editing the navi repo's install.sh, with two DeepSeek agents running in opencode panels beside the code">
+    <figcaption><strong>naviCode at work on the navi repo.</strong> install.sh open beside two DeepSeek agents running in opencode panels — the editor speaks the same language as the terminal.</figcaption>
+  </figure>
+
+  <nav class="chapters" aria-label="Chapters">
+    <a href="#inside"><span class="n">01</span> what's inside</a>
+    <a href="#agents"><span class="n">02</span> agents in the window</a>
+    <a href="#navivim"><span class="n">03</span> navivim, side by side</a>
+    <a href="#get"><span class="n">04</span> get it</a>
+  </nav>
+
+  <section class="stop now" id="inside">
+    <p class="state">SHIPPED · FROM EIRI</p>
+    <h2>what's <span>inside</span></h2>
+    <p>naviCode starts from VSCodium — the open-source VS Code builds, without Microsoft's telemetry — and layers navi's own choices on top. Nothing here is a skin over a stranger's defaults; the distribution is the point.</p>
+    <ul>
+      <li><strong>VSCodium</strong> — the editor itself, from the official apt repo (<code>download.vscodium.com</code>), package <code>codium</code>. The extension ecosystem you already know, minus the phone-home.</li>
+      <li><strong>nightshadeNeon</strong> — the theme, pre-installed. The editor looks like the rest of navi because it is the rest of navi: the same neon-on-black language as the terminal, the bar, and the browser.</li>
+      <li><strong>Rina Hermes ACP</strong> — the agent extension, pre-installed. Lain sits in the sidebar through the Hermes ACP connection, so the agent that builds navi is one click from the code it builds.</li>
+      <li><strong>Both architectures</strong> — amd64 and arm64 from the same repo, so the Pi machines and the x86 benches run the same editor.</li>
+    </ul>
+    <p>The repo is <a href="https://github.com/xvoidsx/naviCode">github.com/xvoidsx/naviCode</a>.</p>
+    <a class="top-link" href="#top">↑ back to top</a>
+  </section>
+
+  <section class="stop now" id="agents">
+    <p class="state">SHIPPED · THE AGENT LAYER</p>
+    <h2>agents in the <span>same window</span></h2>
+    <p>The sidebar agent is Lain, through the pre-installed Rina Hermes ACP extension — the same agent story as the rest of navi, not a separate one invented for the editor. But naviCode doesn't lock you to one agent: the integrated terminal runs navi's terminal agents too.</p>
+    <p>The screenshot above is Raven's own setup: <strong>two DeepSeek agents running in opencode</strong> panels beside the code — not the Hermes sidebar, a different agent in a different surface, in the same window. That's the shape of the thing: the editor is where the agents already are, whichever one the work calls for. The wider agent story lives on the <a href="agents.html">agents</a> and <a href="navivim-agents.html">navivim-agents</a> pages.</p>
+    <a class="top-link" href="#top">↑ back to top</a>
+  </section>
+
+  <section class="stop" id="navivim">
+    <p class="state">TWO EDITORS, ONE SOUL</p>
+    <h2>navivim, <span>side by side</span></h2>
+    <p>navi has two editors, and the choice is about habit, not hierarchy. <a href="navivim.html">navivim</a> is the terminal editor — fast, keyboard-driven, at home in a tiling window. naviCode is the graphical editor — the same nightshadeNeon language, the same agent story, in a window with a mouse.</p>
+    <p>Same soul, new window. Use the one your hands already know; both are navi's editors, and both are maintained as first-class parts of the kit.</p>
+    <a class="top-link" href="#top">↑ back to top</a>
+  </section>
+
+  <section class="stop now" id="get">
+    <p class="state">SHIPPED · WITH NAVI</p>
+    <h2>get <span>it</span></h2>
+    <p>naviCode ships with navi — no separate install step, no navi-extras trip. <code>setup_navicode</code> runs as part of the install, alongside the rest of the desktop layer.</p>
+    <p><strong>If the repo was unreachable at install time,</strong> the installer skips naviCode rather than failing the install — re-run install.sh with <code>--yes</code> later and it picks it up.</p>
+    <p><a href="https://github.com/xvoidsx/naviCode">github.com/xvoidsx/naviCode</a> · <a href="https://github.com/xvoidsx/navi">github.com/xvoidsx/navi</a></p>
+    <a class="top-link" href="#top">↑ back to top</a>
+  </section>
+
+  <section class="stop">
+    <p class="state">CLOSING / REFERENCE</p>
+    <h2>the editor is part of <span>the kit</span></h2>
+    <p>naviCode is not a bonus app — it is one of the tools navi is built with, shipped the way the rest of the system is shipped: themed, agent-ready, and installed by default. The graphical editor and the terminal editor are two windows onto the same wired.</p>
+    <p><a href="https://github.com/xvoidsx/naviCode">github.com/xvoidsx/naviCode</a> · <a href="agents.html">agents</a> · <a href="navivim.html">navivim</a> · <a href="navivim-agents.html">navivim-agents</a></p>
+    <p style="font-size: 13px;">Status note: "shipped" describes project state as of November 2026. — <em>same soul, new window</em></p>
+  </section>
+
+  <footer>
+    <span>navi / wired / nightshadeNeon</span>
+    <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
+  </footer>
+</div>
+<script>
+(function(){
+  var btn = document.querySelector('.navdrop-button');
+  var panel = document.getElementById('navdrop-panel');
+  if (!btn || !panel) return;
+  function set(open){ panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); set(panel.hidden); });
+  document.addEventListener('click', function(e){ if (!panel.hidden && !panel.contains(e.target) && e.target !== btn) set(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !panel.hidden){ set(false); btn.focus(); } });
+})();
+</script>
+</body>
+</html>
