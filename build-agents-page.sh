@@ -112,19 +112,74 @@ page = """<!doctype html>
   footer a { text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   @media (max-width: 560px) { .wrap { padding: 32px 18px 64px; } }
+  .glassnav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 2px;margin:0 0 40px;background:rgba(5,4,7,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .glassnav .brand{font-weight:700;font-size:18px;letter-spacing:.04em;text-decoration:none;color:var(--paper)}
+  .glassnav .brand .void{color:var(--pink);animation:voidpulse 3.2s ease-in-out infinite}
+  @keyframes voidpulse{0%,100%{text-shadow:0 0 8px rgba(255,16,240,.7),0 0 22px rgba(255,16,240,.3)}50%{text-shadow:0 0 14px rgba(0,229,255,.8),0 0 30px rgba(0,229,255,.35)}}
+  .navdrop{position:relative}
+  .navdrop-button{background:transparent;border:1px solid var(--line);color:var(--paper);border-radius:999px;padding:6px 14px;cursor:pointer;font:inherit;font-size:14px}
+  .navdrop-button:hover,.navdrop-button[aria-expanded="true"]{color:var(--pink);border-color:var(--pink);outline:0}
+  .navdrop-panel{position:absolute;right:0;top:calc(100% + 8px);min-width:190px;padding:10px 14px;background:rgba(5,4,7,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:6px}
+  .navdrop-panel[hidden]{display:none}
+  .navdrop-panel a{text-decoration:none;color:var(--muted)}
+  .navdrop-panel a:hover{color:var(--pink)}
+  .navdrop-panel .active{color:var(--pink)}
+
+  .navdrop-panel .navmenu-level{display:flex;flex-direction:column;gap:6px}
+  .navdrop-panel .navmenu-level[hidden]{display:none}
+  .navdrop-panel .navcat{background:transparent;border:0;padding:0;font:inherit;color:var(--muted);cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left}
+  .navdrop-panel .navcat:hover{color:var(--pink)}
+  .navdrop-panel .navcat.current{color:var(--pink)}
+  .navdrop-panel .navcat .chev{color:var(--pink)}
+  .navdrop-panel .navback{background:transparent;border:0;padding:0;font:inherit;font-size:12px;color:var(--muted);cursor:pointer;text-align:left}
+  .navdrop-panel .navback:hover{color:var(--pink)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <nav class="top" aria-label="Site">
-    <a href="index.html">&larr; navi</a>
-    <a href="news.html">news</a>
-    <a href="roadmap.html">roadmap</a>
-    <a href="manual/manual.html">manual</a>
-    <a href="sponsors.html">sponsors</a>
-    <a href="labs.html">labs</a>
-    <a href="community.html">community</a>
-    <span class="active" aria-current="page">agents</span>
+    <nav class="glassnav" aria-label="Site">
+    <a class="brand" href="index.html">navi <span class="void">∅</span></a>
+    <div class="navdrop">
+      <button class="navdrop-button" type="button" aria-label="Site menu" aria-expanded="false" aria-controls="navdrop-panel">sections ☰</button>
+      <div class="navdrop-panel" id="navdrop-panel" hidden>
+        <div class="navmenu-level" data-level="root">
+          <button class="navcat" type="button" data-cat="navi">navi <span class="chev">›</span></button>
+          <button class="navcat current" type="button" data-cat="tools">tools <span class="chev">›</span></button>
+          <button class="navcat" type="button" data-cat="learn">learn <span class="chev">›</span></button>
+          <button class="navcat" type="button" data-cat="community">community <span class="chev">›</span></button>
+        </div>
+        <div class="navmenu-level" data-level="navi" hidden>
+          <button class="navback" type="button">← sections</button>
+          <a href="index.html">home</a>
+          <a href="news.html">news</a>
+          <a href="roadmap.html">roadmap</a>
+          <a href="eiri.html">eiri</a>
+          <a href="navidroid.html">navidroid</a>
+        </div>
+        <div class="navmenu-level" data-level="tools" hidden>
+          <button class="navback" type="button">← sections</button>
+          <span class="active" aria-current="page">agents</span>
+          <a href="navivim.html">navivim</a>
+          <a href="navivim-agents.html">navivim-agents</a>
+          <a href="navivim-handbook.html">navivim-handbook</a>
+          <a href="chromium.html">chromium</a>
+          <a href="navicode.html">navicode</a>
+        </div>
+        <div class="navmenu-level" data-level="learn" hidden>
+          <button class="navback" type="button">← sections</button>
+          <a href="manual/manual.html">manual</a>
+          <a href="faq.html">faq</a>
+        </div>
+        <div class="navmenu-level" data-level="community" hidden>
+          <button class="navback" type="button">← sections</button>
+          <a href="community.html">community</a>
+          <a href="sponsors.html">sponsors</a>
+          <a href="labs.html">labs</a>
+          <a href="issues.html">issues</a>
+          <a href="upstream.html">upstream</a>
+        </div>
+      </div>
+    </div>
   </nav>
 
   <p class="kicker">NAVI // AGENTS.MD</p>
@@ -138,17 +193,27 @@ page = """<!doctype html>
 
   <footer>
     <span>navi / wired / nightshadeNeon</span>
-    <a href="index.html">home</a>
-    <a href="news.html">news</a>
-    <a href="roadmap.html">roadmap</a>
-    <a href="manual/manual.html">manual</a>
-    <a href="sponsors.html">sponsors</a>
-    <a href="labs.html">labs</a>
-    <a href="community.html">community</a>
-    <span class="active" aria-current="page">agents</span>
     <span>built with care by <a href="https://github.com/xvoidsx">xvoidsx</a></span>
   </footer>
 </div>
+<script>
+(function(){
+  var btn = document.querySelector('.navdrop-button');
+  var panel = document.getElementById('navdrop-panel');
+  if (!btn || !panel) return;
+  function show(level){ panel.querySelectorAll('.navmenu-level').forEach(function(el){ el.hidden = el.getAttribute('data-level') !== level; }); }
+  function set(open){ if (open) show('root'); panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); set(panel.hidden); });
+  panel.addEventListener('click', function(e){
+    var cat = e.target.closest('.navcat');
+    if (cat){ show(cat.getAttribute('data-cat')); return; }
+    var back = e.target.closest('.navback');
+    if (back){ show('root'); }
+  });
+  document.addEventListener('click', function(e){ if (!panel.hidden && !panel.contains(e.target) && e.target !== btn) set(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !panel.hidden){ set(false); btn.focus(); } });
+})();
+</script>
 </body>
 </html>
 """

@@ -219,6 +219,8 @@ whole desktop.</p>
 │   ├── navi-wired-restore.sh # drift diff / restore / backup vs stock
 │   ├── navi-wired-adopt.sh   # lay stock wired configs over customized ones
 │   └── installers/           # codex, antigravity, etc.
+├── mods/                # Go mods (agent center, waybar modules, browser
+│                           # picker, …) — prebuilt binaries committed
 ├── iso/
 │   ├── stage.sh            # stages /opt/navi-iso for the ISO build
 │   ├── installer/          # the CLI installer (preflight lives here)
@@ -236,7 +238,7 @@ whole desktop.</p>
 users, doas/sudo, services, firewall) live elsewhere in the repo. <strong>Never
 move system-level pieces into /wired</strong>, and never reach out of it for them.</p>
 <h2>Source of truth: <code>wired/VERSION</code></h2>
-<p>The version string (e.g. <code>1.4.6 "mika"</code>) lives in <code>wired/VERSION</code>. Everything
+<p>The version string (e.g. <code>2.0 "eiri"</code> on the dev branch, <code>1.7 "mika"</code> on stable) lives in <code>wired/VERSION</code>. Everything
 human-facing is derived from it at deploy time:</p>
 <ul>
 <li><code>install.sh</code>'s <code>install_identity</code> re-stamps <code>wired/identity/</code> (os-release,
@@ -283,6 +285,17 @@ Firefox ESR ships too. The OS suggests, the user decides.</p>
   mechanism, scoped to <code>~/.config/chromium</code> (<code>wired/chromium/
   external-extensions/*.json</code>, deployed to <code>$HOME</code> and <code>/etc/skel</code>), so
   forks never see them. Unlike force-install, the user can remove them.</li>
+<li><strong>kirie</strong> is navi's keyboard-driven qutebrowser (<code>wired/qutebrowser/
+  config.py</code>, nightshadeNeon theme, navi bangs). It presents as Chrome
+  stable so sites that reject QtWebEngine's UA — including Google sign-in —
+  accept it. <strong>The UA pin tracks the current Chrome stable major</strong> (157 as
+  of November 2026), NOT navi's chromium package version, so kirie blends
+  in with the Chrome population. Its adblock lists (EasyList, EasyPrivacy,
+  Brave unbreak, uBO filters) only engage when the <code>adblock</code> Python module
+  is importable — <code>python3-adblock</code> isn't in trixie or trixie-backports
+  (sid only), so <code>install.sh</code> pip-installs the engine (abi3 wheel,
+  best-effort) in <code>deploy_configs()</code>; without it kirie silently falls back
+  to hosts blocking.</li>
 <li>The <strong>navi-browser</strong> picker (<code>mods/navi-browser</code>, prebuilt binary
   committed) is how users switch the default browser <em>and</em> the webapp
   runtime: it writes <code>~/.config/navi/default-browser</code>, offers the xdg
@@ -302,6 +315,16 @@ flash OS images to SD cards/USB drives from the terminal. It replaced balenaEtch
 which was dropped 2026-10-01 when its <code>balena-etcher-electron</code> package hard-depended
 on gconf2 (removed from Debian trixie entirely — apt refuses the install). The old
 <code>setup_etcher</code> code paths in install.sh are retired, not just commented out.</p>
+<h2>Matrix clients (Raven's call, 2026-11-03)</h2>
+<ul>
+<li><strong>Sable is navi's default GUI Matrix client</strong>, shipped by default
+  (<code>setup_sable</code> in install.sh, from Sable's Forgejo APT repo, so it updates
+  with everything else). <strong>Element stays in naviApps</strong> — it's loved, not
+  removed.</li>
+<li><strong>cyberia is the default TUI Matrix client</strong> — xvoidsx's fork of pkulak's
+  matui (<code>setup_cyberia</code>), GPL-2.0. A fork of Sable stays an easy escape
+  hatch, not the plan.</li>
+</ul>
 <h2>install.sh — installer and deployer</h2>
 <p><code>install.sh</code> does double duty: fresh installs <em>and</em> redeploys onto a live
 system via <code>--deploy-only</code> (this is what <code>navi-update</code> runs after pulling).</p>
@@ -387,8 +410,11 @@ user) → <code>agent-listening</code> (Hey Lain mic hot via
 <code>$XDG_RUNTIME_DIR/hey-lain/rec.pid</code>, or thinking via <code>processing.lock</code>) →
 <code>agent-working</code> → <code>agent-ready</code> (agents idle, or ollama reachable) →
 <code>agent-asleep</code>. Herdr states come from <code>herdr agent list</code>
-(<code>idle</code>/<code>working</code>/<code>blocked</code>/<code>done</code>/<code>unknown</code>); the server-down shape is JSON
-with an <code>error</code> key and exit code 0, so parse the body, don't trust the exit.</p>
+(<code>idle</code>/<code>working</code>/<code>blocked</code>/<code>done</code>/<code>unknown</code>); the server-down shape is
+usually JSON with an <code>error</code> key and exit code 0, so parse the body — but
+some versions fail the call outright when the server is down, so the center
+checks the install (<code>LookPath</code>) separately from the server and reports
+"isn't running" instead of "isn't installed".</p>
 <p>Click contract: left → the agent center (<code>navi-agents-config</code>, floating),
 middle → <code>herdr</code> attach (floating), right → the rofi menu, which leads
 with blocked agents ("⚠ &lt;agent&gt; needs you — jump to herdr") when any are
@@ -398,7 +424,8 @@ enter jumps to one via <code>herdr agent attach</code> addressed at the pane id 
 herdr doesn't resolve bare agent labels, so the label is display-only;
 r reads recent output the same way),
 models (ollama service on/off via doas, pull/delete models),
-harnesses (installed harnesses, default agent — also what navi-Q opens),
+harnesses (installed harnesses, default agent — Enter on an installed
+harness writes the file; also what navi-Q opens),
 autonomy (opencode permission profiles - ask me / balanced / yolo -
 written to <code>~/.config/opencode/opencode.json</code>, preserving other keys;
 other harnesses keep their own settings for now),
@@ -407,19 +434,30 @@ ollama models, each response scored 1-5 by a local judge model,
 scoreboard with averages and a winner),
 providers (API keys). The default agent is stored in
 <code>~/.config/navi/default-agent</code> (whitelisted to known harness binaries);
-<code>navi-Q</code>/<code>navi-Qx</code> read it, falling back to opencode.</p>
+<code>navi-Q</code>/<code>navi-Qx</code> read it, falling back to hermes (Lain) via <code>navi-lain</code>,
+then opencode — and the center's harnesses tab shows the same default
+(pink ♥), so the marker and Alt+A never disagree.</p>
 <p>Scope is honest by design: herdr only sees its own panes, so bare-terminal
 agents are invisible — tooltips say "in herdr" and never claim global
 awareness. CSS lives in <code>wired/waybar/style.css</code> (<code>#custom-agent</code> + state
 classes; GTK CSS rules apply). Customized waybar configs are preserved by
 navi-update, so users on customized configs need <code>navi-wired-adopt</code> (or a
 manual module add) to see new modules.</p>
+<h2>Mods ship as prebuilt binaries</h2>
+<p>navi mods (<code>mods/&lt;name&gt;/</code>) are committed as <strong>compiled binaries</strong>
+(<code>mods/&lt;name&gt;/&lt;binary&gt;</code>, mode 100755) — <code>install.sh</code> copies them to
+<code>/usr/bin</code>, it never runs <code>go build</code>. Changing a mod's source does nothing
+on installed machines until every affected binary is rebuilt
+(<code>go build -o &lt;name&gt; .</code> in the mod dir; mods <code>replace =&gt; ../theme</code>, so a
+theme change means rebuilding every mod) and recommitted. Verify the new
+behaviour made it into the binary before pushing (<code>strings</code> on it, or the
+mod's own smoke check) — HEAD-current is not binary-current.</p>
 <h2>Release process, end to end</h2>
 <ol>
 <li>Bump <code>wired/VERSION</code>; run the <strong>iso.yml RELEASE CHECKLIST</strong> (every
    human-facing string: VERSION, installer banner + success box, iso config
    RELEASE/ISO_BASENAME/volume label, iso/README.md, identity files).</li>
-<li>Commit to <code>main</code> (the working branch; the <code>mika</code> line merged into main).</li>
+<li>Commit to <code>eiri</code> (the working branch); stable releases are cut from <code>main</code>.</li>
 <li>Tag <strong><code>v&lt;version&gt;-mika</code></strong> (e.g. <code>v1.4.6-mika</code>). All 1.x releases are
    <strong>intentionally unsigned</strong> — signing is deferred to the eiri era. (The
    release-signing GPG key <em>exists</em>; it's just not wired into 1.x.)</li>
@@ -432,6 +470,14 @@ manual module add) to see new modules.</p>
    convention below) and the navi README version strings.</li>
 <li>Write release notes; keep a copy under <code>~/workspace/your_files/</code>.</li>
 </ol>
+<p><strong>eiri rolling releases</strong> (the dev channel): eiri ISOs are date-stamped
+snapshots. Bump <code>ISO_BASENAME</code> (<code>navi-2.0-eiri-YYYY-MM-DD</code>) + <code>EIRI_BUILD</code>
+in <code>.github/workflows/iso-eiri.yml</code> and <strong>push</strong> — the push trigger fires
+the build (<code>workflow_dispatch</code> does NOT work while the file lives on eiri
+only). <code>publish-eiri.yml</code> publishes the build under the rolling <code>eiri</code> tag
+(moved via API). A mika image from eiri needs an eiri→main merge that
+explicitly sets <code>wired/VERSION</code> for main — never inherit eiri's
+<code>2.0 "eiri"</code> stamp.</p>
 <p><strong>Release naming:</strong> 1.x = <strong>"mika"</strong>, 2.x = <strong>"eiri"</strong>. Tags look like
 <code>v1.4.6-mika</code>. The updater discovers "newer" via <code>sort -V</code> over tags
 matching <code>^v1\.[0-9]+</code>, so patch versions sort correctly.</p>
